@@ -9,15 +9,15 @@ import frc.robot.RobotContainer;
 public class FlywheelJoystick extends CommandBase {
 
   public FlywheelJoystick() {
-    addRequirement(Robot.mFlywheel);
+    addRequirements(Robot.mFlywheel);
   }
 
   @Override
-  protected void initialize() {
+  public void initialize() {
   }
 
   @Override
-  protected void execute() {
+  public void execute() {
     // Get the joystick inputs
 
     double xFlywheelSpin = (RobotContainer.mOperatorJoystick.getRawAxis(0));
@@ -27,15 +27,11 @@ public class FlywheelJoystick extends CommandBase {
   }
 
   @Override
-  protected boolean isFinished() {
+  public boolean isFinished() {
     return false;
   }
 
   @Override
-  protected void end() {
-  }
-
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
   }
 }

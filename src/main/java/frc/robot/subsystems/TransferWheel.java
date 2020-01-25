@@ -9,10 +9,11 @@ import org.slf4j.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Flywheel.FlywheelJoystick;
+import com.revrobotics.CANSparkMax;
 
 public class TransferWheel extends SubsystemBase {
 
-    public static WPI_TalonSRX mTransferWheel = new WPI_TalonSRX(Constants.kTransferWheel);
+    public static CANSparkMax mTransferWheel;
     
     private boolean mIsBrakeMode;
 
@@ -29,7 +30,11 @@ public class TransferWheel extends SubsystemBase {
       setBrakeMode(true);
     }
 
-    public TransferWheel(WPI_TalonSRX master) {
+    public void setOpenLoopOutput(double zTransferWheel) {
+      ApplyDriveSignal(zTransferWheel);
+  }
+
+    public TransferWheel(CANSparkMax master) {
       mTransferWheel = master;
   
       mIsBrakeMode = false;
@@ -46,6 +51,12 @@ public class TransferWheel extends SubsystemBase {
     }
 
     public TransferWheel() {
+    }
+  
+    public static TransferWheel create() {
+      CANSparkMax mTransferMotor = new CANSparkMax (Constants.kTransferWheel, Constants. kTransferWheelType);
+     
+      return new TransferWheel(mTransferMotor);
     }
   
     

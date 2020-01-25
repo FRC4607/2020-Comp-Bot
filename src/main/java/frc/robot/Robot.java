@@ -24,6 +24,7 @@ import frc.robot.subsystems.TransferWheel;
 public class Robot extends TimedRobot {
 
   public static Flywheel mFlywheel = Flywheel.create();
+  public static TransferWheel mTransferWheel = TransferWheel.create();
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;

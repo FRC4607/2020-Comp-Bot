@@ -87,8 +87,8 @@ public class Flywheel extends SubsystemBase {
   /****************************************************************************************************************************** 
   ** SET OPEN LOOP OUTPUT
   ******************************************************************************************************************************/
-  public void setOpenLoopOutput(double zElevator) {
-      ApplyDriveSignal(zElevator);
+  public void setOpenLoopOutput(double zFlywheel) {
+      ApplyDriveSignal(zFlywheel);
   }
 
  /****************************************************************************************************************************** 

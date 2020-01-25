@@ -20,6 +20,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 public final class Constants {
 
   // Joysticks
@@ -30,4 +32,6 @@ public final class Constants {
   public static int kLeftFlyWheelFollower = 2;
   public static int kTransferWheel  = 4;
   
+  public static MotorType kTransferWheelType = MotorType.kBrushless;
+
 }

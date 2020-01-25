@@ -1,15 +1,15 @@
-package frc.robot.commands.Flywheel;
+package frc.robot.commands.TransferWheel;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.Flywheel.FlywheelJoystick;
+import frc.robot.commands.TransferWheel.TransferWheelJoystick;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
-public class FlywheelJoystick extends CommandBase {
+public class TransferWheelJoystick extends CommandBase {
 
-  public FlywheelJoystick() {
-    addRequirements(Robot.mFlywheel);
+  public TransferWheelJoystick() {
+    addRequirements(Robot.mTransferWheel);
   }
 
   @Override
@@ -20,9 +20,9 @@ public class FlywheelJoystick extends CommandBase {
   public void execute() {
     // Get the joystick inputs
 
-    double xFlywheelSpin = (RobotContainer.mOperatorJoystick.getRawAxis(1));
+    double xTransferWheelSpin = (RobotContainer.mOperatorJoystick.getRawAxis(5));
 
-    Robot.mFlywheel.setOpenLoopOutput(xFlywheelSpin);
+    Robot.mTransferWheel.setOpenLoopOutput(xTransferWheelSpin);
 
   }
 

@@ -7,15 +7,14 @@ import org.slf4j.LoggerFactory;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotMap;
+import frc.robot.Constants;
 import frc.robot.commands.Flywheel.FlywheelJoystick;
 
-
 // Creates the elevator subsystem
-public class Flywheel extends Subsystem {
+public class Flywheel extends SubsystemBase {
 
-  public static WPI_TalonSRX mRightLeader = new WPI_TalonSRX(RobotMap.kRightFlyWheelLeader);
-  public static WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(RobotMap.kLeftFlyWheelFollower);
+  public static WPI_TalonSRX mRightLeader = new WPI_TalonSRX(Constants.kRightFlyWheelLeader);
+  public static WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(Constants.kLeftFlyWheelFollower);
 
   // public static SpeedControllerGroup shooterDrive = new SpeedControllerGroup(mRightLeader);
 
@@ -32,6 +31,7 @@ public class Flywheel extends Subsystem {
   public boolean isBrakeMode() {
     return mIsBrakeMode;
   }
+
   public boolean isInverted() {
     return mIsInverted;
   }
@@ -110,24 +110,17 @@ public class Flywheel extends Subsystem {
     setOpenLoopControl();
   }
 
-  // public static Flywheel create() {
-  //   WPI_TalonSRX master = TalonSRX.createTalonSRX(new WPI_TalonSRX(RobotMap.kElevatorMotorMasterId));
-  //   WPI_TalonSRX follower = TalonSRX.createTalonSRX(new WPI_TalonSRX(RobotMap.kElevatorMotorFollowerId), RobotMap.kElevatorMotorMasterId);
-   
-  //   return new Flywheel(master, follower);
-  // }
-
-  public Flywheel() {
-}
-/****************************************************************************************************************************** 
+  /****************************************************************************************************************************** 
   ** OVERRIDE DEFAULT SUBSYSTEM COMMAND
   ******************************************************************************************************************************/
-  @Override
-  public void initDefaultCommand() {
-   setDefaultCommand(new FlywheelJoystick());
+  // initdefaultcommand has been removed
+  // @Override
+  // public void initDefaultCommand() {
+  //  setDefaultCommand(new FlywheelJoystick());
+  // }
+
+  public static void initDefaultSetup() {
   }
-public static void initDefaultSetup() {
-}
 
 }
 

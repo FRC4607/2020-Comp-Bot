@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.TransferWheel;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -21,6 +22,8 @@ import frc.robot.subsystems.TransferWheel;
  * project.
  */
 public class Robot extends TimedRobot {
+
+  public static Flywheel mFlywheel = Flywheel.create();
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;

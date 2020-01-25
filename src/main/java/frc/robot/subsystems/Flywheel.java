@@ -1,20 +1,22 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Flywheel.FlywheelJoystick;
 
 // Creates the elevator subsystem
 public class Flywheel extends SubsystemBase {
 
-  public static WPI_TalonSRX mRightLeader = new WPI_TalonSRX(Constants.kRightFlyWheelLeader);
-  public static WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(Constants.kLeftFlyWheelFollower);
+  public static WPI_TalonSRX mRightLeader;
+  public static WPI_TalonSRX mLeftFollow; 
 
   // public static SpeedControllerGroup shooterDrive = new SpeedControllerGroup(mRightLeader);
 
@@ -118,6 +120,13 @@ public class Flywheel extends SubsystemBase {
   // public void initDefaultCommand() {
   //  setDefaultCommand(new FlywheelJoystick());
   // }
+
+  public static Flywheel create() {
+    WPI_TalonSRX mRightLeader = new WPI_TalonSRX(Constants.kRightFlyWheelLeader);
+    WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(Constants.kLeftFlyWheelFollower);
+
+    return new Flywheel(mRightLeader, mLeftFollow);
+  }
 
   public static void initDefaultSetup() {
   }

@@ -18,8 +18,8 @@ public class FlywheelJoystick extends CommandBase {
 
   @Override
   public void execute() {
-    // Get the joystick inputs
 
+    // Get the joystick inputs
     double xFlywheelSpin = (RobotContainer.mOperatorJoystick.getRawAxis(1));
 
     Robot.mFlywheel.setOpenLoopOutput(xFlywheelSpin);

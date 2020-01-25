@@ -5,8 +5,6 @@
 // /* the project.                                                               */
 // /*----------------------------------------------------------------------------*/
 
-// package frc.robot;
-
 // /**
 //  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
 //  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -15,9 +13,6 @@
 //  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
 //  * constants are needed, to reduce verbosity.
 //  */
-// public final class Constants {
-// }
-
 package frc.robot;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -30,8 +25,11 @@ public final class Constants {
   // Shooter
   public static int kRightFlyWheelLeader = 1;
   public static int kLeftFlyWheelFollower = 2;
-  public static int kTransferWheel  = 4;
-  
+  //public static int kFlyWheelJoystickAxis = 1;
+
+
+  // transfer wheel
+  public static int kTransferWheel  = 4; 
   public static MotorType kTransferWheelType = MotorType.kBrushless;
 
 }

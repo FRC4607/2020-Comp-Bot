@@ -15,8 +15,8 @@ import frc.robot.commands.Flywheel.FlywheelJoystick;
 // Creates the elevator subsystem
 public class Flywheel extends SubsystemBase {
 
-  public static WPI_TalonSRX mRightLeader;
-  public static WPI_TalonSRX mLeftFollow; 
+  public static WPI_TalonSRX mRightLeader = new WPI_TalonSRX(Constants.kRightFlyWheelLeader);
+  public static WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(Constants.kLeftFlyWheelFollower); 
 
   // public static SpeedControllerGroup shooterDrive = new SpeedControllerGroup(mRightLeader);
 
@@ -94,9 +94,9 @@ public class Flywheel extends SubsystemBase {
  /****************************************************************************************************************************** 
   ** CONSTRUCTOR
   ******************************************************************************************************************************/
-  public Flywheel(WPI_TalonSRX master, WPI_TalonSRX follower) {
-    mRightLeader = master;
-    mLeftFollow = follower;
+  public Flywheel() {
+    //mRightLeader = master;
+    // mLeftFollow = follower;
 
     mIsBrakeMode = false;
     setBrakeMode(true);
@@ -109,6 +109,9 @@ public class Flywheel extends SubsystemBase {
     // This is inverted alongside the joystick inputs in order to create working limit switches
     mRightLeader.setInverted(true);
     mLeftFollow.setInverted(true);
+
+    // Set mLeftFollow to follow mRightLeader
+    mLeftFollow.follow(mRightLeader);
 
     // Start off in open loop control
     setOpenLoopControl();
@@ -123,14 +126,20 @@ public class Flywheel extends SubsystemBase {
   //  setDefaultCommand(new FlywheelJoystick());
   // }
 
-  public static Flywheel create() {
-    WPI_TalonSRX mRightLeader = new WPI_TalonSRX(Constants.kRightFlyWheelLeader);
-    WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(Constants.kLeftFlyWheelFollower);
+  // public static Flywheel create() {
+  //   WPI_TalonSRX mRightLeader = new WPI_TalonSRX(Constants.kRightFlyWheelLeader);
+  //   WPI_TalonSRX mLeftFollow = new WPI_TalonSRX(Constants.kLeftFlyWheelFollower);
 
-    return new Flywheel(mRightLeader, mLeftFollow);
-  }
+  //   return new Flywheel(mRightLeader, mLeftFollow);
+  // }
 
   public static void initDefaultSetup() {
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    mRightLeader.set(RobotContainer.mOperatorJoystick.getRawAxis(1) * 0.9);
   }
 
 }

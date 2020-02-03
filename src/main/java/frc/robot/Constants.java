@@ -22,14 +22,21 @@ public final class Constants {
   // Joysticks
   public static int kOperatorJoystickId  = 1;
 
-  // Shooter
-  public static int kRightFlyWheelLeader = 11;
+  // Flywheel
+  public static int kRightFlyWheelLeader  = 11;
   public static int kLeftFlyWheelFollower = 25;
-  //public static int kFlyWheelJoystickAxis = 1;
+  // public static int kFlyWheelJoystickAxis = 1;
 
+  // hood
+  public static int kHood           = 7;
+  public static MotorType kHoodType = MotorType.kBrushless;
+
+  // Hopper
+  public static int kHopper         = 6;
+  public static MotorType kHopperType = MotorType.kBrushless;
 
   // transfer wheel
-  public static int kTransferWheel  = 4; 
+  public static int kTransferWheel           = 3;
   public static MotorType kTransferWheelType = MotorType.kBrushless;
 
 }

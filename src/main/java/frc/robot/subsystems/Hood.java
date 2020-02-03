@@ -8,9 +8,9 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.revrobotics.CANSparkMax;
 
-public class TransferWheel extends SubsystemBase {
+public class Hood extends SubsystemBase {
 
-    public static CANSparkMax mTransferWheel;
+    public static CANSparkMax mHood;
     
     private boolean mIsBrakeMode;
 
@@ -20,30 +20,32 @@ public class TransferWheel extends SubsystemBase {
     
     public void ApplyDriveSignal(double throttle) {
       double mThrottle = throttle;
-      mTransferWheel.set(mThrottle);
+      mHood.set(mThrottle);
     }
 
     public void setOpenLoopControl() {
       setBrakeMode(true);
     }
 
-    public void setOpenLoopOutput(double zTransferWheel) {
-      ApplyDriveSignal(zTransferWheel);
+    public void setOpenLoopOutput(double zHood) {
+      ApplyDriveSignal(zHood);
     }
 
     private void setBrakeMode(boolean b) {
     }
 
-    public TransferWheel() {
+    public Hood() {
       mIsBrakeMode = false;
       setBrakeMode(true);
   
-      mTransferWheel = new CANSparkMax (Constants.kTransferWheel, Constants. kTransferWheelType);
+      mHood = new CANSparkMax (Constants.kHood, Constants.kHoodType);
 
-      System.out.println("TransferWheel created");
+      System.out.println("Hood created");
+      System.out.print("Can ID: ");
+      System.out.println(Constants.kHood);
 
       // This is inverted alongside the joystick inputs in order to create working limit switches
-      mTransferWheel.setInverted(true);
+      mHood.setInverted(true);
   
       // Start off in open loop control
       setOpenLoopControl();
@@ -55,7 +57,12 @@ public class TransferWheel extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    mTransferWheel.set(RobotContainer.mOperatorJoystick.getRawAxis(3) * -1.0);
+    // System.out.print("Joystick value: ");
+    // System.out.println(RobotContainer.mOperatorJoystick.getRawAxis(5));
+
+    if (RobotContainer.mOperatorJoystick.getRawAxis(5) < -0.2 || RobotContainer.mOperatorJoystick.getRawAxis(5) > 0.2) {
+      mHood.set(RobotContainer.mOperatorJoystick.getRawAxis(5) * 0.75);
+    } 
   }
 
 }

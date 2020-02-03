@@ -12,8 +12,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.TransferWheel;
-
+import frc.robot.subsystems.Hopper;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,8 +24,10 @@ import frc.robot.subsystems.TransferWheel;
  */
 public class Robot extends TimedRobot {
 
-  public static Flywheel mFlywheel = Flywheel.create();
-  public static TransferWheel mTransferWheel = TransferWheel.create();
+  public static Flywheel mFlywheel = new Flywheel();
+  public static TransferWheel mTransferWheel = new TransferWheel();
+  public static Hood mHood = new Hood();
+  public static Hopper mHopper = new Hopper();
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -41,6 +44,8 @@ public class Robot extends TimedRobot {
 
     Flywheel.initDefaultSetup();
     TransferWheel.initDefaultSetup();
+    Hood.initDefaultSetup();
+    Hopper.initDefaultSetup();
   }
 
   /**

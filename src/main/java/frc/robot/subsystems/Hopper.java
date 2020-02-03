@@ -8,9 +8,9 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import com.revrobotics.CANSparkMax;
 
-public class TransferWheel extends SubsystemBase {
+public class Hopper extends SubsystemBase {
 
-    public static CANSparkMax mTransferWheel;
+    public static CANSparkMax mHopper;
     
     private boolean mIsBrakeMode;
 
@@ -20,30 +20,30 @@ public class TransferWheel extends SubsystemBase {
     
     public void ApplyDriveSignal(double throttle) {
       double mThrottle = throttle;
-      mTransferWheel.set(mThrottle);
+      mHopper.set(mThrottle);
     }
 
     public void setOpenLoopControl() {
       setBrakeMode(true);
     }
 
-    public void setOpenLoopOutput(double zTransferWheel) {
-      ApplyDriveSignal(zTransferWheel);
+    public void setOpenLoopOutput(double zHopper) {
+      ApplyDriveSignal(zHopper);
     }
 
     private void setBrakeMode(boolean b) {
     }
 
-    public TransferWheel() {
+    public Hopper() {
       mIsBrakeMode = false;
       setBrakeMode(true);
   
-      mTransferWheel = new CANSparkMax (Constants.kTransferWheel, Constants. kTransferWheelType);
+      mHopper = new CANSparkMax (Constants.kHopper, Constants. kHopperType);
 
-      System.out.println("TransferWheel created");
+      System.out.println("Hopper created");
 
       // This is inverted alongside the joystick inputs in order to create working limit switches
-      mTransferWheel.setInverted(true);
+      mHopper.setInverted(true);
   
       // Start off in open loop control
       setOpenLoopControl();
@@ -55,7 +55,7 @@ public class TransferWheel extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    mTransferWheel.set(RobotContainer.mOperatorJoystick.getRawAxis(3) * -1.0);
+    mHopper.set(RobotContainer.mOperatorJoystick.getRawAxis(4));
   }
 
 }

@@ -23,8 +23,8 @@ public final class Constants {
   public static int kOperatorJoystickId  = 1;
 
   // Shooter
-  public static int kRightFlyWheelLeader = 1;
-  public static int kLeftFlyWheelFollower = 2;
+  public static int kRightFlyWheelLeader = 11;
+  public static int kLeftFlyWheelFollower = 25;
   //public static int kFlyWheelJoystickAxis = 1;
 
 

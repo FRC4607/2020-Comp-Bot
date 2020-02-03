@@ -40,6 +40,8 @@ public class TransferWheel extends SubsystemBase {
       mIsBrakeMode = false;
       setBrakeMode(true);
   
+      System.out.println("TransferWheel created");
+
       // This is inverted alongside the joystick inputs in order to create working limit switches
       mTransferWheel.setInverted(true);
   

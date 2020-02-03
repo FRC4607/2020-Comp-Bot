@@ -10,6 +10,7 @@ public class TransferWheelJoystick extends CommandBase {
 
   public TransferWheelJoystick() {
     addRequirements(Robot.mTransferWheel);
+    System.out.println("TransferWheelJoystick created");
   }
 
   @Override
@@ -24,6 +25,7 @@ public class TransferWheelJoystick extends CommandBase {
 
     Robot.mTransferWheel.setOpenLoopOutput(xTransferWheelSpin);
 
+    System.out.println("TransferWheelJoystick executed");
   }
 
   @Override

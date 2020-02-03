@@ -10,6 +10,7 @@ public class FlywheelJoystick extends CommandBase {
 
   public FlywheelJoystick() {
     addRequirements(Robot.mFlywheel);
+    System.out.println("FLywheelJoystick created");
   }
 
   @Override
@@ -24,6 +25,7 @@ public class FlywheelJoystick extends CommandBase {
 
     Robot.mFlywheel.setOpenLoopOutput(xFlywheelSpin);
 
+    System.out.println("FLywheelJoystick executed");
   }
 
   @Override

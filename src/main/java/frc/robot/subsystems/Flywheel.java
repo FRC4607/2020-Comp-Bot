@@ -104,6 +104,8 @@ public class Flywheel extends SubsystemBase {
     mIsInverted = true;
     InvertOutput(false);
 
+    System.out.println("FLywheel created");
+
     // This is inverted alongside the joystick inputs in order to create working limit switches
     mRightLeader.setInverted(true);
     mLeftFollow.setInverted(true);

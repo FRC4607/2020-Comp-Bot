@@ -1,62 +1,71 @@
 package frc.robot.subsystems;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Hopper extends SubsystemBase {
 
-    public static CANSparkMax mHopper;
-    
+    // Hardware
+    private final CANSparkMax mHopperMotor;
+
+    // Hardware states
     private boolean mIsBrakeMode;
 
-    public boolean isBrakeMode() {
-      return mIsBrakeMode;
-    }
-    
-    public void ApplyDriveSignal(double throttle) {
-      double mThrottle = throttle;
-      mHopper.set(mThrottle);
+    // Logging
+    private final Logger mLogger = LoggerFactory.getLogger( Hopper.class );
+
+
+    public void SetBrakeMode ( boolean wantsBrakeMode ) {
+        if (wantsBrakeMode && !mIsBrakeMode) {
+            mIsBrakeMode = wantsBrakeMode;
+            mHopperMotor.setIdleMode(IdleMode.kBrake);
+      mLogger.info("Neutral mode set to: [Brake]");
+
+    } else if (!wantsBrakeMode && mIsBrakeMode) {
+      mIsBrakeMode = wantsBrakeMode;
+      mHopperMotor.setIdleMode(IdleMode.kCoast);
+            mLogger.info( "Neutral mode set to: [Coast]" );
+        }
     }
 
-    public void setOpenLoopControl() {
-      setBrakeMode(true);
+    public boolean IsBrakeMode () {
+        return mIsBrakeMode;
     }
 
-    public void setOpenLoopOutput(double zHopper) {
-      ApplyDriveSignal(zHopper);
+    public void OutputSmartDashboard () {
+        if ( IsBrakeMode() ) {
+            SmartDashboard.putString( "Neutral Mode", "Brake" );
+        } else {
+            SmartDashboard.putString( "Neutral Mode", "Coast" );
+        }
     }
 
-    private void setBrakeMode(boolean b) {
-    }
-
-    public Hopper() {
-      mIsBrakeMode = false;
-      setBrakeMode(true);
+    public Hopper ( CANSparkMax hopperMotor ) {
   
-      mHopper = new CANSparkMax (Constants.kHopper, Constants. kHopperType);
+        // Set the hardware
+        mHopperMotor = hopperMotor;
 
-      System.out.println("Hopper created");
+        // Set the hardware states
+        mIsBrakeMode = false;
+        SetBrakeMode( true );
+    }
 
-      // This is inverted alongside the joystick inputs in order to create working limit switches
-      mHopper.setInverted(true);
-  
-      // Start off in open loop control
-      setOpenLoopControl();
+    public static Hopper create () {
+        // Talon's and Victor's go through a custom wrapper for creation
+        CANSparkMax hopperMotor = new CANSparkMax( Constants.HOPPER_MOTOR_ID, MotorType.kBrushless );
+        return new Hopper( hopperMotor );
     }
-  
-    public static void initDefaultSetup() {
+
+    @Override
+    public void periodic () {
+
     }
-		
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    mHopper.set(RobotContainer.mOperatorJoystick.getRawAxis(4));
-  }
 
 }
-      
+

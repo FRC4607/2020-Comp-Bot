@@ -1,0 +1,42 @@
+<configuration>
+
+	<timestamp key="TIME_BY_SECOND" datePattern="yyyy-MM-dd_HH.mm.ss"/>
+	<timestamp key="TIME_BY_DAY" datePattern="yyyy-MM-dd"/>
+	
+	<property name="LOG_DATEFORMAT_PATTERN" value="HH:mm:ss.SSS"/>
+	<property name="LOG_LEVEL_PATTERN" value="%5p"/>
+	<property name="LOG_PATTERN" value="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN} --- %-40.40logger{39} : %m%n"/>
+	
+	<property name="LOG_DIR_BASE" value="/home/lvuser/logback/"/>
+	<property name="LOG_DIR_DAILY" value="${LOG_DIR_BASE}/per-day"/>
+	<property name="LOG_DIR_SESSION" value="${LOG_DIR_BASE}/per-session"/>
+
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="frc.robot.lib.logback.ConsoleFilter" />
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE_BY_SECOND" class="ch.qos.logback.core.FileAppender">
+		<file>${LOG_DIR_SESSION}/${TIME_BY_DAY}/session-log-${TIME_BY_SECOND}.log</file>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE_BY_DAY" class="ch.qos.logback.core.FileAppender">
+		<file>${LOG_DIR_DAILY}/${TIME_BY_MONTH}/daily-log-${TIME_BY_DAY}.log</file>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="FILE_BY_SECOND"/>
+		<appender-ref ref="FILE_BY_DAY"/>
+	</root>
+
+</configuration>

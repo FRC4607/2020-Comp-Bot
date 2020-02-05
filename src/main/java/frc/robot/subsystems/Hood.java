@@ -1,69 +1,71 @@
 package frc.robot.subsystems;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Hood extends SubsystemBase {
 
-    public static CANSparkMax mHood;
-    
+    // Hardware
+    private final CANSparkMax mHoodMotor;
+
+    // Hardware states
     private boolean mIsBrakeMode;
 
-    public boolean isBrakeMode() {
-      return mIsBrakeMode;
-    }
-    
-    public void ApplyDriveSignal(double throttle) {
-      double mThrottle = throttle;
-      mHood.set(mThrottle);
+    // Logging
+    private final Logger mLogger = LoggerFactory.getLogger( Hood.class );
+
+
+    public void SetBrakeMode ( boolean wantsBrakeMode ) {
+        if (wantsBrakeMode && !mIsBrakeMode) {
+            mIsBrakeMode = wantsBrakeMode;
+            mHoodMotor.setIdleMode(IdleMode.kBrake);
+      mLogger.info("Neutral mode set to: [Brake]");
+
+    } else if (!wantsBrakeMode && mIsBrakeMode) {
+      mIsBrakeMode = wantsBrakeMode;
+      mHoodMotor.setIdleMode(IdleMode.kCoast);
+            mLogger.info( "Neutral mode set to: [Coast]" );
+        }
     }
 
-    public void setOpenLoopControl() {
-      setBrakeMode(true);
+    public boolean IsBrakeMode () {
+        return mIsBrakeMode;
     }
 
-    public void setOpenLoopOutput(double zHood) {
-      ApplyDriveSignal(zHood);
+    public void OutputSmartDashboard () {
+        if ( IsBrakeMode() ) {
+            SmartDashboard.putString( "Neutral Mode", "Brake" );
+        } else {
+            SmartDashboard.putString( "Neutral Mode", "Coast" );
+        }
     }
 
-    private void setBrakeMode(boolean b) {
-    }
-
-    public Hood() {
-      mIsBrakeMode = false;
-      setBrakeMode(true);
+    public Hood ( CANSparkMax hoodMotor ) {
   
-      mHood = new CANSparkMax (Constants.kHood, Constants.kHoodType);
+        // Set the hardware
+        mHoodMotor = hoodMotor;
 
-      System.out.println("Hood created");
-      System.out.print("Can ID: ");
-      System.out.println(Constants.kHood);
-
-      // This is inverted alongside the joystick inputs in order to create working limit switches
-      mHood.setInverted(true);
-  
-      // Start off in open loop control
-      setOpenLoopControl();
+        // Set the hardware states
+        mIsBrakeMode = false;
+        SetBrakeMode( true );
     }
-  
-    public static void initDefaultSetup() {
-    }
-		
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    // System.out.print("Joystick value: ");
-    // System.out.println(RobotContainer.mOperatorJoystick.getRawAxis(5));
 
-    if (RobotContainer.mOperatorJoystick.getRawAxis(5) < -0.2 || RobotContainer.mOperatorJoystick.getRawAxis(5) > 0.2) {
-      mHood.set(RobotContainer.mOperatorJoystick.getRawAxis(5) * 0.75);
-    } 
-  }
+    public static Hood create () {
+        // Talon's and Victor's go through a custom wrapper for creation
+        CANSparkMax hoodMotor = new CANSparkMax( Constants.HOOD_MOTOR_ID, MotorType.kBrushless );
+        return new Hood( hoodMotor );
+    }
+
+    @Override
+    public void periodic () {
+
+    }
 
 }
-      
+

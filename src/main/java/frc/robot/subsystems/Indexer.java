@@ -9,27 +9,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TransferWheel extends SubsystemBase {
+public class Indexer extends SubsystemBase {
 
     // Hardware
-    private final CANSparkMax mTransferMotor;
+    private final CANSparkMax mIndexerMotor;
 
     // Hardware states
     private boolean mIsBrakeMode;
 
     // Logging
-    private final Logger mLogger = LoggerFactory.getLogger( TransferWheel.class );
+    private final Logger mLogger = LoggerFactory.getLogger( Indexer.class );
 
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
-            mTransferMotor.setIdleMode(IdleMode.kBrake);
+            mIndexerMotor.setIdleMode(IdleMode.kBrake);
       mLogger.info("Neutral mode set to: [Brake]");
 
     } else if (!wantsBrakeMode && mIsBrakeMode) {
       mIsBrakeMode = wantsBrakeMode;
-      mTransferMotor.setIdleMode(IdleMode.kCoast);
+      mIndexerMotor.setIdleMode(IdleMode.kCoast);
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }
@@ -46,20 +46,20 @@ public class TransferWheel extends SubsystemBase {
         }
     }
 
-    public TransferWheel ( CANSparkMax transferMotor ) {
+    public Indexer ( CANSparkMax indexerMotor ) {
   
         // Set the hardware
-        mTransferMotor = transferMotor;
+        mIndexerMotor = indexerMotor;
 
         // Set the hardware states
         mIsBrakeMode = false;
         SetBrakeMode( true );
     }
 
-    public static TransferWheel create () {
+    public static Indexer create () {
         // Talon's and Victor's go through a custom wrapper for creation
-        CANSparkMax transferMotor = new CANSparkMax( Constants.TRANSFER_MOTOR_ID, MotorType.kBrushless );
-        return new TransferWheel( transferMotor );
+        CANSparkMax indexerMotor = new CANSparkMax( Constants.INDEXER_MOTOR_ID, MotorType.kBrushless );
+        return new Indexer( indexerMotor );
     }
 
     @Override
@@ -68,3 +68,4 @@ public class TransferWheel extends SubsystemBase {
     }
 
 }
+

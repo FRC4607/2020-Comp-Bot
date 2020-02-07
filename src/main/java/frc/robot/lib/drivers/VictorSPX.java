@@ -1,6 +1,6 @@
 package frc.robot.lib.drivers;
 
-import frc.robot.Constants;
+import frc.robot.Constants.GLOBAL;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -20,7 +20,7 @@ public class VictorSPX {
         victor.getStickyFaults( faults );
         if ( faults.hasAnyFault() ) {
             mLogger.warn( "Clearing VictorSPX [{}] sticky faults: [{}]", victor.getDeviceID(), faults.toString() );
-            final ErrorCode clearStickyFaults = victor.clearStickyFaults( Constants.CAN_LONG_TIMEOUT_MS );
+            final ErrorCode clearStickyFaults = victor.clearStickyFaults( GLOBAL.CAN_LONG_TIMEOUT_MS );
             if ( clearStickyFaults != ErrorCode.OK ) {
                 mLogger.error( "Could not clear sticky faults due to EC: [{}]", clearStickyFaults );
             }  
@@ -31,7 +31,7 @@ public class VictorSPX {
             mLogger.error( "Could not factory reset VictorSPX [{}] due to EC: [{}]", victor.getDeviceID(), configFactoryDefault );
         }  
 
-        final ErrorCode configVoltageCompSaturation = victor.configVoltageCompSaturation( 12.0, Constants.CAN_LONG_TIMEOUT_MS );
+        final ErrorCode configVoltageCompSaturation = victor.configVoltageCompSaturation( 12.0, GLOBAL.CAN_LONG_TIMEOUT_MS );
         if ( configVoltageCompSaturation != ErrorCode.OK ) {
             mLogger.error( "Could not set VictorSPX [{}] voltage compensation due to EC: [{}]", victor.getDeviceID(), configVoltageCompSaturation );
         }  

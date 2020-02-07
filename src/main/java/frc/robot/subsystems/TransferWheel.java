@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
+import frc.robot.lib.drivers.Photoeye;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -13,6 +14,7 @@ public class TransferWheel extends SubsystemBase {
 
     // Hardware
     private final CANSparkMax mTransferMotor;
+    private final Photoeye mTransferPhotoeye = new Photoeye( Constants.TRANSFER_PHOTOEYE_ANALOG_CHANNEL );
 
     // Hardware states
     private boolean mIsBrakeMode;

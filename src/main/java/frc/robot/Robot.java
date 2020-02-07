@@ -16,6 +16,7 @@ public class Robot extends TimedRobot {
     public void robotInit () {
         mLogger.info("<=========== ROBOT INIT ===========>");
         mRobotContainer = new RobotContainer();
+        mRobotContainer.SetMatchState( MatchState_t.robotInit );
         mRobotContainer.LogRobotDataHeader( mLogger );
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();
@@ -24,7 +25,9 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic () {
         CommandScheduler.getInstance().run();
-        mRobotContainer.LogRobotDataToRoboRio( mLogger );
+        if ( mRobotContainer.GetMatchState() != MatchState_t.robotPeriodic ) {
+            mRobotContainer.SetMatchState( MatchState_t.robotPeriodic );
+        }
         mRobotContainer.UpdateSmartDashboard();
     }
 
@@ -38,6 +41,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic () {
+        if ( mRobotContainer.GetMatchState() != MatchState_t.robotPeriodic ) {
+            mRobotContainer.SetMatchState( MatchState_t.robotPeriodic );
+            mRobotContainer.LogRobotDataToRoboRio( mLogger );
+            mRobotContainer.UpdateSmartDashboard();
+        }
     }
 
     @Override
@@ -58,6 +66,7 @@ public class Robot extends TimedRobot {
         if ( mRobotContainer.GetMatchState() != MatchState_t.autonomousPeriodic ) {
             mRobotContainer.SetMatchState( MatchState_t.autonomousPeriodic );
         }
+        mRobotContainer.LogRobotDataToRoboRio( mLogger );
     }
 
     @Override
@@ -76,6 +85,7 @@ public class Robot extends TimedRobot {
         if ( mRobotContainer.GetMatchState() != MatchState_t.teleopPeriodic ) {
             mRobotContainer.SetMatchState( MatchState_t.teleopPeriodic );
         }
+        mRobotContainer.LogRobotDataToRoboRio( mLogger );
     }
 
     @Override
@@ -83,9 +93,12 @@ public class Robot extends TimedRobot {
         mLogger.info( "<=========== TEST INIT ===========>" );
         CommandScheduler.getInstance().cancelAll();
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
-        mRobotContainer.UpdateSmartDashboard();          
+        mRobotContainer.UpdateSmartDashboard();
     }
 
     @Override
-    public void testPeriodic () {}
+    public void testPeriodic () {
+
+
+    }
 }

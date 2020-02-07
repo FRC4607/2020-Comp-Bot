@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import org.slf4j.Logger;
 // import org.slf4j.LoggerFactory;
 
-public class SuperStructure extends SubsystemBase {
+public class Shooter extends SubsystemBase {
 
     // Hardware
 
@@ -17,7 +17,7 @@ public class SuperStructure extends SubsystemBase {
     public void OutputSmartDashboard () {
     }
 
-    public SuperStructure (  ) {
+    public Shooter (  ) {
   
         // Set the hardware
 
@@ -25,8 +25,8 @@ public class SuperStructure extends SubsystemBase {
 
     }
 
-    public static SuperStructure create () {
-        return new SuperStructure(  );
+    public static Shooter create () {
+        return new Shooter(  );
     }
 
     @Override

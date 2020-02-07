@@ -16,21 +16,33 @@ public final class Constants {
     public static final class FLYWHEEL {
         public static final int MASTER_ID = 10000;                     // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
         public static final int FOLLOWER_ID = 10000;                   // The device ID of the follower *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
-        public static final double SENSOR_UNITS_PER_ROTATION = 4096.0; // Using a CTRE Mag Encoder
+        public static final int SENSOR_UNITS_PER_ROTATION = 4096;      // Using a CTRE Mag Encoder
         public static final int PID_IDX = 0;                           // Velocity closed-loop slot index for gains
-        public static final double PID_KF = 0.0;                       // Velocity closed-loop feed-forward
         public static final double PID_KP = 0.0;                       // Velocity closed-loop proportional gain
         public static final double PID_KI = 0.0;                       // Velocity closed-loop intgral gain
         public static final double PID_KD = 0.0;                       // Velocity closed-loop derivative gain
+        public static final double PID_KF = 0.0;                       // Velocity closed-loop feed-forward
         public static final double OFFTRACK_ERROR_PERCENT = 0.01;      // This limit determines when the flywheel is considered on-target
         public static final double SEEK_TIMER_EXPIRED_S = 2.0;         // Allow 2 seconds to spin up to target velocity before retrying
         public static final int SEEK_RETRY_LIMIT = 3;                  // Allow 3 seek retries before falling back to open-loop 
         public static final double PERCENT_MOTOR_OUTPUT = 0.5;         // The open-loop motor percent ouput
     }
 
-    // Hood devices ID's
-    public static final int HOOD_MOTOR_ID = 10;
-    public static final int SMART_MOTION_ID = 11;
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the hood
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Hood}
+    */        
+    public static final class HOOD {
+        public static final int MASTER_ID = 10000;                     // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
+        public static final int SENSOR_COUNTS_PER_ROTATION = 8192;     // Using a REV Through Bore Encoder
+        public static final int PID_IDX = 0;                           // Position closed-loop slot index for gains
+        public static final double PID_KP = 0.0;                       // Position closed-loop proportional gain
+        public static final double PID_KI = 0.0;                       // Position closed-loop intgral gain
+        public static final double PID_KD = 0.0;                       // Position closed-loop derivative gain
+        public static final double PID_KF = 0.0;                       // Position closed-loop feed-forward
+    }
+
 
     // Hopper devices ID's
     public static final int HOPPER_MOTOR_ID = 10;

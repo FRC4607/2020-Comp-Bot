@@ -24,6 +24,7 @@ public final class Constants {
 
     // Hood devices ID's
     public static final int HOOD_MOTOR_ID = 10;
+    public static final int SMART_MOTION_ID = 11;
 
     // Hopper devices ID's
     public static final int HOPPER_MOTOR_ID = 10;

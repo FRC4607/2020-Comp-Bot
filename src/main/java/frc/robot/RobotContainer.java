@@ -2,14 +2,18 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
 import frc.robot.Constants;
+
 import frc.robot.lib.drivers.PressureSensor;
 import frc.robot.lib.drivers.Photoeye;
+
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;
@@ -18,9 +22,11 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.SuperStructure;
+
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
+
 import org.slf4j.Logger;
 
 public class RobotContainer {

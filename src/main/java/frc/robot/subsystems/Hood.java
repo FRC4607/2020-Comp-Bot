@@ -138,10 +138,7 @@ public class Hood extends SubsystemBase {
         mF = HOOD.PID_KF;
         mMaxVelocity = HOOD.MAX_VELOCITY;
         mMaxAcceleration = HOOD.MAX_ACCELERATION;     
-        SetTargetPosition_Rot( mAlternateEncoder.getPosition() );  
         SetGains();
-
-        //Master.setSecondaryCurrentLimit();  // Set this for zero'ing
     }
 
     /**

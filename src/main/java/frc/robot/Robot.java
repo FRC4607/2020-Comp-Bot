@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
         mLogger.info( "<=========== AUTONOMOUS INIT ===========>" );
         mRobotContainer.SetMatchState( MatchState_t.autonomousInit );
         mAutonomousCommand = mRobotContainer.GetAutonomousCommand();
-        if (mAutonomousCommand != null) {
+        if ( mAutonomousCommand != null ) {
             mAutonomousCommand.schedule();
             mLogger.info( "Starting autonomous command {}", mAutonomousCommand.getName() );
         }
@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
     public void teleopInit () {
         mLogger.info( "<=========== TELEOP INIT ===========>" );
         mRobotContainer.SetMatchState( MatchState_t.teleopInit );
-        if (mAutonomousCommand != null) {
+        if ( mAutonomousCommand != null ) {
             mAutonomousCommand.cancel();
         }
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
@@ -99,6 +99,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic () {
 
-
     }
 }
+

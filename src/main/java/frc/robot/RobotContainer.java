@@ -30,18 +30,19 @@ public class RobotContainer {
     // Hardware
     private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
     private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
-    private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
+    private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
+                                                                       Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( Constants.PDP_ID ), Constants.PDP_ID );
 
      // Subsystems
-     private final Drivetrain mDrivetrain = Drivetrain.create();
-     private final Flywheel mFlywheel = Flywheel.create();
-     private final Hood mHood = Hood.create();
-     private final Hopper mHopper = Hopper.create();
-     private final Indexer mIndexer = Indexer.create();
-     private final Intake mIntake = Intake.create();
+     private final Drivetrain mDrivetrain =       Drivetrain.create();
+     private final Flywheel mFlywheel =           Flywheel.create();
+     private final Hood mHood =                   Hood.create();
+     private final Hopper mHopper =               Hopper.create();
+     private final Indexer mIndexer =             Indexer.create();
+     private final Intake mIntake =               Intake.create();
      private final TransferWheel mTransferWheel = TransferWheel.create();
-     private final Shooter mSuperStructure = Shooter.create();
+     private final Shooter mSuperStructure =      Shooter.create();
      
      // Autonomous chooser
      private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();

@@ -24,14 +24,14 @@ public class TransferWheel extends SubsystemBase {
 
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
-        if (wantsBrakeMode && !mIsBrakeMode) {
+        if ( wantsBrakeMode && !mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
-            mTransferMotor.setIdleMode(IdleMode.kBrake);
-      mLogger.info("Neutral mode set to: [Brake]");
+            mTransferMotor.setIdleMode( IdleMode.kBrake );
+            mLogger.info( "Neutral mode set to: [Brake]" );
 
-    } else if (!wantsBrakeMode && mIsBrakeMode) {
-      mIsBrakeMode = wantsBrakeMode;
-      mTransferMotor.setIdleMode(IdleMode.kCoast);
+        } else if ( !wantsBrakeMode && mIsBrakeMode ) {
+            mIsBrakeMode = wantsBrakeMode;
+            mTransferMotor.setIdleMode( IdleMode.kCoast );
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }

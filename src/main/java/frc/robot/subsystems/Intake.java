@@ -22,14 +22,14 @@ public class Intake extends SubsystemBase {
 
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
-        if (wantsBrakeMode && !mIsBrakeMode) {
+        if ( wantsBrakeMode && !mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
-            mIntakeMotor.setIdleMode(IdleMode.kBrake);
-      mLogger.info("Neutral mode set to: [Brake]");
+            mIntakeMotor.setIdleMode( IdleMode.kBrake );
+            mLogger.info( "Neutral mode set to: [Brake]" );
 
-    } else if (!wantsBrakeMode && mIsBrakeMode) {
-      mIsBrakeMode = wantsBrakeMode;
-      mIntakeMotor.setIdleMode(IdleMode.kCoast);
+        } else if ( !wantsBrakeMode && mIsBrakeMode ) {
+            mIsBrakeMode = wantsBrakeMode;
+            mIntakeMotor.setIdleMode( IdleMode.kCoast );
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }

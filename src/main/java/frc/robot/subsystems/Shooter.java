@@ -17,7 +17,7 @@ public class Shooter extends SubsystemBase {
     public void OutputSmartDashboard () {
     }
 
-    public Shooter (  ) {
+    public Shooter () {
   
         // Set the hardware
 
@@ -26,7 +26,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public static Shooter create () {
-        return new Shooter(  );
+        return new Shooter();
     }
 
     @Override

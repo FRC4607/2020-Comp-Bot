@@ -1,6 +1,7 @@
 package frc.robot.lib.drivers;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,37 +18,51 @@ public class SparkMax {
     private static final Logger mLogger = LoggerFactory.getLogger( SparkMax.class );
 
     /**
-    * First, any motor controller sticky faults will be logged and cleared.  Next, the default configuration for the
-    * motor controller is reset to factory defaults.  Finally, voltage compensation will be enabled and set for 12V.
-    *  
+    * This method is wrapper for a newly created CANSparkMax object that is intended to initialize the motor controller
+    * to a know state.  The following lists what this method does and the state of the controller.
+    * <p>
+    * <ul>
+    * <li>Sticky faults will be logged and cleared
+    * <li>Reset to factory defaults
+    * <li>Voltage compensation is enabled and set for 12V
+    * <li>Set the idle mode to brake
+    * <li>Open-loop duty-cycle output is set to 0.0
+    * </ul>
+    * <p>
+    * @param sparkMax CANSparkMax The motor controller to initialize
     * @see {@link frc.robot.lib.drivers.SparkMax}
     */        
     private static void SetDefaultConfig ( CANSparkMax sparkMax ) {
+        CANError canError;
+        long faults;
 
-        final long faults = sparkMax.getStickyFaults();
+        faults = sparkMax.getStickyFaults();
         if ( faults != 0 ) {
             mLogger.warn( "Clearing SparkMax [{}] sticky faults: [{}]", sparkMax.getDeviceId(), faults );
-            final CANError clearStickyFaults = sparkMax.clearFaults();
-            if ( clearStickyFaults != CANError.kOk ) {
-                mLogger.error( "Could not clear sticky faults due to EC: [{}]", clearStickyFaults );
+            canError = sparkMax.clearFaults();
+            if ( canError != CANError.kOk ) {
+                mLogger.error( "Could not clear sticky faults due to EC: [{}]", canError.toString() );
             }  
         }
-        
-        final CANError configFactoryDefault = sparkMax.restoreFactoryDefaults();
-        if ( configFactoryDefault != CANError.kOk ) {
-            mLogger.error( "Could not factory reset SparkMax [{}] due to EC: [{}]", sparkMax.getDeviceId(), configFactoryDefault.toString() );
+        canError = sparkMax.restoreFactoryDefaults();
+        if ( canError != CANError.kOk ) {
+            mLogger.error( "Could not factory reset SparkMax [{}] due to EC: [{}]", sparkMax.getDeviceId(), canError.toString() );
         }  
-
-        final CANError configVoltageCompSaturation = sparkMax.enableVoltageCompensation( 12.0 );
-        if ( configVoltageCompSaturation != CANError.kOk ) {
-            mLogger.error( "Could not set SparkMax [{}] voltage compensation due to EC: [{}]", sparkMax.getDeviceId(), configVoltageCompSaturation.toString() );
+        canError = sparkMax.enableVoltageCompensation( 12.0 );
+        if ( canError != CANError.kOk ) {
+            mLogger.error( "Could not set SparkMax [{}] voltage compensation due to EC: [{}]", sparkMax.getDeviceId(), canError.toString() );
         }  
+        canError = sparkMax.setIdleMode( IdleMode.kBrake );
+        if ( canError != CANError.kOk ) {
+            mLogger.error( "Could not set SparkMax [{}] idle mode due to EC: [{}]", sparkMax.getDeviceId(), canError.toString() );
+        }        
+        sparkMax.set( 0.0 );        
 
     }
 
     /**
     * Create a master CANSparkMax motor controller.
-    *  
+    * @param sparkMax CANSparkMax The motor controller to initialize
     * @see {@link frc.robot.lib.drivers.SparkMax}
     */  
     public static CANSparkMax CreateSparkMax ( CANSparkMax sparkMax ) {
@@ -57,7 +72,8 @@ public class SparkMax {
 
     /**
     * Create a follower CANSparkMax motor controller.
-    *  
+    * @param sparkMax CANSparkMax The motor controller to initialize 
+    * @param master CANSparkMax The motor controller to follow 
     * @see {@link frc.robot.lib.drivers.SparkMax}
     */  
     public static CANSparkMax CreateSparkMax ( CANSparkMax sparkMax, CANSparkMax master ) {

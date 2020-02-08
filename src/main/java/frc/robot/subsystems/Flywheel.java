@@ -146,6 +146,7 @@ public class Flywheel extends SubsystemBase {
         mFlywheelState = FlywheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
         mFailingState = FailingState_t.Healthy;
+        mCurrentVelocity_RPM = Double.NaN;
         mError_RPM = 0;
         mP = FLYWHEEL.PID_KP;
         mI = FLYWHEEL.PID_KI;

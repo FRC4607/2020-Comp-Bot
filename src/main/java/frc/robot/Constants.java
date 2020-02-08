@@ -50,6 +50,29 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 500.0;            // Smart Motion max acceleration
     }
 
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the turret
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Turret}
+    */        
+    public static final class TURRET {
+        public static final int MASTER_ID = 10000;                      // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
+        public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
+        public static final int PID_IDX = 0;                            // Position closed-loop slot index for gains
+        public static final double PID_KP = 0.0;                        // Position closed-loop proportional gain
+        public static final double PID_KI = 0.0;                        // Position closed-loop intgral gain
+        public static final double PID_KD = 0.0;                        // Position closed-loop derivative gain
+        public static final double PID_KF = 0.0;                        // Position closed-loop feed-forward
+        public static final int MOVING_AVERAGE_FILTER_TAPS = 5;         // The number of samples to average the position for zero'ing the sensor
+        public static final double ZEROING_MOTOR_OUTPUT = 0.1;          // The open-loop motor output percentage for zero'ing the sensor
+        public static final double ZEROING_TIMER_EXPIRED_S = 0.5;       // The time in seconds that the hood will search for the hard-stop
+        public static final double ZEROING_DONE_THRESHOLD = 50.0 / 8192.0; // The threshold used to compare against the current postion - filtered position
+        public static final int ZEROING_RETRY_LIMIT = 1;                // Allow 3 zeroing retries before failing and living with a fixed hood
+        public static final double MAX_VELOCITY = 1000.0;               // Smart Motion max velocity
+        public static final double MAX_ACCELERATION = 500.0;            // Smart Motion max acceleration
+    }
+
+
 
     // Hopper devices ID's
     public static final int HOPPER_MOTOR_ID = 10;

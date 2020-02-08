@@ -18,19 +18,19 @@ public class Intake extends SubsystemBase {
     private boolean mIsBrakeMode;
 
     // Logging
-    private final Logger mLogger = LoggerFactory.getLogger ( Intake.class );
+    private final Logger mLogger = LoggerFactory.getLogger( Intake.class );
 
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if ( wantsBrakeMode && !mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
             mIntakeMotor.setIdleMode( IdleMode.kBrake );
-                mLogger.info( "Neutral mode set to: [Brake]" );
+            mLogger.info( "Neutral mode set to: [Brake]" );
 
         } else if ( !wantsBrakeMode && mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
             mIntakeMotor.setIdleMode( IdleMode.kCoast );
-                mLogger.info( "Neutral mode set to: [Coast]" );
+            mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }
 

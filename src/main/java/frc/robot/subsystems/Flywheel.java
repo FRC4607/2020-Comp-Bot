@@ -237,7 +237,7 @@ public class Flywheel extends SubsystemBase {
     * <b>This function should only be used for Livewindow PID tuning!<b> 
     */    
     private void EnableClosedLoop ( boolean wantsClosedLoop ) {
-        if (wantsClosedLoop && !IsClosedLoop() ) {
+        if ( wantsClosedLoop && !IsClosedLoop() ) {
             SetGains();
             mControlState = ControlState_t.ClosedLoop;
         } else if ( !wantsClosedLoop && IsClosedLoop() ) {

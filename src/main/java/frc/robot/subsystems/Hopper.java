@@ -18,19 +18,19 @@ public class Hopper extends SubsystemBase {
     private boolean mIsBrakeMode;
 
     // Logging
-    private final Logger mLogger = LoggerFactory.getLogger ( Hopper.class );
+    private final Logger mLogger = LoggerFactory.getLogger( Hopper.class );
 
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if ( wantsBrakeMode && !mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
             mHopperMotor.setIdleMode( IdleMode.kBrake );
-                mLogger.info( "Neutral mode set to: [Brake]" );
+            mLogger.info( "Neutral mode set to: [Brake]" );
 
         } else if (!wantsBrakeMode && mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
             mHopperMotor.setIdleMode( IdleMode.kCoast );
-                mLogger.info( "Neutral mode set to: [Coast]" );
+            mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }
 

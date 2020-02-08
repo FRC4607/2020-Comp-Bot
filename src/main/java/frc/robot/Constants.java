@@ -40,7 +40,7 @@ public final class Constants {
         public static final double PID_KP = 0.0;                           // Position closed-loop proportional gain
         public static final double PID_KI = 0.0;                           // Position closed-loop intgral gain
         public static final double PID_KD = 0.0;                           // Position closed-loop derivative gain
-        public static final double PID_KF = 0.0;                           // Position closed-loop feed-forward
+        public static final double PID_KFF = 0.0;                           // Position closed-loop feed-forward
         public static final int MOVING_AVERAGE_FILTER_TAPS = 5;            // The number of samples to average the position for zero'ing the sensor
         public static final double ZEROING_MOTOR_OUTPUT = 0.1;             // The open-loop motor output percentage for zero'ing the sensor
         public static final double ZEROING_TIMER_EXPIRED_S = 0.5;          // The time in seconds that the hood will search for the hard-stop
@@ -62,7 +62,7 @@ public final class Constants {
         public static final double PID_KP = 0.0;                           // Position closed-loop proportional gain
         public static final double PID_KI = 0.0;                           // Position closed-loop intgral gain
         public static final double PID_KD = 0.0;                           // Position closed-loop derivative gain
-        public static final double PID_KF = 0.0;                           // Position closed-loop feed-forward
+        public static final double PID_KFF = 0.0;                           // Position closed-loop feed-forward
         public static final int MOVING_AVERAGE_FILTER_TAPS = 5;            // The number of samples to average the position for zero'ing the sensor
         public static final double ZEROING_MOTOR_OUTPUT = 0.1;             // The open-loop motor output percentage for zero'ing the sensor
         public static final double ZEROING_TIMER_EXPIRED_S = 0.5;          // The time in seconds that the hood will search for the hard-stop
@@ -72,13 +72,20 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
     }
 
+    public static final class INDEXER {
+        public static final int PHOTOEYE_ANALOG_CHANNEL = 0;               
+        public static final int MOTOR_ID = 10;                            
+        public static final int SENSOR_UNITS_PER_ROTATION = 4096;        // Using a REV Through Bore Encoder
+        public static final int PID_IDX = 0;                               // Position closed-loop slot index for gains
+        public static final double PID_KP = 0.0;                           // Position closed-loop proportional gain
+        public static final double PID_KI = 0.0;                           // Position closed-loop intgral gain
+        public static final double PID_KD = 0.0;                           // Position closed-loop derivative gain
+        public static final double PID_KFF = 0.0;                           // Position closed-loop feed-forward
+       
+    }
 
     // Hopper devices ID's
     public static final int HOPPER_MOTOR_ID = 10;
-
-    // Indexer devices ID's
-    public static final int INDEXER_PHOTOEYE_ANALOG_CHANNEL = 0;
-    public static final int INDEXER_MOTOR_ID = 10;
 
     // Intake device ID's
     public static final int INTAKE_MOTOR_ID = 10;

@@ -41,7 +41,7 @@ public class Turret extends SubsystemBase {
     private CANPIDController mPIDController;
 
     // Closed-loop control
-    private double mP, mI, mD, mF, mMaxVelocity, mMaxAcceleration;
+    private double mP, mI, mD, mFF, mMaxVelocity, mMaxAcceleration;
     private double mTargetPosition_Rot;
     private double mCurrentPosition_Rot;
     //private double mError_Rot;
@@ -135,7 +135,7 @@ public class Turret extends SubsystemBase {
         mP = TURRET.PID_KP;
         mI = TURRET.PID_KI;
         mD = TURRET.PID_KD;
-        mF = TURRET.PID_KF;
+        mFF = TURRET.PID_KFF;
         mMaxVelocity = TURRET.MAX_VELOCITY;
         mMaxAcceleration = TURRET.MAX_ACCELERATION;     
         SetGains();
@@ -186,15 +186,15 @@ public class Turret extends SubsystemBase {
     /**
     * This method will set the feedforward gain of the position controller.
     */  
-    private void SetF ( double f ) {
-        mF = f;
+    private void SetFF ( double ff ) {
+        mFF = ff;
     }
 
     /**
     * This method will get the feedforward gain of the position controller.
     */  
-    private double GetF () {
-        return mF;
+    private double GetFF () {
+        return mFF;
     }
 
     /**
@@ -262,7 +262,7 @@ public class Turret extends SubsystemBase {
         mPIDController.setP( mP, TURRET.PID_IDX );
         mPIDController.setI( mI, TURRET.PID_IDX );
         mPIDController.setD( mD, TURRET.PID_IDX );
-        mPIDController.setFF( mF, TURRET.PID_IDX );
+        mPIDController.setFF( mFF, TURRET.PID_IDX );
         mPIDController.setIZone( 0.0, TURRET.PID_IDX );
         mPIDController.setOutputRange( -1.0, 1.0 );
         mPIDController.setSmartMotionMaxVelocity( mMaxVelocity, TURRET.PID_IDX );
@@ -434,7 +434,7 @@ public class Turret extends SubsystemBase {
         builder.addDoubleProperty( "P", this::GetP, this::SetP);
         builder.addDoubleProperty( "I", this::GetI, this::SetI);
         builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
+        builder.addDoubleProperty( "FF", this::GetFF, this::SetFF);
         builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity);
         builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration);
         //builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);

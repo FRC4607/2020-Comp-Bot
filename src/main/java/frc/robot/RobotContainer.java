@@ -18,6 +18,7 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.Auto1;
@@ -43,6 +44,7 @@ public class RobotContainer {
      private final Intake mIntake = Intake.create();
      private final TransferWheel mTransferWheel = TransferWheel.create();
      private final Shooter mSuperStructure = Shooter.create();
+     private final Turret mTurret = Turret.create();
      
      // Autonomous chooser
      private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();

@@ -35,7 +35,8 @@ public class TeleopDrive extends CommandBase {
     public TeleopDrive ( Drivetrain drivetrain, XboxController driverXbox ) {
         mDrivetrain = drivetrain;
         mDriverXbox = driverXbox;
-        addRequirements(mDrivetrain);
+        addRequirements( mDrivetrain );
     }
 
 }
+

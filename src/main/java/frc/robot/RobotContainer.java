@@ -30,7 +30,8 @@ public class RobotContainer {
     // Hardware
     private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
     private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
-    private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
+    private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
+                                                                       Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( Constants.PDP_ID ), Constants.PDP_ID );
 
      // Subsystems

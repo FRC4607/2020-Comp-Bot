@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import java.lang.Math;
 
@@ -20,7 +21,7 @@ public class Flywheel extends SubsystemBase {
         Init { @Override public String toString() { return "Init"; } },
         Seeking { @Override public String toString() { return "Seeking"; } },
         Holding { @Override public String toString() { return "Holding"; } },
-        Fail { @Override public String toString() { return "Teleop Periodic"; } };
+        Fail { @Override public String toString() { return "Fail"; } };
     }
 
     public static enum ControlState_t {
@@ -141,9 +142,11 @@ public class Flywheel extends SubsystemBase {
 		mMaster.setSensorPhase( true );
         mMaster.setNeutralMode( NeutralMode.Brake );
         mFollower.setNeutralMode( NeutralMode.Brake );
+        mFollower.setInverted( InvertType.OpposeMaster );
         mFlywheelState = FlywheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
         mFailingState = FailingState_t.Healthy;
+        mCurrentVelocity_RPM = Double.NaN;
         mError_RPM = 0;
         mP = FLYWHEEL.PID_KP;
         mI = FLYWHEEL.PID_KI;
@@ -211,7 +214,6 @@ public class Flywheel extends SubsystemBase {
     private double GetF () {
         return mF;
     }
-
 
     /**
     * This method will set the velocity closed-loop gains of the TalonSRX.
@@ -463,7 +465,7 @@ public class Flywheel extends SubsystemBase {
         mError_RPM = GetTargetVelocity_RPM() - mCurrentVelocity_RPM;     
     }
 
-     /**
+    /**
     * We are overriding the initSendable and using it to send information back-and-forth between the robot program and
     * the user PC for live PID tuning purposes.
     * @param SendableBuilder This is inherited from SubsystemBase

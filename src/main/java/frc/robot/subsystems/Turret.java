@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.HOOD;
+import frc.robot.Constants.TURRET;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.AlternateEncoderType;
@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.LinearFilter;
 
-public class Hood extends SubsystemBase {
+public class Turret extends SubsystemBase {
 
     // State enumerations
-    public static enum HoodState_t {
+    public static enum TurretState_t {
         Init { @Override public String toString() { return "Init"; } },
         Zeroing { @Override public String toString() { return "Zeroing"; } },
         Seeking { @Override public String toString() { return "Seeking"; } },
@@ -56,7 +56,7 @@ public class Hood extends SubsystemBase {
     private int mZeroingRetries;
 
     // State variables
-    private HoodState_t mHoodState;    
+    private TurretState_t mTurretState;    
     private ControlState_t mControlState;
     private FailingState_t mFailingState;
     
@@ -64,21 +64,21 @@ public class Hood extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     
     /**
-    * @return HoodState_t The current state of the hood.
+    * @return TurretState_t The current state of the turret.
     */
-    public HoodState_t GetHoodState () {
-        return mHoodState;
+    public TurretState_t GetTurretState () {
+        return mTurretState;
     }
 
     /**
-    * @return ControlState_t The current control state of the hood.
+    * @return ControlState_t The current control state of the turret.
     */
     public ControlState_t GetControlState () {
         return mControlState;
     }
 
     /**
-    * @return FailingState_t The current failing state of the flywheel.
+    * @return FailingState_t The current failing state of the turret.
     */
     public FailingState_t GetFailingState () {
         return mFailingState;
@@ -99,7 +99,7 @@ public class Hood extends SubsystemBase {
     }
 
     /**
-    * @return double The current current position of the hood in rotations.
+    * @return double The current current position of the turret in rotations.
     */
     public double GetCurrentPosition_Rot () {
         return mCurrentPosition_Rot;
@@ -117,7 +117,7 @@ public class Hood extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
 
     /**
-    * This method will initialize the Hood subsystem by setting the internal states to their starting values and
+    * This method will initialize the turret subsystem by setting the internal states to their starting values and
     * intialize the closed loop gains/targets.  
     */
     private void Initialize () {
@@ -129,15 +129,15 @@ public class Hood extends SubsystemBase {
         mZeroingRetries = 0;
         mCurrentPosition_Rot = Double.NaN;
         mCurrentPosition_Rot_Filtered = Double.NaN;
-        mHoodState = HoodState_t.Init;
+        mTurretState = TurretState_t.Init;
         mControlState = ControlState_t.OpenLoop;
         mFailingState = FailingState_t.Healthy;
-        mP = HOOD.PID_KP;
-        mI = HOOD.PID_KI;
-        mD = HOOD.PID_KD;
-        mF = HOOD.PID_KF;
-        mMaxVelocity = HOOD.MAX_VELOCITY;
-        mMaxAcceleration = HOOD.MAX_ACCELERATION;     
+        mP = TURRET.PID_KP;
+        mI = TURRET.PID_KI;
+        mD = TURRET.PID_KD;
+        mF = TURRET.PID_KF;
+        mMaxVelocity = TURRET.MAX_VELOCITY;
+        mMaxAcceleration = TURRET.MAX_ACCELERATION;     
         SetGains();
     }
 
@@ -234,7 +234,7 @@ public class Hood extends SubsystemBase {
 
     /**
     * This method will set output mode of the SparkMax to a percentage defined by the variable 
-    * mTargetPercentOutput.  The only time this variable isn't 0.0 is when the hood is zero'ing the encoder
+    * mTargetPercentOutput.  The only time this variable isn't 0.0 is when the turret is zero'ing the encoder
     * position.
     */  
     private void SetPercentOutput () {
@@ -242,7 +242,7 @@ public class Hood extends SubsystemBase {
     }    
 
     /**
-    * This method will set the TalonSRX output based on the control state.
+    * This method will set the Spark Max output based on the control state.
     */
     private void MotorOutput () {  
         switch ( mControlState ) {
@@ -259,30 +259,30 @@ public class Hood extends SubsystemBase {
     * This method will set the velocity closed-loop gains of the Spark Max.
     */
     private void SetGains () {
-        mPIDController.setP( mP, HOOD.PID_IDX );
-        mPIDController.setI( mI, HOOD.PID_IDX );
-        mPIDController.setD( mD, HOOD.PID_IDX );
-        mPIDController.setFF( mF, HOOD.PID_IDX );
-        mPIDController.setIZone( 0.0, HOOD.PID_IDX );
+        mPIDController.setP( mP, TURRET.PID_IDX );
+        mPIDController.setI( mI, TURRET.PID_IDX );
+        mPIDController.setD( mD, TURRET.PID_IDX );
+        mPIDController.setFF( mF, TURRET.PID_IDX );
+        mPIDController.setIZone( 0.0, TURRET.PID_IDX );
         mPIDController.setOutputRange( -1.0, 1.0 );
-        mPIDController.setSmartMotionMaxVelocity( mMaxVelocity, HOOD.PID_IDX );
-        mPIDController.setSmartMotionMinOutputVelocity( 0.0, HOOD.PID_IDX );
-        mPIDController.setSmartMotionMaxAccel( mMaxAcceleration, HOOD.PID_IDX );
-        mPIDController.setSmartMotionAllowedClosedLoopError( 0.1, HOOD.PID_IDX );
+        mPIDController.setSmartMotionMaxVelocity( mMaxVelocity, TURRET.PID_IDX );
+        mPIDController.setSmartMotionMinOutputVelocity( 0.0, TURRET.PID_IDX );
+        mPIDController.setSmartMotionMaxAccel( mMaxAcceleration, TURRET.PID_IDX );
+        mPIDController.setSmartMotionAllowedClosedLoopError( 0.1, TURRET.PID_IDX );
     }
 
     /**
-    * This method will zero the hood by driving the hood slowly to the hard-stop and monitor the position as the
-    * indicator.  It is expected that the robot is starting with the hood already against the hard-stop, but in the
+    * This method will zero the turret by driving the turret slowly to the hard-stop and monitor the position as the
+    * indicator.  It is expected that the robot is starting with the turret already against the hard-stop, but in the
     * case of a powerloss/reset or some other fault, the system will be able to re-zero and continue using
     * closed-loop position control.
     * <p>
-    * Due to how the hood state machine is setup, the motor is guarenteed to be driven for 1 loop period (20ms) before
+    * Due to how the turret state machine is setup, the motor is guarenteed to be driven for 1 loop period (20ms) before
     * checking the position.
     */
     private boolean IsZeroingDone () {
         if ( !Double.isNaN( mCurrentPosition_Rot ) && !Double.isNaN( mCurrentPosition_Rot_Filtered ) ) {
-            if ( Math.abs( mCurrentPosition_Rot - mCurrentPosition_Rot_Filtered ) < HOOD.ZEROING_DONE_THRESHOLD ) {
+            if ( Math.abs( mCurrentPosition_Rot - mCurrentPosition_Rot_Filtered ) < TURRET.ZEROING_DONE_THRESHOLD ) {
                 return true;
             }
         }
@@ -290,7 +290,7 @@ public class Hood extends SubsystemBase {
     }
 
     /**
-    * This method will update the states of the variable mHoodState, mControlState, and mFailingState.  After
+    * This method will update the states of the variable mTurretState, mControlState, and mFailingState.  After
     * the states have been updated, the TalonSRX outputs are set for either the open-loop (percentage output) or
     * closed-loop (velocity control) cases.
     * <p> 
@@ -309,36 +309,36 @@ public class Hood extends SubsystemBase {
     * @see {@link edu.wpi.first.wpilibj2.command.CommandScheduler#run}
     */     
     public void Update () {
-        switch ( mHoodState ) {
+        switch ( mTurretState ) {
             case Init:
-                // Always move to Zeroing state when we arrive at the Init state, start trying to move the hood slowly
-                mTargetPercentOutput = HOOD.ZEROING_MOTOR_OUTPUT;
+                // Always move to Zeroing state when we arrive at the Init state, start trying to move the turret slowly
+                mTargetPercentOutput = TURRET.ZEROING_MOTOR_OUTPUT;
                 // TODO: Add current limiting
                 mZeroingTimer_S = Timer.getFPGATimestamp();
-                mHoodState = HoodState_t.Zeroing;
+                mTurretState = TurretState_t.Zeroing;
                 break;
 
             case Zeroing:
                 // The zeroing timer has expired
-                if ( Timer.getFPGATimestamp() - mZeroingTimer_S > HOOD.ZEROING_TIMER_EXPIRED_S ) {
+                if ( Timer.getFPGATimestamp() - mZeroingTimer_S > TURRET.ZEROING_TIMER_EXPIRED_S ) {
                     mTargetPercentOutput = 0.0;
                     mZeroingRetries += 1;
                     // The retries have been exhausted
-                    if ( mZeroingRetries > HOOD.ZEROING_RETRY_LIMIT ) {
+                    if ( mZeroingRetries > TURRET.ZEROING_RETRY_LIMIT ) {
                         mFailingState = FailingState_t.ZeroingRetries;
                     } else {
                         mFailingState = FailingState_t.ZeroingTimeout;
                     }
                 }
-                // The hood has reached the hard-stop, zero the position and move on
+                // The turret has reached the hard-stop, zero the position and move on
                 else if ( IsZeroingDone() ) {
                     mAlternateEncoder.setPosition( mCurrentPosition_Rot );
-                    // There's no request to seek another hood position, hold this position
+                    // There's no request to seek another turret position, hold this position
                     if ( mTargetPosition_Rot == 0.0 ) {
-                        mHoodState = HoodState_t.Holding;
+                        mTurretState = TurretState_t.Holding;
                     // Request to seek
                     } else {
-                        mHoodState = HoodState_t.Seeking;
+                        mTurretState = TurretState_t.Seeking;
                     }
                 }
                 break;
@@ -351,11 +351,11 @@ public class Hood extends SubsystemBase {
 
             case Fail:
                 switch ( mFailingState ) {
-                    // Failure due to timing out during zero'ing, retry with 10% more cowbell
+                    // Failure due to timing out during zero'ing, retry with amps turned up to 11
                     case ZeroingTimeout:
-                        mTargetPercentOutput = HOOD.ZEROING_MOTOR_OUTPUT * 1.1;  
+                        mTargetPercentOutput = TURRET.ZEROING_MOTOR_OUTPUT * 1.11;  
                         mZeroingTimer_S = Timer.getFPGATimestamp();
-                        mHoodState = HoodState_t.Zeroing;
+                        mTurretState = TurretState_t.Zeroing;
                         break;
 
                     case ZeroingRetries:
@@ -368,17 +368,6 @@ public class Hood extends SubsystemBase {
 
         }       
             
-            // // No velocity command has come in, so just hold at 0.0
-            //     if ( mTargetVelocity_Units_Per_100ms == 0.0 ) {
-                    
-                
-            //     // Set the seek timer and begin seeking to the velocity target
-            //     } else  {
-            //         mFlywheelState = FlywheelState_t.Seeking;
-            //         SetSeekTimer();
-            //     }
-            //     break;
-
         // The feedback sensor isn't working
 
         // The motor control lost power and/or reset    
@@ -389,25 +378,18 @@ public class Hood extends SubsystemBase {
     }
 
 
-
-
-
-
-
-
-
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
 
     /**
-    * This is the hood class consructor.  It is setup for injecting the dependencies in order to allow for mocking
+    * This is the turret class consructor.  It is setup for injecting the dependencies in order to allow for mocking
     * those dependencies during unit-testing.
     *
     * @param master CANSparkMax master motor controller
     * @param pidController CANPIDController PID controller used for position control
     * @param alternateEncoder CANEncoder alternate encoder used for position control (REV Through Bore)
     */
-    public Hood ( CANSparkMax master, CANPIDController pidController, CANEncoder alternateEncoder, LinearFilter movingAverageFilter ) {
+    public Turret ( CANSparkMax master, CANPIDController pidController, CANEncoder alternateEncoder, LinearFilter movingAverageFilter ) {
         mMaster = master;
         mAlternateEncoder = alternateEncoder;
         mPIDController = pidController;
@@ -416,18 +398,18 @@ public class Hood extends SubsystemBase {
     }
 
     /**
-    * This is methods calls the hood consructor and creates the hood object.  The motor controllers objects are sent
+    * This is methods calls the turret consructor and creates the turret object.  The motor controllers objects are sent
     * through a custom wrapper to ensure each motor controller created is in a known state.  The alternate encoder is
     * a REV Through bore and is used for posion control feedback.  The PID controller is used for all positional
     * control.
     * @see {@link frc.robot.lib.drivers.SparkMax}
     */   
-    public static Hood create () {
-        CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( HOOD.MASTER_ID, MotorType.kBrushless ) );
-        CANEncoder alternateEncoder = master.getAlternateEncoder( AlternateEncoderType.kQuadrature, HOOD.SENSOR_COUNTS_PER_ROTATION );
+    public static Turret create () {
+        CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( TURRET.MASTER_ID, MotorType.kBrushless ) );
+        CANEncoder alternateEncoder = master.getAlternateEncoder( AlternateEncoderType.kQuadrature, TURRET.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController pidController = master.getPIDController();
-        LinearFilter movingAverageFilter = LinearFilter.movingAverage( HOOD.MOVING_AVERAGE_FILTER_TAPS );
-        return new Hood( master, pidController, alternateEncoder, movingAverageFilter );
+        LinearFilter movingAverageFilter = LinearFilter.movingAverage( TURRET.MOVING_AVERAGE_FILTER_TAPS );
+        return new Turret( master, pidController, alternateEncoder, movingAverageFilter );
     }
 
     /**
@@ -448,7 +430,7 @@ public class Hood extends SubsystemBase {
     */ 
     @Override
     public void initSendable ( SendableBuilder builder ) {
-        //builder.setSmartDashboardType( "Flywheel PID Tuning" );
+        //builder.setSmartDashboardType( "Turret PID Tuning" );
         builder.addDoubleProperty( "P", this::GetP, this::SetP);
         builder.addDoubleProperty( "I", this::GetI, this::SetI);
         builder.addDoubleProperty( "D", this::GetD, this::SetD);
@@ -462,23 +444,3 @@ public class Hood extends SubsystemBase {
 
 
 }
-
-
-
-
-//     public void SmartMotion {
-//         if (mControlState != controlType.kSmartMotion) {
-//             mControlState = controlType.kSmartMotion;
-//             mHoodMotor.selectProfileSlot(Constants.SMART_MOTION_ID);
-//         }
-
-//         mEncoderPositionTicks = getEncoderPositionTicks();
-        
-//         if (mEncoderPositionTicks < targetPositionTicks) {
-//             mHoodFFGravityComponent = Math.cos(Math.toRadians(getAngle(mEncoderPositionTicks)));
-//         } else {
-//             mHoodFFGravityComponent = 0.0;
-//     }
-//     // mLogger.info("Encoder position: {}, target position: {}, Feed Forward: {}", mEncoderPositionTicks, targetPositionTicks, mWristFFGravityComponent);
-//     mHoodMotor.set(ControlType.IntState, targetPositionTicks);
-//   }

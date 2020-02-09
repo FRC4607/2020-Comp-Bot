@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class TransferWheel extends SubsystemBase {
 
     // Hardware
-    private final CANSparkMax mTransferMotor;
+    private CANSparkMax mTransferMotor;
     private final Photoeye mTransferPhotoeye = new Photoeye( Constants.TRANSFER_PHOTOEYE_ANALOG_CHANNEL );
 
     // Hardware states

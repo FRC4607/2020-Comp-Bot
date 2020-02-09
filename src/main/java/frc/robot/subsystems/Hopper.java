@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class Hopper extends SubsystemBase {
 
     // Hardware
-    private final CANSparkMax mHopperMotor;
+    private CANSparkMax mHopperMotor;
 
     // Hardware states
     private boolean mIsBrakeMode;

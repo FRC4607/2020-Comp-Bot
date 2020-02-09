@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class Indexer extends SubsystemBase {
 
     // Hardware
-    private final CANSparkMax mIndexerMotor;
+    private CANSparkMax mIndexerMotor;
     private final Photoeye mIndexerPhotoeye = new Photoeye( Constants.INDEXER_PHOTOEYE_ANALOG_CHANNEL );
 
     // Hardware states

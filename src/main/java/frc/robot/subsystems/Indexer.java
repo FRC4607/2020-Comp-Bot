@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants;
-import frc.robot.lib.drivers.Photoeye;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -14,7 +13,7 @@ public class Indexer extends SubsystemBase {
 
     // Hardware
     private final CANSparkMax mIndexerMotor;
-    private final Photoeye mIndexerPhotoeye = new Photoeye( Constants.INDEXER_PHOTOEYE_ANALOG_CHANNEL );
+    
 
     // Hardware states
     private boolean mIsBrakeMode;

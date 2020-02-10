@@ -22,6 +22,104 @@ public class TransferWheel extends SubsystemBase {
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( TransferWheel.class );
 
+    public static enum TransferWheelState_t {
+        Init { @Override public String toString() { return "Init"; } },
+        Seeking { @Override public String toString() { return "Seeking"; } },
+        Holding { @Override public String toString() { return "Holding"; } },
+        Fail { @Override public String toString() { return "Fail"; } };
+    }
+    public static enum ControlState_t {
+        ClosedLoop { @Override public String toString() { return "Closed-Loop"; } };
+ public static enum FailingState_t {
+        Healthy { @Override public String toString() { return "Healthy"; } },        
+        BrokenSensor { @Override public String toString() { return "Broken sensor"; } },
+        PowerLoss { @Override public String toString() { return "Power loss"; } },
+        SeekTimeout { @Override public String toString() { return "Seek timeout"; } },
+        SeekRetries { @Override public String toString() { return "Seek retries"; } };
+    }
+    private final CANSparkMax mMaster;
+
+    private double mP, mI, mD, mF;
+    private double mTargetVelocity_Units_Per_100ms;
+    private double mTargetVelocity_RPM;
+    private double mCurrentVelocity_RPM;
+    private double mError_RPM;
+
+    private double mTargetPercentOutput;
+
+    // State variables
+    private TransferWheelState_t mTransferWheelState;
+    private ControlState_t mControlState;
+    private FailingState_t mFailingState;
+    private double mSeekTimer_S;
+    private int mSeekRetries;
+
+/**
+    * @return TransferWheelState_t The current state of the TransferWheel.
+    */
+    public TransferWheelState_t GetTransferWheelState () {
+        return mTransferWheelState;
+    }
+
+    /**
+    * @return ControlState_t The current control state of the TransferWheel.
+    */
+    public ControlState_t GetControlState () {
+        return mControlState;
+    }
+
+    /**
+    * @return FailingState_t The current failing state of the TransferWheel.
+    */
+    public FailingState_t GetFailingState () {
+        return mFailingState;
+    }
+
+    /**
+    * @return double The current closed-loop velocity target.
+    */
+    public double GetTargetVelocity_RPM () {
+        return mTargetVelocity_RPM;
+    }
+
+ /**
+    * @return double The current open-loop motor voltage percentage output.
+    */
+    public double GetTargetPercentOutput () {
+        return mTargetPercentOutput;
+    }
+
+    private void Initialize () {
+        mMaster.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
+                                              TransferWheel.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.setSensorPhase( true );
+        mMaster.setNeutralMode( NeutralMode.Brake );
+        mFollower.setNeutralMode( NeutralMode.Brake );
+        mFollower.setInverted( InvertType.OpposeMaster );
+        mTransferWheelState = TransferWheelState_t.Init;
+        mControlState = ControlState_t.ClosedLoop;
+        mFailingState = FailingState_t.Healthy;
+        mCurrentVelocity_RPM = Double.NaN;
+        mError_RPM = 0;
+        mP = TransferWheel.PID_KP;
+        mI = TransferWheel.PID_KI;
+        mD = TransferWheel.PID_KD;
+        mF = TransferWheel.PID_KF;     
+        SetTargetVelocity_RPM( 0.0 );  // 0's mSeekRetries
+        SetTargetPercentOutput( 0.0 );
+        SetGains();
+        SetVelocityOutput();
+    }
+
+
+
+
+
+
+
+
+
+
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {

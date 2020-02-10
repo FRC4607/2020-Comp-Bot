@@ -313,8 +313,8 @@ public class Hood extends SubsystemBase {
             case Init:
                 // Always move to Zeroing state when we arrive at the Init state, start trying to move the hood slowly
                 mTargetPercentOutput = HOOD.ZEROING_MOTOR_OUTPUT;
-                // TODO: Add current limiting
-                mZeroingTimer_S = Timer.getFPGATimestamp();
+                // TODO: Add current limiting 
+                mZeroingTimer_S = Timer.getFPGATimestamp(); 
                 mHoodState = HoodState_t.Zeroing;
                 break;
 

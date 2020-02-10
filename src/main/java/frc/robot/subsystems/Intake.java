@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class Intake extends SubsystemBase {
 
     // Hardware
-    private final CANSparkMax mIntakeMotor;
+    private CANSparkMax mIntakeMotor;
 
     // Hardware states
     private boolean mIsBrakeMode;

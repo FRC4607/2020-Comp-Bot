@@ -36,7 +36,7 @@ public class Turret extends SubsystemBase {
     }
 
     // Hardware
-    private final CANSparkMax mMaster;
+    private CANSparkMax mMaster;
     private CANEncoder mAlternateEncoder;
     private CANPIDController mPIDController;
 

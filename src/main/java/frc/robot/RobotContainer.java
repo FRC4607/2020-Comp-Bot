@@ -7,10 +7,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.robot.Constants;
+import frc.robot.Constants.INDEXER;
 import frc.robot.lib.drivers.PressureSensor;
 import frc.robot.lib.drivers.PDP;
+import frc.robot.lib.drivers.Photoeye;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hood;
@@ -31,6 +34,8 @@ public class RobotContainer {
     // Hardware
     private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
     private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
+    private final Photoeye mIndexerPhotoeye = new Photoeye( INDEXER.PHOTOEYE_ANALOG_CHANNEL );
+    private final Photoeye mTransferPhotoeye = new Photoeye( TRANSFER.PHOTOEYE_ANALOG_CHANNEL );
     private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
                                                                        Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( Constants.PDP_ID ), Constants.PDP_ID );
@@ -88,6 +93,7 @@ public class RobotContainer {
         return mAutoChooser.getSelected();
     }
 
+
      // Button mappings
      private void ConfigureButtonBindings () {
          new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
@@ -134,7 +140,7 @@ public class RobotContainer {
  
      public RobotContainer () {
          ConfigureButtonBindings();
-         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
+         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox, mIntake, mOperatorXbox ) );
          mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
          mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
          SmartDashboard.putData( "Auto Chooser", mAutoChooser );

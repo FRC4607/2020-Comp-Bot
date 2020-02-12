@@ -81,7 +81,9 @@ public final class Constants {
         public static final double PID_KI = 0.0;                           // Position closed-loop intgral gain
         public static final double PID_KD = 0.0;                           // Position closed-loop derivative gain
         public static final double PID_KFF = 0.0;                           // Position closed-loop feed-forward
-       
+        public static final double OFFTRACK_ERROR_PERCENT = 0.01;       // This limit determines when the flywheel is considered on-target
+        public static final double SEEK_TIMER_EXPIRED_S = 2.0;          // Allow 2 seconds to spin up to target velocity before retrying
+        public static final int SEEK_RETRY_LIMIT = 3;                   // Allow 3 seek retries before falling back to open-loop 
     }
 
     // Hopper devices ID's
@@ -98,7 +100,6 @@ public final class Constants {
     // Controllers and Joysticks
     public static final int DRIVER_XBOX = 0;
     public static final int OPERATOR_XBOX = 1;
-
 
     // Pressure sensor
     public static final int PRESSURE_SENSOR_ANALOG_CHANNEL = 0;

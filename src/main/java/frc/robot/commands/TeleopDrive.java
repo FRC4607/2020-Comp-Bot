@@ -3,12 +3,16 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 
 public class TeleopDrive extends CommandBase {
     @SuppressWarnings( { "PMD.UnusedPrivateField", "PMD.SingularField" } )
     private final Drivetrain mDrivetrain;
+    private final Intake mIntake;
     private final XboxController mDriverXbox;
+    private final XboxController mOperatorXbox;
 
 
     @Override
@@ -22,6 +26,13 @@ public class TeleopDrive extends CommandBase {
         } else {
             mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), -mDriverXbox.getX( Hand.kLeft ) );
         }
+
+        if ( mIntake.IsReversed() ) {
+            mIntake( mOperatorXbox.getY( Trigger.kRight ), mOperatorXbox.getX( Trigger.kRight ) );
+        } else {
+            mIntake( mOperatorXbox.getY( Trigger.kLeft ), -mOperatorXbox.getX( Trigger.kLeft ) );
+        }
+
     }
 
     @Override
@@ -32,9 +43,11 @@ public class TeleopDrive extends CommandBase {
       return false;
     }
 
-    public TeleopDrive ( Drivetrain drivetrain, XboxController driverXbox ) {
+    public TeleopDrive ( Drivetrain drivetrain, XboxController driverXbox, Intake intake, XboxController operatorXbox ) {
         mDrivetrain = drivetrain;
         mDriverXbox = driverXbox;
+        mIntake = intake;
+        mOperatorXbox = operatorXbox;
         addRequirements( mDrivetrain );
     }
 

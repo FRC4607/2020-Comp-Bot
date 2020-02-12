@@ -10,6 +10,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.EncoderType;
 import com.revrobotics.CANPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.ctre.phoenix.motorcontrol.StickyFaults;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +29,17 @@ public class Indexer extends SubsystemBase {
     }
 
     public static enum FailingState_t {
-        Ok { @Override public String toString() { return "Ok"; } },        
-       
+        Ok { @Override public String toString() { return "Ok"; } }, 
+        BrokenSensor { @Override public String toString() { return "Broken sensor"; } },      
+        PowerLoss { @Override public String toString() { return "Power loss"; } },
+        SeekTimeout { @Override public String toString() { return "Seek timeout"; } },
+        SeekRetries { @Override public String toString() { return "Seek retries"; } };
     }
 
     // Hardware
     private final CANSparkMax mIndexerMotor;
     private final Photoeye mIndexerPhotoeye = new Photoeye( INDEXER.PHOTOEYE_ANALOG_CHANNEL );
+    private StickyFaults mIndexerMotorFaults;
 
     // Closed-loop control
     private double mP, mI, mD, mFF;
@@ -121,9 +126,7 @@ public class Indexer extends SubsystemBase {
     */
     private void Initialize () {
         mPIDController.setFeedbackDevice( mHallSensor );
-        //mIndexerMotor.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
-                                            //  INDEXER.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
-		//mIndexerMotor.setSensorPhase( true );
+        mHallSensor.setInverted( false );
         mIndexerMotor.setNeutralMode( NeutralMode.Brake );
         mIndexerState = IndexerState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
@@ -198,12 +201,180 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
+    * This method will set the velocity closed-loop gains of the TalonSRX.
+    */
+    private void SetGains () {
+        mPIDController.setP( mP, INDEXER.PID_IDX );
+        mPIDController.setI( mI, INDEXER.PID_IDX );
+        mPIDController.setD( mD, INDEXER.PID_IDX );
+        mPIDController.setFF( mFF, INDEXER.PID_IDX );
+        mPIDController.setIZone( 0.0, INDEXER.PID_IDX );
+        mPIDController.setOutputRange( -1.0, 1.0 );
+        //mPIDController.setSmartMotionMaxVelocity( mMaxVelocity, INDEXER.PID_IDX );
+        mPIDController.setSmartMotionMinOutputVelocity( 0.0, INDEXER.PID_IDX );
+        //mPIDController.setSmartMotionMaxAccel( mMaxAcceleration, INDEXER.PID_IDX );
+        mPIDController.setSmartMotionAllowedClosedLoopError( 0.1, INDEXER.PID_IDX );
+    }
+
+    /**
+    * <b>This function should only be used for Livewindow PID tuning!<b> 
+    * @return boolean True if the current control state is closed-loop
+    */
+    private boolean IsClosedLoop () {
+        return mControlState == ControlState_t.ClosedLoop;
+    }
+
+
+/**
+    * <b>This function should only be used for Livewindow PID tuning!<b> 
+    */    
+    private void EnableClosedLoop ( boolean wantsClosedLoop ) {
+        if ( wantsClosedLoop && !IsClosedLoop() ) {
+            SetGains();
+            mControlState = ControlState_t.ClosedLoop;
+        } else if ( !wantsClosedLoop && IsClosedLoop() ) {
+            SetTargetPercentOutput( 0.0 );
+            mControlState = ControlState_t.OpenLoop;
+        }
+    }
+
+    /**
+    * This method will set the mSeekTimer_S variable to the current time in seconds.
+    */
+    private void SetSeekTimer () {
+        mSeekTimer_S = Timer.getFPGATimestamp();
+    }
+
+    /**
+    * This method will check the sticky faults of the master TalonSRX for faults related to the sensor used for
+    * velocity feedback.
+    * @return boolean Logical OR of SensorOverflow, SensorOutOfPhase, and RemoteLossOfSignal
+    */
+    private boolean SensorIsBroken () {
+        mIndexerMotor.getStickyFaults( mIndexerMotorFaults );
+        return mIndexerMotorFaults.SensorOverflow | mIndexerMotorFaults.SensorOutOfPhase | mIndexerMotorFaults.RemoteLossOfSignal;
+    }
+
+    /**
+    * This method will check the sticky faults of the master and follower TalonSRX for faults related to the power
+    * supplied. 
+    * @return boolean Logical OR of ResetDuringEn and UnderVoltage for both TalonSRX's
+    */    
+    private boolean PowerDisruption () {
+        mIndexerMotor.getStickyFaults( mIndexerMotorFaults );
+        return mIndexerMotorFaults.ResetDuringEn | mIndexerMotorFaults.UnderVoltage;
+    }
+
+    /**
     * This method will set output mode of the TalonSRX's to velocity at a target defined by the variable
     * mTargetVelocity_Units_Per_100ms.
     */    
     private void SetVelocityOutput () {
         mIndexerMotor.set( ControlState.Velocity, mTargetVelocity_Units_Per_100ms );
     }
+
+    /**
+    * This method will set the TalonSRX output based on the control state.
+    */
+    private void MotorOutput () {  
+        switch ( mControlState ) {
+            case ClosedLoop:
+                SetVelocityOutput();
+                break;
+        }
+    }
+
+
+    /**
+    * This method will update the states of the variable mFlywheelState, mControlState, and mFailingState.  After
+    * the states have been updated, the TalonSRX outputs are set for either the open-loop (percentage output) or
+    * closed-loop (velocity control) cases.
+    * <p> 
+    * This method should be set as the subsystems default command.  Furthermore, this subsystem isn't designed to be
+    * command requirement, so commands should set this subsystem as a requirement.  Following these two rules will
+    * ensure that this method is called after all of the subsystem's period() methods and all of the command's have
+    * finished running.
+    * <p>
+    * The flow for subsystems with this design pattern is:
+    * <ol>
+    * <li>Put all sensor readings into the subsystem's periodic() method so they are gathered right away
+    * <li>Commands generate new targets for the subsystem and set them up in the subsystem via set() method call
+    * <li>All default subsystem commands will be run to update internal states and set their outputs
+    * <li>Logging will grab all relevant data for logging and outputing to the SmartDashboard
+    * </ol>
+    * @see {@link edu.wpi.first.wpilibj2.command.CommandScheduler#run}
+    */     
+    public void Update () {
+        switch ( mIndexerState ) {
+            case Init:
+                // No velocity command has come in, so just hold at 0.0
+                if ( mTargetVelocity_Units_Per_100ms == 0.0 ) {
+                    mIndexerState = IndexerState_t.Holding;
+                
+                // Set the seek timer and begin seeking to the velocity target
+                } else  {
+                    mIndexerState = IndexerState_t.Loading;
+                }
+                break;
+
+            case Loading:
+                // The velocity is within tolerance to move to the holding state...which is a go for shooting
+                if ( Math.abs( mError_RPM ) <= INDEXER.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
+                    mIndexerState = IndexerState_t.Holding;
+                }
+                    // The retries have been exhausted
+                    if ( mSeekRetries > INDEXER.SEEK_RETRY_LIMIT ) {
+                        mControlState = ControlState_t.OpenLoop;
+                        mFailingState = FailingState_t.SeekRetries;
+                    } else {
+                        mFailingState = FailingState_t.SeekTimeout;
+                    }
+                }
+                break;
+
+            case Holding:
+                // The velocity has fallen outside of tolerance, move back to the seeking state
+                if ( Math.abs( mError_RPM ) > INDEXER.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
+                    mIndexerState = INDEXERState_t.Holding;
+                    SetSeekTimer();
+                }
+                break;
+
+            case Fail:
+                switch ( mFailingState ) {
+                    // Failure due to broken sensor, keep checking if it comes back online
+                    case BrokenSensor:
+                    mIndexerMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
+                        if ( !SensorIsBroken() ) {
+                            Initialize();
+                        }
+                        break;
+
+                    case PowerLoss:
+                    mIndexerMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
+                        if ( !PowerDisruption() ) {
+                            Initialize();
+                        }
+                        break;
+
+                    // Failure due to timing out during a seek
+                    case SeekTimeout:
+                        mFailingState = FailingState_t.Ok;
+                        mIndexerState = IndexerState_t.Seeking;
+                        SetSeekTimer();
+                        break;
+                    
+                    // All of the seek retries have been exhausted
+                    case SeekRetries:
+                        break;
+
+                    default:
+                        break;
+
+                }
+                break;
+        
+        }
 
 
     // Hardware states
@@ -257,6 +428,22 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic () {
 
+    }
+
+    /**
+    * We are overriding the initSendable and using it to send information back-and-forth between the robot program and
+    * the user PC for live PID tuning purposes.
+    * @param SendableBuilder This is inherited from SubsystemBase
+    */ 
+    @Override
+    public void initSendable ( SendableBuilder builder ) {
+        //builder.setSmartDashboardType( "Flywheel PID Tuning" );
+        builder.addDoubleProperty( "P", this::GetP, this::SetP);
+        builder.addDoubleProperty( "I", this::GetI, this::SetI);
+        builder.addDoubleProperty( "D", this::GetD, this::SetD);
+        builder.addDoubleProperty( "F", this::GetF, this::SetF);
+        builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
+        builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }
 
 }

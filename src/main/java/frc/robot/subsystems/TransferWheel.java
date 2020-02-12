@@ -90,12 +90,10 @@ public class TransferWheel extends SubsystemBase {
     }
 
     private void Initialize () {
-        mMaster.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
+        mTransferMotor.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
                                               TransferWheel.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.setSensorPhase( true );
-        mMaster.setNeutralMode( NeutralMode.Brake );
-        mFollower.setNeutralMode( NeutralMode.Brake );
-        mFollower.setInverted( InvertType.OpposeMaster );
+		mTransferMotor.setSensorPhase( true );
+        mTransferMotor.setNeutralMode( SparkNeutralMode.Brake );
         mTransferWheelState = TransferWheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
         mFailingState = FailingState_t.Healthy;

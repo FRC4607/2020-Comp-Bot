@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
         if (wantsBrakeMode && !mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
             mIntakeMotor.setIdleMode(IdleMode.kBrake);
-      mLogger.info("Neutral mode set to: [Brake]");
+      mLogger.info ("Neutral mode set to: [Brake]");
 
     } else if (!wantsBrakeMode && mIsBrakeMode) {
       mIsBrakeMode = wantsBrakeMode;

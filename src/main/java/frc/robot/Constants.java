@@ -72,6 +72,17 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 500.0;            // Smart Motion max acceleration
     }
 
+    public static final class TRANSFERWHEEL {
+        public static final int TRANSFER_PHOTOEYE_ANALOG_CHANNEL = 1;
+        public static final int TRANSFER_MOTOR_ID = 10;
+        public static final int SENSOR_COUNTS_PER_ROTATION = 4096;
+        public static final int PID_IDX = 0;                            // Position closed-loop slot index for gains
+        public static final double PID_KP = 0.0;                        // Position closed-loop proportional gain
+        public static final double PID_KI = 0.0;                        // Position closed-loop intgral gain
+        public static final double PID_KD = 0.0;                        // Position closed-loop derivative gain
+        public static final double PID_KF = 0.0; 
+
+    }
 
 
     // Hopper devices ID's
@@ -85,9 +96,7 @@ public final class Constants {
     public static final int INTAKE_MOTOR_ID = 10;
 
     // Tansfer device ID's
-    public static final int TRANSFER_PHOTOEYE_ANALOG_CHANNEL = 1;
-    public static final int TRANSFER_MOTOR_ID = 10;
-
+    
 
     // Controllers and Joysticks
     public static final int DRIVER_XBOX = 0;

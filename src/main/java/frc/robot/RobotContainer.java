@@ -111,6 +111,24 @@ public class RobotContainer {
                           "Flywheel Target Velocity (RPM),"+
                           "Flywheel Measured Velocity (RPM),"+
                           "Flywheel Velocity Error (RPM),"+
+                          "Indexer State,"+
+                          "Indexer Ouput State,"+
+                          "Indexer Error State,"+
+                          "Indexer Target Velocity (RPM),"+
+                          "Indexer Measured Velocity (RPM),"+
+                          "Indexer Velocity Error (RPM),"+
+                          "Hood State,"+
+                          "Hood Ouput State,"+
+                          "Hood Error State,"+
+                          "Hood Target Position Output,"+
+                          "Hood Measured Position (RPM),"+
+                          "Hood Target Percent Output,"+
+                          "Turret State,"+
+                          "Turret Ouput State,"+
+                          "Turret Error State,"+
+                          "Turret Target Position Output,"+
+                          "Turret Measured Position (RPM),"+
+                          "Turret Target Percent Output,"+
                           "PDP Voltage,"
                           //"PDP Slot 0 Current"                          
                           );

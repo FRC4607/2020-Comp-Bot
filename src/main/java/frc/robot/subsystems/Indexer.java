@@ -414,6 +414,7 @@ public class Indexer extends SubsystemBase {
         // Set the hardware
         mIndexerMotor = indexerMotor;
 
+
         // Set the hardware states
         mIsBrakeMode = false;
         SetBrakeMode( true );

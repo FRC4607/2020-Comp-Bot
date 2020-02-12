@@ -117,7 +117,7 @@ public class RobotContainer {
     }   
     
     public void LogRobotDataToRoboRio ( Logger fileLogger ) {
-        fileLogger.debug( "{},{},{},{},{},{},{},{},{},{},{}",
+        fileLogger.debug( "{},{},{},{},{},{},{},{},{},{},{},{}",
                           Timer.getFPGATimestamp(),
                           mMatchState.toString(),
                           mFlywheel.GetFlywheelState().toString(),
@@ -127,6 +127,24 @@ public class RobotContainer {
                           mFlywheel.GetTargetVelocity_RPM(),
                           mFlywheel.GetCurrentVelocity_RPM(),
                           mFlywheel.GetError_RPM(),
+                          mIndexer.GetIndexerState().toString(),
+                          mIndexer.GetControlState().toString(),
+                          mIndexer.GetFailingState().toString(),
+                          mIndexer.GetTargetVelocity_RPM(),
+                          mIndexer.GetCurrentVelocity_RPM(),
+                          mIndexer.GetError_RPM(),
+                          mHood.GetHoodState().toString(),
+                          mHood.GetControlState().toString(),
+                          mHood.GetFailingState().toString(),
+                          mHood.GetTargetPosition_Rot(),
+                          mHood.GetCurrentPosition_Rot(),
+                          mHood.GetTargetPercentOutput(),
+                          mTurret.GetTurretState().toString(),
+                          mTurret.GetControlState().toString(),
+                          mTurret.GetFailingState().toString(),
+                          mTurret.GetTargetPosition_Rot(),
+                          mTurret.GetCurrentPosition_Rot(),
+                          mTurret.GetTargetPercentOutput(),
                           mPDP.getVoltage()
                           //mPDP.getCurrent(  )                          
                           );

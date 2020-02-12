@@ -67,7 +67,7 @@ public class Indexer extends SubsystemBase {
     /**
     * @return IndexerState_t The current state of the indexer.
     */
-    public IndexerState_t GetFlywheelState () {
+    public IndexerState_t GetIndexerState () {
         return mIndexerState;
     }
 

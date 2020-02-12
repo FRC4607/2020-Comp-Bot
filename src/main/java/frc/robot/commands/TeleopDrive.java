@@ -28,9 +28,9 @@ public class TeleopDrive extends CommandBase {
         }
 
         if ( mIntake.IsReversed() ) {
-            mIntake( mOperatorXbox.getY( Trigger.kRight ), mOperatorXbox.getX( Trigger.kRight ) );
+            mIntake( mOperatorXbox.getY( Trigger.kRight ) );
         } else {
-            mIntake( mOperatorXbox.getY( Trigger.kLeft ), -mOperatorXbox.getX( Trigger.kLeft ) );
+            mIntake( mOperatorXbox.getY( Trigger.kLeft ) );
         }
 
     }

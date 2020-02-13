@@ -8,10 +8,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import frc.robot.Constants;
+import frc.robot.Constants.CONTROLLERS;
 import frc.robot.Constants.INDEXER;
+import frc.robot.Constants.INTAKE;
+import frc.robot.Constants.PRESSURE_SENSOR;
+import frc.robot.Constants.MISC;
+import frc.robot.Constants.PHOTOTEYES;
+import frc.robot.Constants.PHOTOTEYES;
 import frc.robot.lib.drivers.PressureSensor;
 import frc.robot.lib.drivers.PDP;
 import frc.robot.lib.drivers.Photoeye;
@@ -33,15 +37,15 @@ import org.slf4j.Logger;
 public class RobotContainer {
 
     // Hardware
-    private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
-    private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
-    private final Joystick mIntakeForward = new Joystick( Constants.INTAKE_TRIGGER_FORWARD );
-    private final Joystick mIntakeBackward = new Joystick( Constants.INTAKE_TRIGGER_BACKWARD );
+    private final XboxController mDriverXbox = new XboxController( CONTROLLERS.DRIVER_XBOX );
+    private final XboxController mOperatorXbox = new XboxController( CONTROLLERS.OPERATOR_XBOX );
+    private final Joystick mIntakeForward = new Joystick( INTAKE.INTAKE_FORWARD );
+    private final Joystick mIntakeBackward = new Joystick( INTAKE.INTAKE_BACKWARD );
     private final Photoeye mIndexerPhotoeye = new Photoeye( INDEXER.PHOTOEYE_ANALOG_CHANNEL );
-    private final Photoeye mTransferPhotoeye = new Photoeye( TRANSFER.PHOTOEYE_ANALOG_CHANNEL );
-    private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
-                                                                       Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
-    private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( Constants.PDP_ID ), Constants.PDP_ID );
+    private final Photoeye mTransferPhotoeye = new Photoeye( PHOTOTEYES.PHOTOEYE_ANALOG_CHANNEL );
+    private final PressureSensor mPressureSensor = new PressureSensor( PRESSURE_SENSOR.PRESSURE_SENSOR_ANALOG_CHANNEL, PRESSURE_SENSOR.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
+                                                                       PRESSURE_SENSOR.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
+    private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( MISC.PDP_ID ), MISC.PDP_ID );
 
      // Subsystems
      private final Drivetrain mDrivetrain = Drivetrain.create();
@@ -101,6 +105,8 @@ public class RobotContainer {
      private void ConfigureButtonBindings () {
          new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
          new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
+         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIntake.SetIntake( !mIntake.IsIntake() ), mIntake ) );
+         new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mIntake.SetOuttake( !mIntake.IsOuttake() ), mIntake ) );
      }
 
      // Debug logging
@@ -179,7 +185,7 @@ public class RobotContainer {
  
      public RobotContainer () {
          ConfigureButtonBindings();
-         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox, mIntake, mOperatorXbox ) );
+         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
          mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
          mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
          SmartDashboard.putData( "Auto Chooser", mAutoChooser );

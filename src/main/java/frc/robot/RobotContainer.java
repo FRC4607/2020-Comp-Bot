@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import frc.robot.Constants;
+import frc.robot.Constants.GLOBAL;
 import frc.robot.lib.drivers.PressureSensor;
 import frc.robot.lib.drivers.PDP;
 import frc.robot.subsystems.Drivetrain;
@@ -18,6 +18,7 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.Auto1;
@@ -28,24 +29,25 @@ import org.slf4j.Logger;
 public class RobotContainer {
 
     // Hardware
-    private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
-    private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
+    //private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
+    //private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
     private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
                                                                        Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
-    private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( Constants.PDP_ID ), Constants.PDP_ID );
+    private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( GLOBAL.PDP_ID ), GLOBAL.PDP_ID );
 
-     // Subsystems
-     private final Drivetrain mDrivetrain = Drivetrain.create();
-     private final Flywheel mFlywheel = Flywheel.create();
-     private final Hood mHood = Hood.create();
-     private final Hopper mHopper = Hopper.create();
-     private final Indexer mIndexer = Indexer.create();
-     private final Intake mIntake = Intake.create();
-     private final TransferWheel mTransferWheel = TransferWheel.create();
-     private final Shooter mSuperStructure = Shooter.create();
+    // Subsystems
+    private final Drivetrain mDrivetrain = Drivetrain.create();
+    private final Flywheel mFlywheel = Flywheel.create();
+    private final Hood mHood = Hood.create();
+    private final Hopper mHopper = Hopper.create();
+    private final Indexer mIndexer = Indexer.create();
+    private final Intake mIntake = Intake.create();
+    private final TransferWheel mTransferWheel = TransferWheel.create();
+    private final Turret mTurret = Turret.create();
+    private final Shooter mSuperStructure = Shooter.create();
      
-     // Autonomous chooser
-     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
+    // Autonomous chooser
+    private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
  
     // Match states for debug data output
     public static enum MatchState_t {
@@ -88,8 +90,8 @@ public class RobotContainer {
 
      // Button mappings
      private void ConfigureButtonBindings () {
-         new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
-         new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
+         //new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
+         //new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
      }
 
      // Debug logging
@@ -132,7 +134,7 @@ public class RobotContainer {
  
      public RobotContainer () {
          ConfigureButtonBindings();
-         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
+         //mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
          mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
          mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
          SmartDashboard.putData( "Auto Chooser", mAutoChooser );

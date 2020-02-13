@@ -462,23 +462,3 @@ public class Hood extends SubsystemBase {
 
 
 }
-
-
-
-
-//     public void SmartMotion {
-//         if (mControlState != controlType.kSmartMotion) {
-//             mControlState = controlType.kSmartMotion;
-//             mHoodMotor.selectProfileSlot(Constants.SMART_MOTION_ID);
-//         }
-
-//         mEncoderPositionTicks = getEncoderPositionTicks();
-        
-//         if (mEncoderPositionTicks < targetPositionTicks) {
-//             mHoodFFGravityComponent = Math.cos(Math.toRadians(getAngle(mEncoderPositionTicks)));
-//         } else {
-//             mHoodFFGravityComponent = 0.0;
-//     }
-//     // mLogger.info("Encoder position: {}, target position: {}, Feed Forward: {}", mEncoderPositionTicks, targetPositionTicks, mWristFFGravityComponent);
-//     mHoodMotor.set(ControlType.IntState, targetPositionTicks);
-//   }

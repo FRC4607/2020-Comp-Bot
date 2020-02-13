@@ -1,23 +1,32 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
-import frc.robot.lib.drivers.TalonSRX;
+import frc.robot.Constants.GLOBAL;
+import frc.robot.Constants.DRIVETRAIN;
+import frc.robot.lib.drivers.SparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.AlternateEncoderType;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends SubsystemBase {
 
     // Hardware
-    private final WPI_TalonSRX mLeftMaster;
-    private final WPI_TalonSRX mLeftFollower;
-    private final WPI_TalonSRX mRightMaster;
-    private final WPI_TalonSRX mRightFollower;
+    private final CANSparkMax mLeftMaster;
+    private final CANSparkMax mLeftFollower;
+    private final CANSparkMax mRightMaster;
+    private final CANSparkMax mRightFollower;
+    private CANEncoder mLeftAlternateEncoder;
+    private CANPIDController mLeftPIDController;
+    private CANEncoder mRightAlternateEncoder;
+    private CANPIDController mRightPIDController;
     private final DoubleSolenoid mShifter;
     public final DifferentialDrive mDifferentialDrive;
 
@@ -63,18 +72,18 @@ public class Drivetrain extends SubsystemBase {
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
-            mLeftMaster.setNeutralMode( NeutralMode.Brake );
-            mLeftFollower.setNeutralMode( NeutralMode.Brake );
-            mRightMaster.setNeutralMode( NeutralMode.Brake );
-            mRightFollower.setNeutralMode( NeutralMode.Brake );
+            // mLeftMaster.setNeutralMode( NeutralMode.Brake );
+            // mLeftFollower.setNeutralMode( NeutralMode.Brake );
+            // mRightMaster.setNeutralMode( NeutralMode.Brake );
+            // mRightFollower.setNeutralMode( NeutralMode.Brake );
             mLogger.info( "Neutral mode set to: [Brake]" );
 
         } else if (!wantsBrakeMode && mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
-            mLeftMaster.setNeutralMode( NeutralMode.Coast );
-            mLeftFollower.setNeutralMode( NeutralMode.Coast );
-            mRightMaster.setNeutralMode( NeutralMode.Coast );
-            mRightFollower.setNeutralMode( NeutralMode.Coast );
+            // mLeftMaster.setNeutralMode( NeutralMode.Coast );
+            // mLeftFollower.setNeutralMode( NeutralMode.Coast );
+            // mRightMaster.setNeutralMode( NeutralMode.Coast );
+            // mRightFollower.setNeutralMode( NeutralMode.Coast );
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }
@@ -103,13 +112,19 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
-    public Drivetrain ( WPI_TalonSRX leftMaster, WPI_TalonSRX leftFollower, WPI_TalonSRX rightMaster, WPI_TalonSRX rightFollower, DoubleSolenoid shifter ) {
+    public Drivetrain ( CANSparkMax leftMaster, CANSparkMax leftFollower, CANEncoder leftAlternateEncoder, CANPIDController leftPidController,
+                        CANSparkMax rightMaster, CANSparkMax rightFollower, CANEncoder rightAlternateEncoder, CANPIDController rightPidController,
+                        DoubleSolenoid shifter ) {
   
         // Set the hardware
         mLeftMaster = leftMaster;
         mLeftFollower = leftFollower;
         mRightMaster = rightMaster; 
         mRightFollower = rightFollower;
+        mLeftAlternateEncoder = leftAlternateEncoder;
+        mLeftPIDController = leftPidController;
+        mRightAlternateEncoder = rightAlternateEncoder;
+        mRightPIDController = rightPidController;        
         mShifter = shifter;
 
         // Create differential drive object
@@ -125,13 +140,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public static Drivetrain create () {
-        // Talon's and Victor's go through a custom wrapper for creation
-        WPI_TalonSRX leftMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( Constants.DRIVETRAIN_LEFT_MASTER_ID) );
-        WPI_TalonSRX leftFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( Constants.DRIVETRAIN_LEFT_FOLLOWER_ID), leftMaster );
-        WPI_TalonSRX rightMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( Constants.DRIVETRAIN_RIGHT_MASTER_ID) );
-        WPI_TalonSRX rightFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( Constants.DRIVETRAIN_RIGHT_FOLLOWER_ID), rightMaster );
-        DoubleSolenoid shifter = new DoubleSolenoid( Constants.PCM_ID, Constants.DRIVETRAIN_HIGH_GEAR_SOLENOID_ID, Constants.DRIVETRAIN_LOW_GEAR_SOLENOID_ID );
-        return new Drivetrain( leftMaster, leftFollower, rightMaster, rightFollower, shifter );
+        CANSparkMax leftMaster =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.LEFT_MASTER_ID, MotorType.kBrushless ) );
+        CANSparkMax leftFollower =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.LEFT_FOLLOWER_ID, MotorType.kBrushless ), leftMaster );
+        CANEncoder leftAlternateEncoder = leftMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
+        CANPIDController leftPidController = leftMaster.getPIDController();
+        CANSparkMax rightMaster =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.RIGHT_MASTER_ID, MotorType.kBrushless ) );
+        CANSparkMax rightFollower =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.RIGHT_FOLLOWER_ID, MotorType.kBrushless ), rightMaster );
+        CANEncoder rightAlternateEncoder = rightMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
+        CANPIDController rightPidController = rightMaster.getPIDController();
+        DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
+        return new Drivetrain( leftMaster, leftFollower, leftAlternateEncoder, leftPidController,
+                               rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter ); 
     }
 
     @Override

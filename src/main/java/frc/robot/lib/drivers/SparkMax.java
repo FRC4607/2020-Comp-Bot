@@ -67,6 +67,7 @@ public class SparkMax {
     */  
     public static CANSparkMax CreateSparkMax ( CANSparkMax sparkMax ) {
         SetDefaultConfig( sparkMax );
+        mLogger.info( "Created master Spark Max [{}] ", sparkMax.getDeviceId() );
         return sparkMax;
     }
 
@@ -79,6 +80,7 @@ public class SparkMax {
     public static CANSparkMax CreateSparkMax ( CANSparkMax sparkMax, CANSparkMax master ) {
         SetDefaultConfig( sparkMax );
         sparkMax.follow( master );
+        mLogger.info( "Created follower Spark Max [{}], master [{}] ", sparkMax.getDeviceId(), master.getDeviceId() );
         return sparkMax;
     }
 

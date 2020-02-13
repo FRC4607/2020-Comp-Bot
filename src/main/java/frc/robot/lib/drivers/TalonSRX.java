@@ -67,7 +67,7 @@ public class TalonSRX {
             mLogger.error( "Could not set TalonSRX [{}] status frame period due to EC: [{}]", talon.getDeviceID(), setStatusFramePeriod );
         }  
         talon.set( ControlMode.PercentOutput, 0.0 );
-        mLogger.info( "Created leader TalonSRX [{}]", talon.getDeviceID() );
+        mLogger.info( "Created master TalonSRX [{}]", talon.getDeviceID() );
         return talon;
     }
 
@@ -80,7 +80,7 @@ public class TalonSRX {
             mLogger.error( "Could not set TalonSRX [{}] status frame period due to EC: [{}]", talon.getDeviceID(), setStatusFramePeriod );
         }  
         talon.follow( master);
-        mLogger.info( "Created follower TalonSRX [{}]", talon.getDeviceID() );
+        mLogger.info( "Created follower TalonSRX [{}], master [{}]", talon.getDeviceID(), master.getDeviceID() );
         return talon;
     }
 
@@ -93,7 +93,7 @@ public class TalonSRX {
         }  
         talon.set(ControlMode.PercentOutput, 0.0);
         setEncoderConfig( talon );
-        mLogger.info( "Created leader TalonSRX [{}] with an encoder", talon.getDeviceID() );
+        mLogger.info( "Created master TalonSRX [{}] with an encoder", talon.getDeviceID() );
         return talon;
     }
 
@@ -106,7 +106,7 @@ public class TalonSRX {
         }
         talon.follow( master );
         setEncoderConfig( talon );
-        mLogger.info( "Created follower TalonSRX [{}] with an encoder", talon.getDeviceID() );
+        mLogger.info( "Created follower TalonSRX [{}] with a CTRE Mag encoder, master [{}]", talon.getDeviceID(), master.getDeviceID() );
         return talon;
     }
 

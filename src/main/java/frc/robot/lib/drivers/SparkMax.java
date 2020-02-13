@@ -9,10 +9,8 @@ import org.slf4j.LoggerFactory;
 /**
 * This class is used as a wrapper around the CANSparkMax object in order to initialize the motor controller to known
 * configuration.  Also, any sticky errors present will be logged and cleared.
-*  
 * @see {@link http://www.revrobotics.com/content/sw/max/sw-docs/java/index.html}
-*/    
-
+*/
 public class SparkMax {
 
     private static final Logger mLogger = LoggerFactory.getLogger( SparkMax.class );
@@ -30,7 +28,6 @@ public class SparkMax {
     * </ul>
     * <p>
     * @param sparkMax CANSparkMax The motor controller to initialize
-    * @see {@link frc.robot.lib.drivers.SparkMax}
     */        
     private static void SetDefaultConfig ( CANSparkMax sparkMax ) {
         CANError canError;
@@ -63,7 +60,6 @@ public class SparkMax {
     /**
     * Create a master CANSparkMax motor controller.
     * @param sparkMax CANSparkMax The motor controller to initialize
-    * @see {@link frc.robot.lib.drivers.SparkMax}
     */  
     public static CANSparkMax CreateSparkMax ( CANSparkMax sparkMax ) {
         SetDefaultConfig( sparkMax );
@@ -75,7 +71,6 @@ public class SparkMax {
     * Create a follower CANSparkMax motor controller.
     * @param sparkMax CANSparkMax The motor controller to initialize 
     * @param master CANSparkMax The motor controller to follow 
-    * @see {@link frc.robot.lib.drivers.SparkMax}
     */  
     public static CANSparkMax CreateSparkMax ( CANSparkMax sparkMax, CANSparkMax master ) {
         SetDefaultConfig( sparkMax );

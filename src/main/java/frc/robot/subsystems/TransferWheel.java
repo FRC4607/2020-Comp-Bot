@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class TransferWheel extends SubsystemBase {
 
     // Hardware
-    private final CANSparkMax mMaster;
+    private CANSparkMax mMaster;
     //private final Photoeye mIndexerPhotoeye = new Photoeye( TRANSFER_WHEEL.PHOTOEYE_DIO_CHANNEL );
 
     // Logging

@@ -35,45 +35,29 @@ public class RobotContainer {
                                                                        Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( GLOBAL.PDP_ID ), GLOBAL.PDP_ID );
 
-    // Subsystems
-    private final Drivetrain mDrivetrain = Drivetrain.create();
-    private final Flywheel mFlywheel = Flywheel.create();
-    private final Hood mHood = Hood.create();
-    private final Hopper mHopper = Hopper.create();
-    private final Indexer mIndexer = Indexer.create();
-    private final Intake mIntake = Intake.create();
-    private final TransferWheel mTransferWheel = TransferWheel.create();
-    private final Turret mTurret = Turret.create();
-    private final Shooter mSuperStructure = Shooter.create();
+     // Subsystems
+     private Drivetrain mDrivetrain = Drivetrain.create();
+     private Flywheel mFlywheel = Flywheel.create();
+     private Hood mHood = Hood.create();
+     private Hopper mHopper = Hopper.create();
+     private Indexer mIndexer = Indexer.create();
+     private Intake mIntake = Intake.create();
+     private TransferWheel mTransferWheel = TransferWheel.create();
+     private Shooter mSuperStructure = Shooter.create();
      
     // Autonomous chooser
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
  
     // Match states for debug data output
     public static enum MatchState_t {
-        robotInit {
-            @Override public String toString() { return "Robot Init"; }
-        },
-        robotPeriodic {
-            @Override public String toString() { return "Robot Periodic"; }
-        },
-        disabledInit {
-            @Override public String toString() { return "Disabled Init"; }
-        },
-        autonomousInit {
-            @Override public String toString() { return "Autonomous Init"; }
-        },
-        autonomousPeriodic {
-            @Override public String toString() { return "Autonomous Periodic"; }
-        },
-        teleopInit {
-            @Override public String toString() { return "Teleop Init"; }
-        },
-        teleopPeriodic {
-            @Override public String toString() { return "Teleop Periodic"; }
-        };
+        robotInit { @Override public String toString() { return "Robot Init"; } },
+        robotPeriodic { @Override public String toString() { return "Robot Periodic"; } },
+        disabledInit { @Override public String toString() { return "Disabled Init"; } },
+        autonomousInit { @Override public String toString() { return "Autonomous Init"; } },
+        autonomousPeriodic { @Override public String toString() { return "Autonomous Periodic"; } },
+        teleopInit { @Override public String toString() { return "Teleop Init"; } },
+        teleopPeriodic { @Override public String toString() { return "Teleop Periodic"; } };
     }
-     
      private MatchState_t mMatchState;
  
      public MatchState_t GetMatchState () {

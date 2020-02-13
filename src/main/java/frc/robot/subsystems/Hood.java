@@ -36,7 +36,7 @@ public class Hood extends SubsystemBase {
     }
 
     // Hardware
-    private final CANSparkMax mMaster;
+    private CANSparkMax mMaster;
     private CANEncoder mAlternateEncoder;
     private CANPIDController mPIDController;
 
@@ -50,7 +50,7 @@ public class Hood extends SubsystemBase {
     private double mTargetPercentOutput;
 
     // Zero'ing the encoder
-    LinearFilter mMovingAverageFilter;
+    private LinearFilter mMovingAverageFilter;
     private double mCurrentPosition_Rot_Filtered;
     private double mZeroingTimer_S;
     private int mZeroingRetries;

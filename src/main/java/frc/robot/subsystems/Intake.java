@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class Intake extends SubsystemBase {
 
     // Hardware
-    private final WPI_TalonSRX mMaster;
+    private WPI_TalonSRX mMaster;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Intake.class );

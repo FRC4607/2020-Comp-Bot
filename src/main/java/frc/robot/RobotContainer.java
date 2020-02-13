@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import frc.robot.Constants;
 import frc.robot.Constants.INDEXER;
@@ -34,6 +35,8 @@ public class RobotContainer {
     // Hardware
     private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
     private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
+    private final Joystick mIntakeForward = new Joystick( Constants.INTAKE_TRIGGER_FORWARD );
+    private final Joystick mIntakeBackward = new Joystick( Constants.INTAKE_TRIGGER_BACKWARD );
     private final Photoeye mIndexerPhotoeye = new Photoeye( INDEXER.PHOTOEYE_ANALOG_CHANNEL );
     private final Photoeye mTransferPhotoeye = new Photoeye( TRANSFER.PHOTOEYE_ANALOG_CHANNEL );
     private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 

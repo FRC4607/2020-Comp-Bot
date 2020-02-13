@@ -17,21 +17,34 @@ public class Intake extends SubsystemBase {
 
     // Hardware states
     private boolean mIsBrakeMode;
-    private boolean mIsReversed;
+    private boolean mIsIntake;
+    private boolean mIsOuttake;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Intake.class );
 
-    public void SetReversed ( boolean wantsReversed ) {
-        if ( wantsReversed != mIsReversed ) {
-            mIsReversed = wantsReversed;
-            mIntakeMotor.setInverted( wantsReversed );
-            mLogger.info( "Reversed drive set to: [{}]", mIsReversed );
+    public void SetIntake ( boolean wantsIntake ) {
+        if ( wantsIntake != mIsIntake ) {
+            mIsIntake = wantsIntake;
+            mIntakeMotor.setThrottleChannel( wantsIntake );
+            mLogger.info( "Intaking set to: [{}]", mIsIntake );
         }
     }
 
-    public boolean IsReversed () {
-        return mIsReversed;
+    public boolean IsIntake () {
+        return mIsIntake;
+    }
+
+    public void SetOuttake ( boolean wantsOuttake ) {
+        if ( wantsOuttake != mIsOuttake ) {
+            mIsOuttake = wantsOuttake;
+            mIntakeMotor.setInverted( wantsOuttake );
+            mLogger.info( "Outtaking set to: [{}]", mIsOuttake );
+        }
+    }
+
+    public boolean IsOuttake () {
+        return mIsOuttake;
     }
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {

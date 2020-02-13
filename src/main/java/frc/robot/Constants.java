@@ -100,6 +100,8 @@ public final class Constants {
     // Controllers and Joysticks
     public static final int DRIVER_XBOX = 0;
     public static final int OPERATOR_XBOX = 1;
+    public static final int INTAKE_TRIGGER_FORWARD = 0;
+    public static final int INTAKE_TRIGGER_BACKWARD = 1;
 
     // Pressure sensor
     public static final int PRESSURE_SENSOR_ANALOG_CHANNEL = 0;

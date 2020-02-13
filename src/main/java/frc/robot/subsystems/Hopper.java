@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class Hopper extends SubsystemBase {
 
     // Hardware
-    private CANSparkMax mHopperMotor;
+    private CANSparkMax mMaster;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Hopper.class );

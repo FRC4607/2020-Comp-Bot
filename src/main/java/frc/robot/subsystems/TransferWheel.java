@@ -8,12 +8,18 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StickyFaults;
 
 public class TransferWheel extends SubsystemBase {
 
     // Hardware
     private CANSparkMax mMaster;
-    //private final Photoeye mIndexerPhotoeye = new Photoeye( TRANSFER_WHEEL.PHOTOEYE_DIO_CHANNEL );
+    //private Photoeye mIndexerPhotoeye = new Photoeye( TRANSFER_WHEEL.PHOTOEYE_DIO_CHANNEL );
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( TransferWheel.class );
@@ -26,11 +32,4 @@ public class TransferWheel extends SubsystemBase {
         CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( TRANSFER_WHEEL.MASTER_ID, MotorType.kBrushless ) );
         return new TransferWheel( master );
     }
-
-    @Override
-    public void periodic () {
-
-    }
-
 }
-

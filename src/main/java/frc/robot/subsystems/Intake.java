@@ -16,7 +16,6 @@ public class Intake extends SubsystemBase {
     private final Logger mLogger = LoggerFactory.getLogger( Intake.class );
 
     public Intake ( WPI_TalonSRX master ) {
-        mMaster = master;
     }
 
     public static Intake create () {

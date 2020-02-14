@@ -73,7 +73,7 @@ public class VictorSPX {
     public static WPI_VictorSPX createVictorSPX ( WPI_VictorSPX victor, WPI_TalonSRX master ) {
         setDefaultConfig( victor );
         victor.follow( master );
-        mLogger.info( "Created follower VictorSPX [{}]", victor.getDeviceID() );
+        mLogger.info( "Created follower VictorSPX [{}], master [{}]", victor.getDeviceID(), master.getDeviceID() );
         return victor;
     }
 

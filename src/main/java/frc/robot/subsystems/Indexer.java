@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import frc.robot.Constants.INDEXER;
 import frc.robot.lib.drivers.Photoeye;
 import frc.robot.lib.drivers.SparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

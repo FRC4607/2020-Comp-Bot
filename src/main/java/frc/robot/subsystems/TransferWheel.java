@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.TRANSFERWHEEL;
 import frc.robot.lib.drivers.Photoeye;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,6 +10,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 
 public class TransferWheel extends SubsystemBase {
@@ -38,15 +44,16 @@ public class TransferWheel extends SubsystemBase {
         SeekTimeout { @Override public String toString() { return "Seek timeout"; } },
         SeekRetries { @Override public String toString() { return "Seek retries"; } };
     }
-    private final CANSparkMax mMaster;
+    private final CANSparkMax mTransferMotor;
 
     private double mP, mI, mD, mF;
     private double mTargetVelocity_Units_Per_100ms;
     private double mTargetVelocity_RPM;
     private double mCurrentVelocity_RPM;
     private double mError_RPM;
-
+    private CANEncoder mHallSensor;
     private double mTargetPercentOutput;
+    private CANPIDController mPIDController;
 
     // State variables
     private TransferWheelState_t mTransferWheelState;
@@ -91,8 +98,7 @@ public class TransferWheel extends SubsystemBase {
     }
 
     private void Initialize () {
-        mTransferMotor.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
-                                              TransferWheel.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
+        mPIDController.setFeedbackDevice( mHallSensor );
 		mTransferMotor.setSensorPhase( true );
         mTransferMotor.setNeutralMode( SparkNeutralMode.Brake );
         mTransferWheelState = TransferWheelState_t.Init;
@@ -100,10 +106,10 @@ public class TransferWheel extends SubsystemBase {
         mFailingState = FailingState_t.Healthy;
         mCurrentVelocity_RPM = Double.NaN;
         mError_RPM = 0;
-        mP = TransferWheel.PID_KP;
-        mI = TransferWheel.PID_KI;
-        mD = TransferWheel.PID_KD;
-        mF = TransferWheel.PID_KF;     
+        mP = TRANSFERWHEEL.PID_KP;
+        mI = TRANSFERWHEEL.PID_KI;
+        mD = TRANSFERWHEEL.PID_KD;
+        mF = TRANSFERWHEEL.PID_KF;     
         SetTargetVelocity_RPM( 0.0 );  // 0's mSeekRetries
         SetTargetPercentOutput( 0.0 );
         SetGains();
@@ -165,10 +171,10 @@ public class TransferWheel extends SubsystemBase {
     }
 
     private void SetGains () {
-		mTransferMotor.config_kP( TransferWheel.PID_IDX, mP, GLOBAL.CAN_TIMEOUT_MS );
-		mTransferMotor.config_kI( TransferWheel.PID_IDX, mI, GLOBAL.CAN_TIMEOUT_MS );
-		mTransferMotor.config_kD( TransferWheel.PID_IDX, mD, GLOBAL.CAN_TIMEOUT_MS );
-		mTransferMotor.config_kF( TransferWheel.PID_IDX, mF, GLOBAL.CAN_TIMEOUT_MS );
+		mTransferMotor.config_kP( TRANSFERWHEEL.PID_IDX, mP, GLOBAL.CAN_TIMEOUT_MS );
+		mTransferMotor.config_kI( TRANSFERWHEEL.PID_IDX, mI, GLOBAL.CAN_TIMEOUT_MS );
+		mTransferMotor.config_kD( TRANSFERWHEEL.PID_IDX, mD, GLOBAL.CAN_TIMEOUT_MS );
+		mTransferMotor.config_kF( TRANSFERWHEEL.PID_IDX, mF, GLOBAL.CAN_TIMEOUT_MS );
     }
 
     private boolean IsClosedLoop () {
@@ -195,9 +201,8 @@ public class TransferWheel extends SubsystemBase {
     }
 
     private boolean PowerDisruption () {
-        mMaster.getStickyFaults( mMasterFaults );
-        mFollower.getStickyFaults( mFollowerFaults );
-        return mMasterFaults.ResetDuringEn | mMasterFaults.UnderVoltage | mFollowerFaults.ResetDuringEn | mFollowerFaults.UnderVoltage;
+        mTransferMotor.getStickyFaults( mTransferMotorFaults );
+        return mTransferMotorFaults.ResetDuringEn | mTransferMotorFaults.UnderVoltage;
     }
 
     /**
@@ -205,7 +210,7 @@ public class TransferWheel extends SubsystemBase {
     * mTargetVelocity_Units_Per_100ms.
     */    
     private void SetVelocityOutput () {
-        mMaster.set( ControlMode.Velocity, mTargetVelocity_Units_Per_100ms );
+        mTransferMotor.set( ControlMode.Velocity, mTargetVelocity_Units_Per_100ms );
     }
 
     /**
@@ -213,7 +218,7 @@ public class TransferWheel extends SubsystemBase {
     * mTargetPercentOutput.
     */  
     private void SetPercentOutput () {
-        mMaster.set( ControlMode.PercentOutput, mTargetPercentOutput );
+        mTransferMotor.set( ControlMode.PercentOutput, mTargetPercentOutput );
     }
 
     /**
@@ -231,23 +236,23 @@ public class TransferWheel extends SubsystemBase {
     }
 
     public void Update () {
-        switch ( mTransfereWheelState ) {
+        switch ( mTransferWheelState ) {
             case Init:
                 // No velocity command has come in, so just hold at 0.0
                 if ( mTargetVelocity_Units_Per_100ms == 0.0 ) {
-                    mTransfereWheelState = TransfereWheelState_t.Holding;
+                    mTransferWheelState = TransferWheelState_t.Holding;
                 
                 // Set the seek timer and begin seeking to the velocity target
                 } else  {
-                    mTransfereWheelState = TransfereWheelState_t.Seeking;
+                    mTransferWheelState = TransferWheelState_t.Seeking;
                     SetSeekTimer();
                 }
                 break;
 
             case Seeking:
                 // The velocity is within tolerance to move to the holding state...which is a go for shooting
-                if ( Math.abs( mError_RPM ) <= TransfereWheel.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
-                    mTransfereWheelState = TransfereWheelState_t.Holding;
+                if ( Math.abs( mError_RPM ) <= TransferWheel.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
+                    mTransferWheelState = TransferWheelState_t.Holding;
                 }
                 // The seek timer has expired
                 if ( Timer.getFPGATimestamp() - mSeekTimer_S > TransferWheel.SEEK_TIMER_EXPIRED_S ) {
@@ -275,15 +280,14 @@ public class TransferWheel extends SubsystemBase {
                 switch ( mFailingState ) {
                     // Failure due to broken sensor, keep checking if it comes back online
                     case BrokenSensor:
-                        mMaster.clearStickyFaults( 0 ); // Send command whithout checking or blocking
+                    mTransferMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
                         if ( !SensorIsBroken() ) {
                             Initialize();
                         }
                         break;
 
                     case PowerLoss:
-                        mMaster.clearStickyFaults( 0 ); // Send command whithout checking or blocking
-                        mFollower.clearStickyFaults( 0 ); // Send command whithout checking or blocking
+                    mTransferMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
                         if ( !PowerDisruption() ) {
                             Initialize();
                         }
@@ -324,18 +328,15 @@ public class TransferWheel extends SubsystemBase {
         MotorOutput();
     }
 
-    public TransferWheel ( WPI_TalonSRX master, StickyFaults masterFaults,
-                      WPI_TalonSRX follower, StickyFaults followerFaults ) {
-        mMaster = master;
-        mFollower = follower;
-        mMasterFaults = masterFaults;
-        mFollowerFaults = followerFaults;
+    public TransferWheel ( CANSparkMax TransferMotor, StickyFaults mTransferMotorFaults, ) {
+        mTransferMotor = mTransferMotor;
+        mTransferMotorFaults = mTransferMotorFaults;
         Initialize();
     }
 
     @Override
     public void periodic () {
-        mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity(TRANSFERWHEEL.PID_IDX ) /
+        mCurrentVelocity_RPM = mTransferMotor.getSelectedSensorVelocity(TRANSFERWHEEL.PID_IDX ) /
                                                                   TRANSFERWHEEL.SENSOR_UNITS_PER_ROTATION * 4096;
         mError_RPM = GetTargetVelocity_RPM() - mCurrentVelocity_RPM;     
     }
@@ -357,11 +358,6 @@ public class TransferWheel extends SubsystemBase {
     }
 
 }
-
-
-
-
-
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {
@@ -388,10 +384,10 @@ public class TransferWheel extends SubsystemBase {
         }
     }
 
-    public TransferWheel ( CANSparkMax transferMotor ) {
+    public TransferWheel ( CANSparkMax TransferMotor ) {
   
         // Set the hardware
-        mTransferMotor = transferMotor;
+        mTransferMotor = TransferMotor;
 
         // Set the hardware states
         mIsBrakeMode = false;
@@ -399,9 +395,9 @@ public class TransferWheel extends SubsystemBase {
     }
 
     public static TransferWheel create () {
-        // Talon's and Victor's go through a custom wrapper for creation
-        CANSparkMax transferMotor = new CANSparkMax( Constants.TRANSFER_MOTOR_ID, MotorType.kBrushless );
-        return new TransferWheel( transferMotor );
+        // CANSparkMax and Victor's go through a custom wrapper for creation
+        CANSparkMax TransferMotor = new CANSparkMax( TRANSFERWHEEL.TRANSFER_MOTOR_ID, MotorType.kBrushless );
+        return new TransferWheel( TransferMotor );
         StickyFaults TransferWheelFaults = new StickyFaults();
     }
 

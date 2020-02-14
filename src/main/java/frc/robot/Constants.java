@@ -72,6 +72,11 @@ public final class Constants {
         public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
     }
 
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the indexer
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Indexer}
+    */ 
     public static final class INDEXER {
         public static final int PHOTOEYE_ANALOG_CHANNEL = 0;               
         public static final int MOTOR_ID = 10;                            

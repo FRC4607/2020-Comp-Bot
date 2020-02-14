@@ -15,7 +15,6 @@ import frc.robot.Constants.INTAKE;
 import frc.robot.Constants.PRESSURE_SENSOR;
 import frc.robot.Constants.MISC;
 import frc.robot.Constants.PHOTOTEYES;
-import frc.robot.Constants.PHOTOTEYES;
 import frc.robot.lib.drivers.PressureSensor;
 import frc.robot.lib.drivers.PDP;
 import frc.robot.lib.drivers.Photoeye;
@@ -102,11 +101,14 @@ public class RobotContainer {
 
 
      // Button mappings
+     // TODO: figure out where drivers want buttons  
      private void ConfigureButtonBindings () {
-         new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
-         new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
-         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIntake.SetIntake( !mIntake.IsIntake() ), mIntake ) );
-         new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mIntake.SetOuttake( !mIntake.IsOuttake() ), mIntake ) );
+        // drivetrain gear 
+        new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
+        new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
+        // intake and outtake
+        new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIntake.SetIntake( !mIntake.IsIntake() ), mIntake ) );
+        new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mIntake.SetOuttake( !mIntake.IsOuttake() ), mIntake ) );
      }
 
      // Debug logging

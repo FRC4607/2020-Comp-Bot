@@ -29,6 +29,7 @@ public class Drivetrain extends SubsystemBase {
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
 
+    // reverse direction of driving
     public void SetReversed ( boolean wantsReversed ) {
         if ( wantsReversed != mIsReversed ) {
             mIsReversed = wantsReversed;

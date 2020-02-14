@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
 import frc.robot.Constants.INTAKE;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,29 +19,17 @@ public class Intake extends SubsystemBase {
 
     // Hardware states
     private boolean mIsBrakeMode;
-    private boolean mIsIntake;
     private boolean mIsOuttake;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Intake.class );
 
-    public void setIntake ( double 1.0 ) {
-        if ( wantsIntake != mIsIntake ) {
-            mIsIntake = wantsIntake;
-            mIntakeMotor.SetIntake( wantsIntake );
-            mLogger.info( "Intaking set to: [{}]", mIsIntake );
-        }
-    }
-
-    public boolean IsIntake () {
-        return mIsIntake;
-    }
-
-    public void setOuttake ( double 1.0 ) {
-        if ( wantsIntake != mIsIntake ) {
-            mIsIntake = wantsIntake;
-            mIntakeMotor.SetIntake( wantsIntake );
-            mLogger.info( "Intaking set to: [{}]", mIsIntake );
+    // reverse direction of intaking / outtaking
+    public void SetOuttake ( boolean wantsOuttake ) {
+        if ( wantsOuttake != mIsOuttake ) {
+            mIsOuttake = wantsOuttake;
+            mIntakeMotor.setInverted( wantsOuttake );
+            mLogger.info( "Reversed intake drive set to: [{}]", mIsOuttake );
         }
     }
 
@@ -83,6 +71,8 @@ public class Intake extends SubsystemBase {
         // Set the hardware states
         mIsBrakeMode = false;
         SetBrakeMode( true );
+        mIsOuttake = false;
+        SetOuttake( true );
     }
 
     public static Intake create () {

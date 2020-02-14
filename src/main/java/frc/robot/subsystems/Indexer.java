@@ -2,16 +2,20 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.INDEXER;
 import frc.robot.Constants.GLOBAL;
-import edu.wpi.first.wpilibj.Timer;
 import frc.robot.lib.drivers.Photoeye;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.EncoderType;
 import com.revrobotics.CANPIDController;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import com.ctre.phoenix.motorcontrol.StickyFaults;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +123,7 @@ public class Indexer extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------------
 
- /**
+    /**
     * This method will initialize the Indexer subsystem by setting the up the
     * master TalonSRX for velocity control and setting all of the internal
     * states to their starting values.

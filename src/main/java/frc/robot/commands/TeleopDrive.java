@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DRIVETRAIN;
 import frc.robot.subsystems.Drivetrain;
 
 public class TeleopDrive extends CommandBase {
@@ -16,12 +17,13 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void execute() {
-        // Arcade drive driven off of the left Xbox joystick only 
+        // Arcade drive driven off of the left Xbox joystick only with turn gain
         if ( mDrivetrain.IsReversed() ) {
-            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), mDriverXbox.getX( Hand.kLeft ) );
+            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), mDriverXbox.getX( Hand.kLeft ) * DRIVETRAIN.TURN_GAIN );
         } else {
-            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), -mDriverXbox.getX( Hand.kLeft ) );
+            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), -mDriverXbox.getX( Hand.kLeft ) * DRIVETRAIN.TURN_GAIN );
         }
+
     }
 
     @Override

@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.TRANSFER_WHEEL;
+import frc.robot.Constants.TRANSFER;
 import frc.robot.lib.drivers.Photoeye;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -11,9 +11,14 @@ import org.slf4j.LoggerFactory;
 
 public class TransferWheel extends SubsystemBase {
 
+    // Just to test pull request
+
     // Hardware
-    private CANSparkMax mMaster;
-    //private final Photoeye mIndexerPhotoeye = new Photoeye( TRANSFER_WHEEL.PHOTOEYE_DIO_CHANNEL );
+    private final CANSparkMax mTransferMotor;
+    private final Photoeye mTransferPhotoeye = new Photoeye( TRANSFER.TRANSFER_PHOTOEYE_ANALOG_CHANNEL );
+
+    // Hardware states
+    private boolean mIsBrakeMode;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( TransferWheel.class );
@@ -23,8 +28,9 @@ public class TransferWheel extends SubsystemBase {
     }
 
     public static TransferWheel create () {
-        CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( TRANSFER_WHEEL.MASTER_ID, MotorType.kBrushless ) );
-        return new TransferWheel( master );
+        // Talon's and Victor's go through a custom wrapper for creation
+        CANSparkMax transferMotor = new CANSparkMax( TRANSFER.TRANSFER_MOTOR_ID, MotorType.kBrushless );
+        return new TransferWheel( transferMotor );
     }
 
     @Override

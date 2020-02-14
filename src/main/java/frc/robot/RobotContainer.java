@@ -107,8 +107,8 @@ public class RobotContainer {
         new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
         new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
         // intake and outtake
-        new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIntake.SetIntake( !mIntake.IsIntake() ), mIntake ) );
-        new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mIntake.SetOuttake( !mIntake.IsOuttake() ), mIntake ) );
+        // new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIntake.SetIntake( !mIntake.IsIntake() ), mIntake ) );
+        // new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mIntake.SetOuttake( !mIntake.IsOuttake() ), mIntake ) );
      }
 
      // Debug logging

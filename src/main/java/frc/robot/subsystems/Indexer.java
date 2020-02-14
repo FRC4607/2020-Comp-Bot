@@ -64,9 +64,9 @@ public class Indexer extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
 
-    public CANEncoder getEncoder() {
-		return getEncoder(EncoderType.kHallSensor, 0);
-	}
+    // public CANEncoder getEncoder() {
+		// return getEncoder(EncoderType.kHallSensor, 0);
+	// }
 
     /**
     * @return IndexerState_t The current state of the indexer.
@@ -131,7 +131,7 @@ public class Indexer extends SubsystemBase {
     private void Initialize () {
         mPIDController.setFeedbackDevice( mHallSensor );
         mHallSensor.setInverted( false );
-        mIndexerMotor.setNeutralMode( NeutralMode.Brake );
+        // mIndexerMotor.setNeutralMode( NeutralMode.Brake );
         mIndexerState = IndexerState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
         mFailingState = FailingState_t.Ok;
@@ -237,8 +237,8 @@ public class Indexer extends SubsystemBase {
             SetGains();
             mControlState = ControlState_t.ClosedLoop;
         } else if ( !wantsClosedLoop && IsClosedLoop() ) {
-            SetTargetPercentOutput( 0.0 );
-            mControlState = ControlState_t.OpenLoop;
+            // SetTargetPercentOutput( 0.0 );
+            // mControlState = ControlState_t.OpenLoop;
         }
     }
 
@@ -255,7 +255,7 @@ public class Indexer extends SubsystemBase {
     * @return boolean Logical OR of SensorOverflow, SensorOutOfPhase, and RemoteLossOfSignal
     */
     private boolean SensorIsBroken () {
-        mIndexerMotor.getStickyFaults( mIndexerMotorFaults );
+        // mIndexerMotor.getStickyFaults( mIndexerMotorFaults );
         return mIndexerMotorFaults.SensorOverflow | mIndexerMotorFaults.SensorOutOfPhase | mIndexerMotorFaults.RemoteLossOfSignal;
     }
 
@@ -265,7 +265,7 @@ public class Indexer extends SubsystemBase {
     * @return boolean Logical OR of ResetDuringEn and UnderVoltage for both TalonSRX's
     */    
     private boolean PowerDisruption () {
-        mIndexerMotor.getStickyFaults( mIndexerMotorFaults );
+        // mIndexerMotor.getStickyFaults( mIndexerMotorFaults );
         return mIndexerMotorFaults.ResetDuringEn | mIndexerMotorFaults.UnderVoltage;
     }
 
@@ -274,7 +274,7 @@ public class Indexer extends SubsystemBase {
     * mTargetVelocity_Units_Per_100ms.
     */    
     private void SetVelocityOutput () {
-        mIndexerMotor.set( ControlState.Velocity, mTargetVelocity_Units_Per_100ms );
+        // mIndexerMotor.set( ControlState.Velocity, mTargetVelocity_Units_Per_100ms );
     }
 
     /**
@@ -309,74 +309,74 @@ public class Indexer extends SubsystemBase {
     * @see {@link edu.wpi.first.wpilibj2.command.CommandScheduler#run}
     */     
     public void Update () {
-        switch ( mIndexerState ) {
-            case Init:
-                // No velocity command has come in, so just hold at 0.0
-                if ( mTargetVelocity_Units_Per_100ms == 0.0 ) {
-                    mIndexerState = IndexerState_t.Holding;
+        // switch ( mIndexerState ) {
+        //     case Init:
+        //         // No velocity command has come in, so just hold at 0.0
+        //         if ( mTargetVelocity_Units_Per_100ms == 0.0 ) {
+        //             mIndexerState = IndexerState_t.Holding;
                 
-                // Set the seek timer and begin seeking to the velocity target
-                } else  {
-                    mIndexerState = IndexerState_t.Loading;
-                }
-                break;
+        //         // Set the seek timer and begin seeking to the velocity target
+        //         } else  {
+        //             mIndexerState = IndexerState_t.Loading;
+        //         }
+        //         break;
 
-            case Loading:
-                // The velocity is within tolerance to move to the holding state...which is a go for shooting
-                if ( Math.abs( mError_RPM ) <= INDEXER.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
-                    mIndexerState = IndexerState_t.Holding;
-                }
-                    // The retries have been exhausted
-                    if ( mSeekRetries > INDEXER.SEEK_RETRY_LIMIT ) {
-                        mControlState = ControlState_t.OpenLoop;
-                        mFailingState = FailingState_t.SeekRetries;
-                    } else {
-                        mFailingState = FailingState_t.SeekTimeout;
-                    }
-                }
-                break;
+        //     case Loading:
+        //         // The velocity is within tolerance to move to the holding state...which is a go for shooting
+        //         if ( Math.abs( mError_RPM ) <= INDEXER.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
+        //             mIndexerState = IndexerState_t.Holding;
+        //         }
+        //             // The retries have been exhausted
+        //             if ( mSeekRetries > INDEXER.SEEK_RETRY_LIMIT ) {
+        //                 mControlState = ControlState_t.OpenLoop;
+        //                 mFailingState = FailingState_t.SeekRetries;
+        //             } else {
+        //                 mFailingState = FailingState_t.SeekTimeout;
+        //             }
+        //         }
+        //         break;
 
-            case Holding:
-                // The velocity has fallen outside of tolerance, move back to the seeking state
-                if ( Math.abs( mError_RPM ) > INDEXER.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
-                    mIndexerState = INDEXERState_t.Holding;
-                    SetSeekTimer();
-                }
-                break;
+        //     case Holding:
+        //         // The velocity has fallen outside of tolerance, move back to the seeking state
+        //         if ( Math.abs( mError_RPM ) > INDEXER.OFFTRACK_ERROR_PERCENT * mTargetVelocity_RPM ) {
+        //             mIndexerState = INDEXERState_t.Holding;
+        //             SetSeekTimer();
+        //         }
+        //         break;
 
-            case Fail:
-                switch ( mFailingState ) {
-                    // Failure due to broken sensor, keep checking if it comes back online
-                    case BrokenSensor:
-                    mIndexerMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
-                        if ( !SensorIsBroken() ) {
-                            Initialize();
-                        }
-                        break;
+        //     case Fail:
+        //         switch ( mFailingState ) {
+        //             // Failure due to broken sensor, keep checking if it comes back online
+        //             case BrokenSensor:
+        //             mIndexerMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
+        //                 if ( !SensorIsBroken() ) {
+        //                     Initialize();
+        //                 }
+        //                 break;
 
-                    case PowerLoss:
-                    mIndexerMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
-                        if ( !PowerDisruption() ) {
-                            Initialize();
-                        }
-                        break;
+        //             case PowerLoss:
+        //             mIndexerMotor.clearStickyFaults( 0 ); // Send command whithout checking or blocking
+        //                 if ( !PowerDisruption() ) {
+        //                     Initialize();
+        //                 }
+        //                 break;
 
-                    // Failure due to timing out during a seek
-                    case SeekTimeout:
-                        mFailingState = FailingState_t.Ok;
-                        mIndexerState = IndexerState_t.Seeking;
-                        SetSeekTimer();
-                        break;
+        //             // Failure due to timing out during a seek
+        //             case SeekTimeout:
+        //                 mFailingState = FailingState_t.Ok;
+        //                 mIndexerState = IndexerState_t.Seeking;
+        //                 SetSeekTimer();
+        //                 break;
                     
-                    // All of the seek retries have been exhausted
-                    case SeekRetries:
-                        break;
+        //             // All of the seek retries have been exhausted
+        //             case SeekRetries:
+        //                 break;
 
-                    default:
-                        break;
+        //             default:
+        //                 break;
 
-                }
-                break;
+        //         }
+        //         break;
         
         }
 
@@ -391,12 +391,12 @@ public class Indexer extends SubsystemBase {
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
-            mIndexerMotor.setIdleMode(IdleMode.kBrake);
+            // mIndexerMotor.setIdleMode(IdleMode.kBrake);
       mLogger.info("Neutral mode set to: [Brake]");
 
     } else if (!wantsBrakeMode && mIsBrakeMode) {
       mIsBrakeMode = wantsBrakeMode;
-      mIndexerMotor.setIdleMode(IdleMode.kCoast);
+    //   mIndexerMotor.setIdleMode(IdleMode.kCoast);
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }
@@ -440,16 +440,16 @@ public class Indexer extends SubsystemBase {
     * the user PC for live PID tuning purposes.
     * @param SendableBuilder This is inherited from SubsystemBase
     */ 
-    @Override
-    public void initSendable ( SendableBuilder builder ) {
-        //builder.setSmartDashboardType( "Flywheel PID Tuning" );
-        builder.addDoubleProperty( "P", this::GetP, this::SetP);
-        builder.addDoubleProperty( "I", this::GetI, this::SetI);
-        builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
-        builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
-        builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
-    }
+    // @Override
+    // public void initSendable ( SendableBuilder builder ) {
+    //     //builder.setSmartDashboardType( "Flywheel PID Tuning" );
+    //     builder.addDoubleProperty( "P", this::GetP, this::SetP);
+    //     builder.addDoubleProperty( "I", this::GetI, this::SetI);
+    //     builder.addDoubleProperty( "D", this::GetD, this::SetD);
+    //     builder.addDoubleProperty( "F", this::GetF, this::SetF);
+    //     builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
+    //     builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
+    // }
 
 }
 

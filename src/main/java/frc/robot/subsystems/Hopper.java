@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
+import frc.robot.Constants.HOPPER;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -58,7 +58,7 @@ public class Hopper extends SubsystemBase {
 
     public static Hopper create () {
         // Talon's and Victor's go through a custom wrapper for creation
-        CANSparkMax hopperMotor = new CANSparkMax( Constants.HOPPER_MOTOR_ID, MotorType.kBrushless );
+        CANSparkMax hopperMotor = new CANSparkMax( HOPPER.HOPPER_MOTOR_ID, MotorType.kBrushless );
         return new Hopper( hopperMotor );
     }
 

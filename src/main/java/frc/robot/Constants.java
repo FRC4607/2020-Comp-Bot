@@ -91,6 +91,11 @@ public final class Constants {
         public static final int SEEK_RETRY_LIMIT = 3;                   // Allow 3 seek retries before falling back to open-loop 
     }
 
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the hopper
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Hopper}
+    */ 
     public static final class HOPPER {
         public static final int HOPPER_MOTOR_ID = 10;
     }

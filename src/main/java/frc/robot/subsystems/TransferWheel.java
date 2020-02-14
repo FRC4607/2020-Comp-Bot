@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
+import frc.robot.Constants.TRANSFER;
 import frc.robot.lib.drivers.Photoeye;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -16,7 +16,7 @@ public class TransferWheel extends SubsystemBase {
 
     // Hardware
     private final CANSparkMax mTransferMotor;
-    private final Photoeye mTransferPhotoeye = new Photoeye( Constants.TRANSFER_PHOTOEYE_ANALOG_CHANNEL );
+    private final Photoeye mTransferPhotoeye = new Photoeye( TRANSFER.TRANSFER_PHOTOEYE_ANALOG_CHANNEL );
 
     // Hardware states
     private boolean mIsBrakeMode;
@@ -62,7 +62,7 @@ public class TransferWheel extends SubsystemBase {
 
     public static TransferWheel create () {
         // Talon's and Victor's go through a custom wrapper for creation
-        CANSparkMax transferMotor = new CANSparkMax( Constants.TRANSFER_MOTOR_ID, MotorType.kBrushless );
+        CANSparkMax transferMotor = new CANSparkMax( TRANSFER.TRANSFER_MOTOR_ID, MotorType.kBrushless );
         return new TransferWheel( transferMotor );
     }
 

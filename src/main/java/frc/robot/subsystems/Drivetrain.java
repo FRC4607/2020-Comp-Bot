@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
+import frc.robot.Constants.DRIVETRAIN;
+import frc.robot.Constants.MISC;
 import frc.robot.lib.drivers.TalonSRX;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,11 +128,11 @@ public class Drivetrain extends SubsystemBase {
 
     public static Drivetrain create () {
         // Talon's and Victor's go through a custom wrapper for creation
-        WPI_TalonSRX leftMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( Constants.DRIVETRAIN_LEFT_MASTER_ID) );
-        WPI_TalonSRX leftFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( Constants.DRIVETRAIN_LEFT_FOLLOWER_ID), leftMaster );
-        WPI_TalonSRX rightMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( Constants.DRIVETRAIN_RIGHT_MASTER_ID) );
-        WPI_TalonSRX rightFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( Constants.DRIVETRAIN_RIGHT_FOLLOWER_ID), rightMaster );
-        DoubleSolenoid shifter = new DoubleSolenoid( Constants.PCM_ID, Constants.DRIVETRAIN_HIGH_GEAR_SOLENOID_ID, Constants.DRIVETRAIN_LOW_GEAR_SOLENOID_ID );
+        WPI_TalonSRX leftMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_LEFT_MASTER_ID) );
+        WPI_TalonSRX leftFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_LEFT_FOLLOWER_ID), leftMaster );
+        WPI_TalonSRX rightMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_RIGHT_MASTER_ID) );
+        WPI_TalonSRX rightFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_RIGHT_FOLLOWER_ID), rightMaster );
+        DoubleSolenoid shifter = new DoubleSolenoid( MISC.PCM_ID, DRIVETRAIN.DRIVETRAIN_HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.DRIVETRAIN_LOW_GEAR_SOLENOID_ID );
         return new Drivetrain( leftMaster, leftFollower, rightMaster, rightFollower, shifter );
     }
 

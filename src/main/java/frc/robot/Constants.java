@@ -5,6 +5,8 @@ public final class Constants {
     public static final class GLOBAL {
         public static final int CAN_TIMEOUT_MS = 10;
         public static final int CAN_LONG_TIMEOUT_MS = 100;
+        public static final int PCM_ID = 0;
+        public static final int PDP_ID = 0;
     }
 
     /**
@@ -14,8 +16,8 @@ public final class Constants {
     * @see {@link https://phoenix-documentation.readthedocs.io/en/latest/ch16_ClosedLoop.html#}
     */        
     public static final class FLYWHEEL {
-        public static final int MASTER_ID = 10000;                      // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
-        public static final int FOLLOWER_ID = 10000;                    // The device ID of the follower *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
+        public static final int MASTER_ID = 13;                      // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
+        public static final int FOLLOWER_ID = 14;                    // The device ID of the follower *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
         public static final int SENSOR_UNITS_PER_ROTATION = 4096;       // Using a CTRE Mag Encoder
         public static final int PID_IDX = 0;                            // Velocity closed-loop slot index for gains
         public static final double PID_KP = 0.0;                        // Velocity closed-loop proportional gain
@@ -34,7 +36,7 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.Hood}
     */        
     public static final class HOOD {
-        public static final int MASTER_ID = 10000;                         // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
+        public static final int MASTER_ID = 5;                         // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
         public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
         public static final int PID_IDX = 0;                               // Position closed-loop slot index for gains
         public static final double PID_KP = 0.0;                           // Position closed-loop proportional gain
@@ -56,47 +58,74 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.Turret}
     */        
     public static final class TURRET {
-        public static final int MASTER_ID = 10000;                      // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
-        public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
-        public static final int PID_IDX = 0;                            // Position closed-loop slot index for gains
-        public static final double PID_KP = 0.0;                        // Position closed-loop proportional gain
-        public static final double PID_KI = 0.0;                        // Position closed-loop intgral gain
-        public static final double PID_KD = 0.0;                        // Position closed-loop derivative gain
-        public static final double PID_KF = 0.0;                        // Position closed-loop feed-forward
-        public static final int MOVING_AVERAGE_FILTER_TAPS = 5;         // The number of samples to average the position for zero'ing the sensor
-        public static final double ZEROING_MOTOR_OUTPUT = 0.1;          // The open-loop motor output percentage for zero'ing the sensor
-        public static final double ZEROING_TIMER_EXPIRED_S = 0.5;       // The time in seconds that the hood will search for the hard-stop
+        public static final int MASTER_ID = 4;                             // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO
+        public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
+        public static final int PID_IDX = 0;                               // Position closed-loop slot index for gains
+        public static final double PID_KP = 0.0;                           // Position closed-loop proportional gain
+        public static final double PID_KI = 0.0;                           // Position closed-loop intgral gain
+        public static final double PID_KD = 0.0;                           // Position closed-loop derivative gain
+        public static final double PID_KF = 0.0;                           // Position closed-loop feed-forward
+        public static final int MOVING_AVERAGE_FILTER_TAPS = 5;            // The number of samples to average the position for zero'ing the sensor
+        public static final double ZEROING_MOTOR_OUTPUT = 0.1;             // The open-loop motor output percentage for zero'ing the sensor
+        public static final double ZEROING_TIMER_EXPIRED_S = 0.5;          // The time in seconds that the hood will search for the hard-stop
         public static final double ZEROING_DONE_THRESHOLD = 50.0 / 8192.0; // The threshold used to compare against the current postion - filtered position
-        public static final int ZEROING_RETRY_LIMIT = 1;                // Allow 3 zeroing retries before failing and living with a fixed hood
-        public static final double MAX_VELOCITY = 1000.0;               // Smart Motion max velocity
-        public static final double MAX_ACCELERATION = 500.0;            // Smart Motion max acceleration
+        public static final int ZEROING_RETRY_LIMIT = 1;                   // Allow 3 zeroing retries before failing and living with a fixed hood
+        public static final double MAX_VELOCITY = 1000.0;                  // Smart Motion max velocity
+        public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
     }
 
-    public static final class TRANSFERWHEEL {
-        public static final int TRANSFER_PHOTOEYE_ANALOG_CHANNEL = 1;
-        public static final int TRANSFER_MOTOR_ID = 10;
-        public static final int SENSOR_COUNTS_PER_ROTATION = 4096;
-        public static final int PID_IDX = 0;                            // Position closed-loop slot index for gains
-        public static final double PID_KP = 0.0;                        // Position closed-loop proportional gain
-        public static final double PID_KI = 0.0;                        // Position closed-loop intgral gain
-        public static final double PID_KD = 0.0;                        // Position closed-loop derivative gain
-        public static final double PID_KF = 0.0; 
-
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the drivetrain
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Drivetrain}
+    */        
+    public static final class DRIVETRAIN {
+        public static final int LEFT_MASTER_ID = 16;
+        public static final int LEFT_FOLLOWER_ID = 1;
+        public static final int RIGHT_MASTER_ID = 2;
+        public static final int RIGHT_FOLLOWER_ID = 3;
+        public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
+        public static final int LOW_GEAR_SOLENOID_ID = 0;
+        public static final int HIGH_GEAR_SOLENOID_ID = 1;
     }
 
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the hopper
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Hopper}
+    */        
+    public static final class HOPPER {
+        public static final int MASTER_ID = 15;
+    }    
 
-    // Hopper devices ID's
-    public static final int HOPPER_MOTOR_ID = 10;
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the indexer
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Indexer}
+    */        
+    public static final class INDEXER {
+        public static final int MASTER_ID = 6;
+        public static final int PHOTOEYE_DIO_CHANNEL = 0;
+    }    
 
-    // Indexer devices ID's
-    public static final int INDEXER_PHOTOEYE_ANALOG_CHANNEL = 0;
-    public static final int INDEXER_MOTOR_ID = 10;
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the intake
+    * subsystem.
+    * @see {@link frc.robot.subsystems.Intake}
+    */        
+    public static final class INTAKE {
+        public static final int MASTER_ID = 10;
+    }    
 
-    // Intake device ID's
-    public static final int INTAKE_MOTOR_ID = 10;
-
-    // Tansfer device ID's
-    
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the transfer
+    * wheel subsystem.
+    * @see {@link frc.robot.subsystems.TransferWheel}
+    */        
+    public static final class TRANSFER_WHEEL {
+        public static final int MASTER_ID = 11;
+        public static final int PHOTOEYE_DIO_CHANNEL = 1;
+    }   
 
     // Controllers and Joysticks
     public static final int DRIVER_XBOX = 0;
@@ -111,17 +140,9 @@ public final class Constants {
     // Photoeye
     public static final int PHOTOEYE_ANALOG_CHANNEL = 1;
 
-    // Drivetrain device ID's and ports
-    public static final int DRIVETRAIN_LEFT_MASTER_ID = 15;
-    public static final int DRIVETRAIN_LEFT_FOLLOWER_ID = 14;
-    public static final int DRIVETRAIN_RIGHT_MASTER_ID = 0;
-    public static final int DRIVETRAIN_RIGHT_FOLLOWER_ID = 1;
-    public static final int DRIVETRAIN_LOW_GEAR_SOLENOID_ID = 0;
-    public static final int DRIVETRAIN_HIGH_GEAR_SOLENOID_ID = 1;
 
 
-    // MISC. Hardware Device ID's
-    public static final int PCM_ID = 0;
-    public static final int PDP_ID = 0;
+
 
 }
+

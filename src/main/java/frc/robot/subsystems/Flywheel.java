@@ -38,8 +38,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     // Hardware
-    private final WPI_TalonSRX mMaster;
-    private final WPI_TalonSRX mFollower;
+    private WPI_TalonSRX mMaster;
+    private WPI_TalonSRX mFollower;
     private StickyFaults mMasterFaults;
     private StickyFaults mFollowerFaults;
 

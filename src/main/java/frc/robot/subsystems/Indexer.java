@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.INDEXER;
 import frc.robot.Constants.GLOBAL;
+
 import frc.robot.lib.drivers.Photoeye;
+import frc.robot.lib.drivers.SparkMax;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -386,7 +388,6 @@ public class Indexer extends SubsystemBase {
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Indexer.class );
-
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {

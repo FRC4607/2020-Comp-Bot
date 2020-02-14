@@ -2,24 +2,23 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.INTAKE;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import frc.robot.lib.drivers.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Intake extends SubsystemBase {
 
-    // Hardware
-    private final CANSparkMax mIntakeMotor;
-
     // Hardware states
     private boolean mIsBrakeMode;
     private boolean mIsOuttake;
+
+    // Hardware
+    private WPI_TalonSRX mIntakeMotor;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Intake.class );
@@ -62,7 +61,7 @@ public class Intake extends SubsystemBase {
         }
     }
 
-    public Intake ( CANSparkMax intakeMotor ) {
+    public Intake ( WPI_TalonSRX intakeMotor ) {
   
         // Set the hardware
         mIntakeMotor = intakeMotor;
@@ -76,8 +75,7 @@ public class Intake extends SubsystemBase {
     }
 
     public static Intake create () {
-        // Talon's and Victor's go through a custom wrapper for creation
-        CANSparkMax intakeMotor = new CANSparkMax( INTAKE.INTAKE_MOTOR_ID, MotorType.kBrushless );
+        WPI_TalonSRX master = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( INTAKE.MASTER_ID) );
         return new Intake( intakeMotor );
     }
 

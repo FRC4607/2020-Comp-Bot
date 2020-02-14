@@ -21,9 +21,8 @@ public class Hopper extends SubsystemBase {
     }
 
     public static Hopper create () {
-        // Talon's and Victor's go through a custom wrapper for creation
-        CANSparkMax hopperMotor = new CANSparkMax( HOPPER.HOPPER_MOTOR_ID, MotorType.kBrushless );
-        return new Hopper( hopperMotor );
+        CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( HOPPER.MASTER_ID, MotorType.kBrushless ) );
+        return new Hopper( master );
     }
 
     @Override

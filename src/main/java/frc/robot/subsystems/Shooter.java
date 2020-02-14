@@ -20,7 +20,7 @@ public class Shooter extends SubsystemBase {
     public Shooter () {
   
         // Set the hardware
-    
+
         // Set the hardware states
 
     }

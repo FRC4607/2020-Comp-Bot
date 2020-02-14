@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.MISC;
-import frc.robot.lib.drivers.TalonSRX;
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.DRIVETRAIN;
 import frc.robot.lib.drivers.SparkMax;
@@ -40,7 +38,6 @@ public class Drivetrain extends SubsystemBase {
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
 
-    // reverse direction of driving
     public void SetReversed ( boolean wantsReversed ) {
         if ( wantsReversed != mIsReversed ) {
             mIsReversed = wantsReversed;
@@ -143,16 +140,15 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public static Drivetrain create () {
-        // Talon's and Victor's go through a custom wrapper for creation
-        WPI_TalonSRX leftMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_LEFT_MASTER_ID) );
-        WPI_TalonSRX leftFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_LEFT_FOLLOWER_ID), leftMaster );
-        WPI_TalonSRX rightMaster = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_RIGHT_MASTER_ID) );
-        WPI_TalonSRX rightFollower = TalonSRX.createTalonSRX( new WPI_TalonSRX( DRIVETRAIN.DRIVETRAIN_RIGHT_FOLLOWER_ID), rightMaster );
-        DoubleSolenoid shifter = new DoubleSolenoid( MISC.PCM_ID, DRIVETRAIN.DRIVETRAIN_HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.DRIVETRAIN_LOW_GEAR_SOLENOID_ID );
+        CANSparkMax leftMaster =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.LEFT_MASTER_ID, MotorType.kBrushless ) );
+        CANSparkMax leftFollower =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.LEFT_FOLLOWER_ID, MotorType.kBrushless ), leftMaster );
         CANEncoder leftAlternateEncoder = leftMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController leftPidController = leftMaster.getPIDController();
+        CANSparkMax rightMaster =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.RIGHT_MASTER_ID, MotorType.kBrushless ) );
+        CANSparkMax rightFollower =  SparkMax.CreateSparkMax( new CANSparkMax( DRIVETRAIN.RIGHT_FOLLOWER_ID, MotorType.kBrushless ), rightMaster );
         CANEncoder rightAlternateEncoder = rightMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController rightPidController = rightMaster.getPIDController();
+        DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
         return new Drivetrain( leftMaster, leftFollower, leftAlternateEncoder, leftPidController,
                                rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter ); 
     }

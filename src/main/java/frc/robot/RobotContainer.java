@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 public class RobotContainer {
 
     // Hardware
-    //private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
+    private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
     //private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
     private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
                                                                        Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
@@ -118,7 +118,7 @@ public class RobotContainer {
  
      public RobotContainer () {
          ConfigureButtonBindings();
-         //mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
+         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
          mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
          mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
          SmartDashboard.putData( "Auto Chooser", mAutoChooser );

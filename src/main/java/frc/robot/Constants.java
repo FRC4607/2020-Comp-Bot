@@ -28,6 +28,7 @@ public final class Constants {
         public static final double SEEK_TIMER_EXPIRED_S = 2.0;          // Allow 2 seconds to spin up to target velocity before retrying
         public static final int SEEK_RETRY_LIMIT = 3;                   // Allow 3 seek retries before falling back to open-loop 
         public static final double PERCENT_MOTOR_OUTPUT = 0.5;          // The open-loop motor percent ouput
+        public static final double DEADBAND = 0.1; 
     }
 
     /**
@@ -50,6 +51,7 @@ public final class Constants {
         public static final int ZEROING_RETRY_LIMIT = 1;                   // Allow 3 zeroing retries before failing and living with a fixed hood
         public static final double MAX_VELOCITY = 1000.0;                  // Smart Motion max velocity
         public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
+        public static final double DEADBAND = 0.1; 
     }
 
     /**
@@ -95,6 +97,7 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.Hopper}
     */ 
     public static final class HOPPER {
+        // is supposed to be 15 
         public static final int MASTER_ID = 15;
         public static final double SPEED = 0.5;
     }    
@@ -107,7 +110,7 @@ public final class Constants {
     public static final class INDEXER {
         public static final int MASTER_ID = 6;
         public static final int PHOTOEYE_DIO_CHANNEL = 0;
-        public static final double SPEED = 0.5;
+        public static final double SPEED = -0.5;
     }    
 
     /**
@@ -128,8 +131,10 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.TransferWheel}
     */        
     public static final class TRANSFER_WHEEL {
+        // supposed to be 11
         public static final int MASTER_ID = 11;
         public static final int PHOTOEYE_DIO_CHANNEL = 1;
+        public static final double SPEED = 1.0;
     }   
 
     // Controllers and Joysticks

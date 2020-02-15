@@ -21,6 +21,10 @@ public class Hopper extends SubsystemBase {
         mMaster.set( HOPPER.SPEED );
     }
 
+    public void Stop() {
+        mMaster.set( 0.0 );
+    }
+
     public Hopper ( CANSparkMax master ) {
         mMaster = master;
     }

@@ -23,6 +23,8 @@ import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
+import frc.robot.commands.HoodDrive;
+import frc.robot.commands.FlywheelSpin;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
 
@@ -47,6 +49,7 @@ public class RobotContainer {
      private TransferWheel mTransferWheel = TransferWheel.create();
      private Shooter mSuperStructure = Shooter.create();
      
+
     // Autonomous chooser
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
  
@@ -81,12 +84,14 @@ public class RobotContainer {
         new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
         // intake shifting
         new JoystickButton( mDriverXbox, 2).whenPressed( new InstantCommand( () -> mIntake.SetUp( !mIntake.IsUp() ), mDrivetrain ) ); 
-        // Run hooper and indexer on one button 
-        // TODO: see if running those commands work
-         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mHopper.Spin() ) ); 
-         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
+        // Run hopper and indexer together on button a 
+        new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mHopper.Spin() ) ); 
+        new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
+        new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
+        new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
         // transfer wheel operator button b
-
+        new JoystickButton( mOperatorXbox, 2).whenPressed( new InstantCommand( () -> mTransferWheel.Spin() ) ); 
+        new JoystickButton( mOperatorXbox, 2).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) ); 
     } 
 
      // Debug logging 
@@ -131,6 +136,8 @@ public class RobotContainer {
          ConfigureButtonBindings();
          mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
          mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
+         mFlywheel.setDefaultCommand( new FlywheelSpin( mFlywheel, mOperatorXbox ) );
+         mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
          mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
          mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
          SmartDashboard.putData( "Auto Chooser", mAutoChooser );

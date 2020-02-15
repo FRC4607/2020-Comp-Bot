@@ -19,15 +19,37 @@ public class TransferWheel extends SubsystemBase {
 
     // Hardware
     private CANSparkMax mMaster;
+    // private boolean mIsSpin;
     //private Photoeye mIndexerPhotoeye = new Photoeye( TRANSFER_WHEEL.PHOTOEYE_DIO_CHANNEL );
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( TransferWheel.class );
 
-    public TransferWheel ( CANSparkMax master ) {
-        mMaster = master;
+    public void Spin() {
+        // if ( wantsSpin != mIsSpin ) {
+            // mIsSpin = wantsSpin; 
+        mMaster.set( TRANSFER_WHEEL.SPEED );
+        // }
     }
 
+    // public boolean IsSpin () {
+    //     return mIsSpin;
+    // }
+
+    public void Stop() {
+        mMaster.set( 0.0 );
+    }
+
+
+    public TransferWheel ( CANSparkMax master ) {
+        mMaster = master;
+    
+        // Set the hardware states
+        // mIsSpin = false; 
+        // Spin( false ); 
+    
+    }
+    
     public static TransferWheel create () {
         CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( TRANSFER_WHEEL.MASTER_ID, MotorType.kBrushless ) );
         return new TransferWheel( master );

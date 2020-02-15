@@ -186,7 +186,6 @@ public class Flywheel extends SubsystemBase {
         return mI;
     }
 
-
     /**
     * This method will set the D-gain of the velocity controller.
     */  
@@ -304,6 +303,16 @@ public class Flywheel extends SubsystemBase {
         }
     }
 
+    // open loop drive
+    public void setOpenLoop (double xFlywheel) {
+        mMaster.set( xFlywheel );
+    }
+
+    // stop for deadband
+    public void Stop() {
+        mMaster.set( 0.0 );
+    }
+    
     /**
     * This method will update the states of the variable mFlywheelState, mControlState, and mFailingState.  After
     * the states have been updated, the TalonSRX outputs are set for either the open-loop (percentage output) or

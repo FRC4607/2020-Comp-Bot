@@ -26,6 +26,11 @@ public class Indexer extends SubsystemBase {
         mMaster.set( INDEXER.SPEED );
     }
 
+    // stop spinning
+    public void Stop() {
+        mMaster.set( 0.0 );
+    }
+
     public Indexer ( CANSparkMax master ) {
         mMaster = master;
     }

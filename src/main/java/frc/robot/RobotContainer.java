@@ -83,8 +83,8 @@ public class RobotContainer {
         new JoystickButton( mDriverXbox, 2).whenPressed( new InstantCommand( () -> mIntake.SetUp( !mIntake.IsUp() ), mDrivetrain ) ); 
         // Run hooper and indexer on one button 
         // TODO: see if running those commands work
-        // new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mHopper.Spin() ) ); 
-        // new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
+         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mHopper.Spin() ) ); 
+         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
         // transfer wheel operator button b
 
     } 

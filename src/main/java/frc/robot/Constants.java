@@ -85,17 +85,18 @@ public final class Constants {
         public static final int RIGHT_MASTER_ID = 2;
         public static final int RIGHT_FOLLOWER_ID = 3;
         public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
-        public static final int LOW_GEAR_SOLENOID_ID = 0;
-        public static final int HIGH_GEAR_SOLENOID_ID = 1;
+        public static final int LOW_GEAR_SOLENOID_ID = 3;
+        public static final int HIGH_GEAR_SOLENOID_ID = 6;
     }
 
     /**
     * These are the constants which are used to map the hardware and define the working bahavior of the the hopper
     * subsystem.
     * @see {@link frc.robot.subsystems.Hopper}
-    */        
+    */ 
     public static final class HOPPER {
         public static final int MASTER_ID = 15;
+        public static final double SPEED = 0.5;
     }    
 
     /**
@@ -106,6 +107,7 @@ public final class Constants {
     public static final class INDEXER {
         public static final int MASTER_ID = 6;
         public static final int PHOTOEYE_DIO_CHANNEL = 0;
+        public static final double SPEED = 0.5;
     }    
 
     /**
@@ -114,7 +116,10 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.Intake}
     */        
     public static final class INTAKE {
-        public static final int MASTER_ID = 10;
+        public static final int MASTER_ID = 10; 
+        public static final int UP_SOLENOID_ID = 2; 
+        public static final int DOWN_SOLENOID_ID = 7; 
+        public static final double DEADBAND = 0.1; 
     }    
 
     /**
@@ -131,18 +136,13 @@ public final class Constants {
     public static final int DRIVER_XBOX = 0;
     public static final int OPERATOR_XBOX = 1;
 
-
     // Pressure sensor
     public static final int PRESSURE_SENSOR_ANALOG_CHANNEL = 0;
     public static final double PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE = 1.19;               // Measure by reading analog input voltage @ 0-PSI 
     public static final double PRESSURE_SENSOR_PRESSURE_PER_VOLT = 115.0 / (3.62 - 1.19);   // Calculate with prior measurement and reading analog input voltage @ max operating PSI 
 
     // Photoeye
-    public static final int PHOTOEYE_ANALOG_CHANNEL = 1;
-
-
-
-
+    public static final int PHOTOEYE_ANALOG_CHANNEL = 1; 
 
 }
 

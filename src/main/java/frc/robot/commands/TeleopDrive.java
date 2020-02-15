@@ -10,7 +10,6 @@ public class TeleopDrive extends CommandBase {
     private final Drivetrain mDrivetrain;
     private final XboxController mDriverXbox;
 
-
     @Override
     public void initialize () {}
 
@@ -18,14 +17,15 @@ public class TeleopDrive extends CommandBase {
     public void execute() {
         // Arcade drive driven off of the left Xbox joystick only 
         if ( mDrivetrain.IsReversed() ) {
-            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), mDriverXbox.getX( Hand.kLeft ) );
-        } else {
             mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), -mDriverXbox.getX( Hand.kLeft ) );
+        } else {
+            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), mDriverXbox.getX( Hand.kLeft ) );
         }
     }
 
     @Override
-    public void end ( boolean interrupted ) {}
+    public void end ( boolean interrupted ) {
+    }
 
     @Override
     public boolean isFinished () {

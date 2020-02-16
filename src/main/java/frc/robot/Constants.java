@@ -74,6 +74,9 @@ public final class Constants {
         public static final int ZEROING_RETRY_LIMIT = 1;                   // Allow 3 zeroing retries before failing and living with a fixed hood
         public static final double MAX_VELOCITY = 1000.0;                  // Smart Motion max velocity
         public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
+        public static final double DEADBAND = 0.1; 
+        public static final double TURNING_GAIN = 1.0;                     // SPEED OF TURN gain
+        public static final double STOP_TURNING_DEG = 1.0; 
     }
 
     /**
@@ -148,6 +151,10 @@ public final class Constants {
 
     // Photoeye
     public static final int PHOTOEYE_ANALOG_CHANNEL = 1; 
+
+    // limelight
+    public static final double SCALE_HORIZONTAL_TO_TARGET = 1.0 / 27.0;                // Limelight has 54deg FOV
+    public static final double VISION_THREAD_TIME = 0.01;   
 
 }
 

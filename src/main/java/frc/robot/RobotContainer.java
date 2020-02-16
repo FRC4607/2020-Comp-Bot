@@ -25,6 +25,7 @@ import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.HoodDrive;
 import frc.robot.commands.FlywheelSpin;
+import frc.robot.commands.TurretSpin;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
 
@@ -48,7 +49,7 @@ public class RobotContainer {
      private Intake mIntake = Intake.create();
      private TransferWheel mTransferWheel = TransferWheel.create();
      private Shooter mSuperStructure = Shooter.create();
-     
+     private Turret mTurret = Turret.create(); 
 
     // Autonomous chooser
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -131,18 +132,19 @@ public class RobotContainer {
         SmartDashboard.putNumber( "Pressure Sensor (PSI)", mPressureSensor.GetPressureInPSI() );
         mDrivetrain.OutputSmartDashboard();
     }
+
+    public RobotContainer () {
+        ConfigureButtonBindings();
+        mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
+        mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
+        mFlywheel.setDefaultCommand( new FlywheelSpin( mFlywheel, mOperatorXbox ) );
+        mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
+        mTurret.setDefaultCommand( new TurretSpin( mTurret ) );
+        mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
+        mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
+        SmartDashboard.putData( "Auto Chooser", mAutoChooser );
+        mMatchState = MatchState_t.robotInit;
+    }
  
-     public RobotContainer () {
-         ConfigureButtonBindings();
-         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
-         mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
-         mFlywheel.setDefaultCommand( new FlywheelSpin( mFlywheel, mOperatorXbox ) );
-         mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
-         mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
-         mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
-         SmartDashboard.putData( "Auto Chooser", mAutoChooser );
-         mMatchState = MatchState_t.robotInit;
-     }
- 
- }
+}
 

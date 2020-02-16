@@ -7,11 +7,13 @@ import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+// should be the same as talons control mode
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.LinearFilter;
+import frc.robot.lib.controllers.Vision;
 
 public class Turret extends SubsystemBase {
 
@@ -44,7 +46,9 @@ public class Turret extends SubsystemBase {
     private double mP, mI, mD, mF, mMaxVelocity, mMaxAcceleration;
     private double mTargetPosition_Rot;
     private double mCurrentPosition_Rot;
-    //private double mError_Rot;
+    // private double mError_Rot;
+    // Closed-loop control with vision feedback
+    public final Vision mVision;
 
     // Open-loop control
     private double mTargetPercentOutput;
@@ -62,6 +66,15 @@ public class Turret extends SubsystemBase {
     
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
+    
+    // open loop drive
+    public void setOpenLoop ( double xTurret ) {
+        mMaster.set( xTurret );
+    }
+    // stop spinning
+    public void Stop() {
+        mMaster.set( 0.0 );
+    }
     
     /**
     * @return TurretState_t The current state of the turret.
@@ -111,7 +124,6 @@ public class Turret extends SubsystemBase {
     public double GetTargetPercentOutput () {
         return mTargetPercentOutput;
     }    
-
 
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
@@ -321,6 +333,7 @@ public class Turret extends SubsystemBase {
             case Zeroing:
                 // The zeroing timer has expired
                 if ( Timer.getFPGATimestamp() - mZeroingTimer_S > TURRET.ZEROING_TIMER_EXPIRED_S ) {
+                
                     mTargetPercentOutput = 0.0;
                     mZeroingRetries += 1;
                     // The retries have been exhausted
@@ -389,11 +402,12 @@ public class Turret extends SubsystemBase {
     * @param pidController CANPIDController PID controller used for position control
     * @param alternateEncoder CANEncoder alternate encoder used for position control (REV Through Bore)
     */
-    public Turret ( CANSparkMax master, CANPIDController pidController, CANEncoder alternateEncoder, LinearFilter movingAverageFilter ) {
+    public Turret ( CANSparkMax master, CANPIDController pidController, CANEncoder alternateEncoder, LinearFilter movingAverageFilter, Vision vision ) {
         mMaster = master;
         mAlternateEncoder = alternateEncoder;
         mPIDController = pidController;
         mMovingAverageFilter = movingAverageFilter;
+        mVision = vision;
         Initialize();
     }
 
@@ -409,7 +423,10 @@ public class Turret extends SubsystemBase {
         CANEncoder alternateEncoder = master.getAlternateEncoder( AlternateEncoderType.kQuadrature, TURRET.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController pidController = master.getPIDController();
         LinearFilter movingAverageFilter = LinearFilter.movingAverage( TURRET.MOVING_AVERAGE_FILTER_TAPS );
-        return new Turret( master, pidController, alternateEncoder, movingAverageFilter );
+
+        Vision vision = Vision.create();
+
+        return new Turret( master, pidController, alternateEncoder, movingAverageFilter, vision );
     }
 
     /**
@@ -444,3 +461,4 @@ public class Turret extends SubsystemBase {
 
 
 }
+

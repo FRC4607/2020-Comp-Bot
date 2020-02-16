@@ -6,11 +6,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.RobotContainer.MatchState_t;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import frc.robot.subsystems.Turret;
 
 public class Robot extends TimedRobot {
     private final Logger mLogger = LoggerFactory.getLogger( Robot.class );
     private RobotContainer mRobotContainer;
     private Command mAutonomousCommand;
+
+    // private Turret mTurret = Turret.create(); 
 
     @Override
     public void robotInit () {
@@ -45,6 +48,8 @@ public class Robot extends TimedRobot {
             mRobotContainer.SetMatchState( MatchState_t.robotPeriodic );
             mRobotContainer.LogRobotDataToRoboRio( mLogger );
             mRobotContainer.UpdateSmartDashboard();
+
+            // mTurret.mVision.mVisionThread.stop();
         }
     }
 
@@ -77,7 +82,9 @@ public class Robot extends TimedRobot {
             mAutonomousCommand.cancel();
         }
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
-        mRobotContainer.UpdateSmartDashboard();          
+        mRobotContainer.UpdateSmartDashboard(); 
+
+        // mTurret.mVision.mVisionThread.startPeriodic(0.01);
     }
 
     @Override

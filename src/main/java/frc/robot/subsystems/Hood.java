@@ -63,6 +63,22 @@ public class Hood extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
     
+    // // Logging
+    // private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
+
+    // public void SetBrakeMode ( boolean wantsBrakeMode ) {
+    //     if (wantsBrakeMode && !mIsBrakeMode) {
+    //         mIsBrakeMode = wantsBrakeMode;
+    //         mMaster.setIdleMode( IdleMode.Brake );
+    //         mLogger.info( "Neutral mode set to: [Brake]" );
+
+    //     } else if (!wantsBrakeMode && mIsBrakeMode) {
+    //         mIsBrakeMode = wantsBrakeMode;
+    //         // mMaster.setIdleMode( IdleMode.Coast );
+    //         mLogger.info( "Neutral mode set to: [Coast]" );
+    //     }
+    // }
+
 
     // open loop drive
     public void setOpenLoop (double xHood) {

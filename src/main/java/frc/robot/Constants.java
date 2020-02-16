@@ -28,6 +28,7 @@ public final class Constants {
         public static final double SEEK_TIMER_EXPIRED_S = 2.0;          // Allow 2 seconds to spin up to target velocity before retrying
         public static final int SEEK_RETRY_LIMIT = 3;                   // Allow 3 seek retries before falling back to open-loop 
         public static final double PERCENT_MOTOR_OUTPUT = 0.5;          // The open-loop motor percent ouput
+        public static final double DEADBAND = 0.1; 
     }
 
     /**
@@ -50,6 +51,7 @@ public final class Constants {
         public static final int ZEROING_RETRY_LIMIT = 1;                   // Allow 3 zeroing retries before failing and living with a fixed hood
         public static final double MAX_VELOCITY = 1000.0;                  // Smart Motion max velocity
         public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
+        public static final double DEADBAND = 0.1; 
     }
 
     /**
@@ -85,17 +87,19 @@ public final class Constants {
         public static final int RIGHT_MASTER_ID = 2;
         public static final int RIGHT_FOLLOWER_ID = 3;
         public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
-        public static final int LOW_GEAR_SOLENOID_ID = 0;
-        public static final int HIGH_GEAR_SOLENOID_ID = 1;
+        public static final int LOW_GEAR_SOLENOID_ID = 3;
+        public static final int HIGH_GEAR_SOLENOID_ID = 6;
     }
 
     /**
     * These are the constants which are used to map the hardware and define the working bahavior of the the hopper
     * subsystem.
     * @see {@link frc.robot.subsystems.Hopper}
-    */        
+    */ 
     public static final class HOPPER {
+        // is supposed to be 15 
         public static final int MASTER_ID = 15;
+        public static final double SPEED = 0.5;
     }    
 
     /**
@@ -106,6 +110,7 @@ public final class Constants {
     public static final class INDEXER {
         public static final int MASTER_ID = 6;
         public static final int PHOTOEYE_DIO_CHANNEL = 0;
+        public static final double SPEED = -0.5;
     }    
 
     /**
@@ -114,7 +119,10 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.Intake}
     */        
     public static final class INTAKE {
-        public static final int MASTER_ID = 10;
+        public static final int MASTER_ID = 10; 
+        public static final int UP_SOLENOID_ID = 2; 
+        public static final int DOWN_SOLENOID_ID = 7; 
+        public static final double DEADBAND = 0.1; 
     }    
 
     /**
@@ -123,14 +131,15 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.TransferWheel}
     */        
     public static final class TRANSFER_WHEEL {
+        // supposed to be 11
         public static final int MASTER_ID = 11;
         public static final int PHOTOEYE_DIO_CHANNEL = 1;
+        public static final double SPEED = 1.0;
     }   
 
     // Controllers and Joysticks
     public static final int DRIVER_XBOX = 0;
     public static final int OPERATOR_XBOX = 1;
-
 
     // Pressure sensor
     public static final int PRESSURE_SENSOR_ANALOG_CHANNEL = 0;
@@ -138,11 +147,7 @@ public final class Constants {
     public static final double PRESSURE_SENSOR_PRESSURE_PER_VOLT = 115.0 / (3.62 - 1.19);   // Calculate with prior measurement and reading analog input voltage @ max operating PSI 
 
     // Photoeye
-    public static final int PHOTOEYE_ANALOG_CHANNEL = 1;
-
-
-
-
+    public static final int PHOTOEYE_ANALOG_CHANNEL = 1; 
 
 }
 

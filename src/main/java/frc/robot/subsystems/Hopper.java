@@ -11,10 +11,19 @@ import org.slf4j.LoggerFactory;
 public class Hopper extends SubsystemBase {
 
     // Hardware
-    private CANSparkMax mMaster;
+    private CANSparkMax mMaster; 
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Hopper.class );
+
+    // spin hopper sending power cells into indexer
+    public void Spin() {
+        mMaster.set( HOPPER.SPEED );
+    }
+
+    public void Stop() {
+        mMaster.set( 0.0 );
+    }
 
     public Hopper ( CANSparkMax master ) {
         mMaster = master;

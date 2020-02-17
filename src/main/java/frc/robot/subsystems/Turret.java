@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.TURRET;
+import frc.robot.Constants;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.AlternateEncoderType;
@@ -149,7 +150,7 @@ public class Turret extends SubsystemBase {
         mD = TURRET.PID_KD;
         mF = TURRET.PID_KF;
         mMaxVelocity = TURRET.MAX_VELOCITY;
-        mMaxAcceleration = TURRET.MAX_ACCELERATION;     
+        mMaxAcceleration = TURRET.MAX_ACCELERATION; 
         SetGains();
     }
 

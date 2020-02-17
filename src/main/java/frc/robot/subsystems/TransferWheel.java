@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.TRANSFER_WHEEL;
+import frc.robot.Constants;
 import frc.robot.lib.drivers.Photoeye;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;

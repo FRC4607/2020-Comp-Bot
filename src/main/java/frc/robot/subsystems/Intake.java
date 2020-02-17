@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.INTAKE;
 import frc.robot.Constants.GLOBAL;
+import frc.robot.Constants;
 
 import frc.robot.lib.drivers.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -54,6 +55,11 @@ public class Intake extends SubsystemBase {
     public Intake ( WPI_TalonSRX master, DoubleSolenoid shifter ) {
         mMaster = master;
         mShifter = shifter;
+    // Current limiting
+        mMaster.configContinuousCurrentLimit( 6, Constants.LONG_CAN_TIMEOUT_MS );
+        mMaster.configPeakCurrentLimit( 6, Constants.LONG_CAN_TIMEOUT_MS );
+        mMaster.configPeakCurrentDuration( 200, Constants.LONG_CAN_TIMEOUT_MS );
+        mMaster.enableCurrentLimit( true );
     }
 
     public static Intake create () {

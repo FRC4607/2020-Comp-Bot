@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.DRIVETRAIN;
+import frc.robot.Constants;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.AlternateEncoderType;
@@ -126,6 +127,12 @@ public class Drivetrain extends SubsystemBase {
         mRightAlternateEncoder = rightAlternateEncoder;
         mRightPIDController = rightPidController;        
         mShifter = shifter;
+
+        // Current limiting
+     mLeftMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
+     mLeftFollower.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
+     mRightMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
+     mRightFollower.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
 
         // Create differential drive object
         mDifferentialDrive = new DifferentialDrive( leftMaster, rightMaster );

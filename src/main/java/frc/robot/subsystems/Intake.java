@@ -3,13 +3,10 @@ package frc.robot.subsystems;
 import frc.robot.Constants.INTAKE;
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants;
-
 import frc.robot.lib.drivers.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

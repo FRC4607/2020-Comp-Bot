@@ -410,6 +410,8 @@ public class Turret extends SubsystemBase {
         mMovingAverageFilter = movingAverageFilter;
         mVision = vision;
         Initialize();
+        // Current limiting
+        mMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
     }
 
     /**

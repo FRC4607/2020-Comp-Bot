@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.HOOD;
+import frc.robot.Constants;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.AlternateEncoderType;
@@ -432,6 +433,8 @@ public class Hood extends SubsystemBase {
         mPIDController = pidController;
         mMovingAverageFilter = movingAverageFilter;
         Initialize();
+        // Current limiting
+     mMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
     }
 
     /**

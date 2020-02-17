@@ -1,14 +1,12 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.INDEXER;
-
+import frc.robot.Constants;
 import frc.robot.lib.drivers.Photoeye;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +36,8 @@ public class Indexer extends SubsystemBase {
 
     public Indexer ( CANSparkMax master ) {
         mMaster = master;
+        // Current limiting
+     mMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
     }
 
     public static Indexer create () {

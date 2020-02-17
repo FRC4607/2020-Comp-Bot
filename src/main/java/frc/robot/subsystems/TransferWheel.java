@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
-
-
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 
@@ -44,7 +42,8 @@ public class TransferWheel extends SubsystemBase {
 
     public TransferWheel ( CANSparkMax master ) {
         mMaster = master;
-    
+     // Current limiting
+     mMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
         // Set the hardware states
         // mIsSpin = false; 
         // Spin( false ); 

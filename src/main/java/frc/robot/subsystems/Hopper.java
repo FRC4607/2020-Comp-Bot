@@ -21,6 +21,11 @@ public class Hopper extends SubsystemBase {
         mMaster.set( HOPPER.SPEED );
     }
 
+    // spin hopper backward away from indexer
+    public void SpinBack() {
+        mMaster.set( -HOPPER.SPEED );
+    }
+
     public void Stop() {
         mMaster.set( 0.0 );
     }

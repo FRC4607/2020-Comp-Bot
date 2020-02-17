@@ -19,8 +19,8 @@ public class FlywheelSpin extends CommandBase {
     public void execute() {
 
         // drive off right trigger on operator 
-        double xSpin = ( -0.6 * mOperatorXbox.getRawAxis(3));
-        if (  xSpin < -FLYWHEEL.DEADBAND ) {
+        double xSpin = ( -0.6 * mOperatorXbox.getRawAxis( 3 ) );
+        if ( xSpin < -FLYWHEEL.DEADBAND ) {
             mFlywheel.setOpenLoop( xSpin );
         } else { 
             mFlywheel.Stop();
@@ -29,8 +29,9 @@ public class FlywheelSpin extends CommandBase {
     }
 
     @Override
-    public void end ( boolean interrupted ) {}
-
+    public void end ( boolean interrupted ) {
+    }
+    
     @Override
     public boolean isFinished () {
       return false;

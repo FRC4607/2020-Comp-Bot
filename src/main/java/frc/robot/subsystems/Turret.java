@@ -458,7 +458,5 @@ public class Turret extends SubsystemBase {
         //builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }
 
-
-
 }
 

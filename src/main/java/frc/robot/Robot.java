@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpiutil.net.PortForwarder;
 import frc.robot.RobotContainer.MatchState_t;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +14,6 @@ public class Robot extends TimedRobot {
     private RobotContainer mRobotContainer;
     private Command mAutonomousCommand;
 
-    // private Turret mTurret = Turret.create(); 
-
     @Override
     public void robotInit () {
         mLogger.info("<=========== ROBOT INIT ===========>");
@@ -23,6 +22,8 @@ public class Robot extends TimedRobot {
         mRobotContainer.LogRobotDataHeader( mLogger );
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();
+        PortForwarder.add( 5800, "10.46.7.1", 5800 );
+        PortForwarder.add( 5801, "10.46.7.1", 5801 );
     }
 
     @Override
@@ -48,8 +49,7 @@ public class Robot extends TimedRobot {
             mRobotContainer.SetMatchState( MatchState_t.robotPeriodic );
             mRobotContainer.LogRobotDataToRoboRio( mLogger );
             mRobotContainer.UpdateSmartDashboard();
-
-            // mTurret.mVision.mVisionThread.stop();
+            mRobotContainer.StopLimelight();
         }
     }
 
@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
         }
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();         
+        mRobotContainer.StartLimelight();
     }
 
     @Override
@@ -83,8 +84,7 @@ public class Robot extends TimedRobot {
         }
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard(); 
-
-        // mTurret.mVision.mVisionThread.startPeriodic(0.01);
+        mRobotContainer.StartLimelight();
     }
 
     @Override

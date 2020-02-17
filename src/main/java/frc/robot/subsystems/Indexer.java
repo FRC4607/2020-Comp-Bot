@@ -26,6 +26,11 @@ public class Indexer extends SubsystemBase {
         mMaster.set( INDEXER.SPEED );
     }
 
+    // spin hopper backward away from indexer
+    public void SpinBack() {
+        mMaster.set( -INDEXER.SPEED );
+    }
+
     // stop spinning
     public void Stop() {
         mMaster.set( 0.0 );

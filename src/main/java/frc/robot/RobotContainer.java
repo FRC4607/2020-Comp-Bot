@@ -90,6 +90,12 @@ public class RobotContainer {
         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
+        // run hopper backward on x
+        new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mHopper.SpinBack() ) ); 
+        new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
+        // run hopper backward on x
+        new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mIndexer.SpinBack() ) ); 
+        new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
         // transfer wheel operator button b
         new JoystickButton( mOperatorXbox, 2).whenPressed( new InstantCommand( () -> mTransferWheel.Spin() ) ); 
         new JoystickButton( mOperatorXbox, 2).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) ); 
@@ -106,6 +112,11 @@ public class RobotContainer {
                           "Flywheel Target Velocity (RPM),"+
                           "Flywheel Measured Velocity (RPM),"+
                           "Flywheel Velocity Error (RPM),"+
+                          "Turret State,"+
+                          "Turret Ouput State,"+
+                          "Turret Error State,"+
+                          "Turret Target Percent Output,"+
+                          "Turret Target Position,"+
                           "PDP Voltage,"
                           //"PDP Slot 0 Current"                          
                           );
@@ -122,6 +133,12 @@ public class RobotContainer {
                           mFlywheel.GetTargetVelocity_RPM(),
                           mFlywheel.GetCurrentVelocity_RPM(),
                           mFlywheel.GetError_RPM(),
+                          mTurret.GetTurretState().toString(),
+                          mTurret.GetControlState().toString(),
+                          mTurret.GetFailingState().toString(),
+                          mTurret.GetTargetPosition_Rot(),
+                          mTurret.GetCurrentPosition_Rot(),
+                          mTurret.GetTargetPercentOutput(),
                           mPDP.getVoltage()
                           //mPDP.getCurrent(  )                          
                           );
@@ -131,6 +148,18 @@ public class RobotContainer {
     public void UpdateSmartDashboard () {
         SmartDashboard.putNumber( "Pressure Sensor (PSI)", mPressureSensor.GetPressureInPSI() );
         mDrivetrain.OutputSmartDashboard();
+        mTurret.mVision.mVisionThread.startPeriodic(0.01);
+
+    }
+
+    // start vision output
+    public void StartLimelight() {
+        mTurret.mVision.mVisionThread.startPeriodic(0.01);
+    }
+
+    // stop vision output 
+    public void StopLimelight() {
+        mTurret.mVision.mVisionThread.stop();
     }
 
     public RobotContainer () {
@@ -140,7 +169,7 @@ public class RobotContainer {
         mFlywheel.setDefaultCommand( new FlywheelSpin( mFlywheel, mOperatorXbox ) );
         mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
         mTurret.setDefaultCommand( new TurretSpin( mTurret ) );
-        mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain ) );
+        mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel ) );
         mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
         SmartDashboard.putData( "Auto Chooser", mAutoChooser );
         mMatchState = MatchState_t.robotInit;

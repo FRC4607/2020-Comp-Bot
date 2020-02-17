@@ -140,8 +140,8 @@ public class Flywheel extends SubsystemBase {
         mMaster.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
                                               FLYWHEEL.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
 		mMaster.setSensorPhase( true );
-        mMaster.setNeutralMode( NeutralMode.Brake );
-        mFollower.setNeutralMode( NeutralMode.Brake );
+        mMaster.setNeutralMode( NeutralMode.Coast ); 
+        mFollower.setNeutralMode( NeutralMode.Coast );
         mFollower.setInverted( InvertType.OpposeMaster );
         mFlywheelState = FlywheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
@@ -491,3 +491,4 @@ public class Flywheel extends SubsystemBase {
     }
 
 }
+

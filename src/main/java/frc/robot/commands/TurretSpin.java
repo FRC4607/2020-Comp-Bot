@@ -25,40 +25,38 @@ public class TurretSpin extends CommandBase {
      ******************************************************************************************************************************/
     @Override
     public void initialize() {
-        mLogger.info("Starting TurretSpin command");
+        mLogger.info( "Starting TurretSpin command" );
         mIsFinished = false;
         // setInterruptible( false );
-        mTurret.mVision.setState(State.kTurn);
+        mTurret.mVision.setState( State.kTurn );
     }
 
     @Override
     public void execute() {
 
         // Make sure the vision thread is processing the turning output
-        if (mTurret.mVision.getState() == State.kTurn) {
+        if ( mTurret.mVision.getState() == State.kTurn ) {
             mStatus = mTurret.mVision.getStatus();
             // Check the status of the controller
-            if (mStatus == Status.kTargeting) {
+            if ( mStatus == Status.kTargeting ) {
                 mTurret.setOpenLoop( mTurret.mVision.getOutput() );
                 // mLogger.info( "Target at: [{}]", mLimelight.horizontalToTargetDeg()); 
-                // mTurret.setOpenLoop(-0.3);
-            } else if (mStatus == Status.kLostTarget) {
+            } else if ( mStatus == Status.kLostTarget ) {
                 // mIsFinished = true;
-                // mTurret.setOpenLoop(0.3);
-                mLogger.info("Lost target");
-            } else if (mStatus == Status.kReachedTarget) {
+                mLogger.info( "Lost target" );
+            } else if ( mStatus == Status.kReachedTarget ) {
                 // mIsFinished = true;
-                mLogger.info("Reached target");
+                mLogger.info( "Reached target" );
             } else {
                 mTurret.setOpenLoop(0.0);
-                mLogger.warn("Unknown status: [{}]", mStatus);
+                mLogger.warn( "Unknown status: [{}]", mStatus );
             }
         }
     }
 
     @Override
-    public void end(boolean interrupted) {
-        mLogger.info("Finished TurnToTarget command");
+    public void end ( boolean interrupted ) {
+        mLogger.info( "Finished TurnToTarget command" );
         // mTurret.setOpenLoopControl();
     }
 
@@ -71,9 +69,9 @@ public class TurretSpin extends CommandBase {
     /******************************************************************************************************************************
      ** CONSTRUCTOR
      ******************************************************************************************************************************/
-    public TurretSpin(Turret turret) {
+    public TurretSpin ( Turret turret ) {
         mTurret = turret;
-        addRequirements(mTurret);
+        addRequirements( mTurret );
     }
 
 }

@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Intake extends SubsystemBase {
-
+    // Get some Current Limiting so the motor dosen't burn out
+    
     // Hardware
     private WPI_TalonSRX mMaster;
     private final DoubleSolenoid mShifter;

@@ -29,7 +29,7 @@ public class Auto1 extends CommandBase {
        //Dont tell Eric, but wait for 3 seconds
        long start = System.currentTimeMillis();
 
-       while(System.currentTimeMillis() <= start + 3000) {}
+       while( System.currentTimeMillis() <= start + 3000 ) {}
 
        //Feed Balls into Shooter
        mHopper.Spin();
@@ -39,7 +39,7 @@ public class Auto1 extends CommandBase {
        //Dont tell Eric again, but wait until balls are shot and stop everything
        start = System.currentTimeMillis();
 
-       while(System.currentTimeMillis() <= start + 7000) {}
+       while( System.currentTimeMillis() <= start + 7000 ) {}
 
        mFlywheel.Stop();
        mHopper.Stop();

@@ -86,7 +86,7 @@ public class Vision {
     return mTurn;
   }
 
-  public synchronized double getRawLimelightTX(){
+  public synchronized double getRawLimelightTX() {
     return mTurningErrorDeg;
   }
 
@@ -98,18 +98,18 @@ public class Vision {
     return mLimelight.getLedMode();
   }
 
-  public synchronized void setState( State state ) {
+  public synchronized void setState ( State state ) {
     mDesiredState = state;
   }
 
-  public synchronized void setLimelightState( ledMode desiredLimelightState ) {
+  public synchronized void setLimelightState ( ledMode desiredLimelightState ) {
     mDesiredLimelightState = desiredLimelightState;
   }
 
   /****************************************************************************************************************************** 
   ** CONSTRUCTOR
   ******************************************************************************************************************************/
-  public Vision( Limelight limelight ) {
+  public Vision ( Limelight limelight ) {
     mLimelight = limelight;
   }
 
@@ -118,7 +118,7 @@ public class Vision {
     return new Vision( limelight );
   }
 
-  public static Vision create( String tableName ) {
+  public static Vision create ( String tableName ) {
     Limelight limelight = new Limelight( tableName );
     return new Vision( limelight );
   }

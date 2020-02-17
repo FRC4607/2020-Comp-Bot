@@ -70,7 +70,7 @@ public class RobotContainer {
          return mMatchState;
      }
  
-     public void SetMatchState (MatchState_t matchState) {
+     public void SetMatchState ( MatchState_t matchState ) {
          mMatchState = matchState;
      }
  
@@ -148,13 +148,13 @@ public class RobotContainer {
     public void UpdateSmartDashboard () {
         SmartDashboard.putNumber( "Pressure Sensor (PSI)", mPressureSensor.GetPressureInPSI() );
         mDrivetrain.OutputSmartDashboard();
-        mTurret.mVision.mVisionThread.startPeriodic(0.01);
+        mTurret.mVision.mVisionThread.startPeriodic( 0.01 );
 
     }
 
     // start vision output
     public void StartLimelight() {
-        mTurret.mVision.mVisionThread.startPeriodic(0.01);
+        mTurret.mVision.mVisionThread.startPeriodic( 0.01 );
     }
 
     // stop vision output 

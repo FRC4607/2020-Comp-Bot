@@ -152,10 +152,10 @@ public final class Constants {
     // Photoeye
     public static final int PHOTOEYE_ANALOG_CHANNEL = 1; 
 
-    // limelight
+    // Limelight
     public static final double SCALE_HORIZONTAL_TO_TARGET = 1.0 / 27.0;                // Limelight has 54deg FOV
     public static final double VISION_THREAD_TIME = 0.01;  
-    
+
     // Current Limiting
       public static final int LONG_CAN_TIMEOUT_MS = 50;
 

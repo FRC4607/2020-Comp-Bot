@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Turret.TurretState_t;
+import frc.robot.subsystems.Turret.ControlState_t;
+import frc.robot.subsystems.Turret.FailingState_t;
 import frc.robot.Constants.TURRET;
 import frc.robot.lib.controllers.Vision.State;
 import frc.robot.lib.controllers.Vision.Status;
@@ -19,6 +21,9 @@ public class TurretSpin extends CommandBase {
     private Limelight mLimelight;
     private final Logger mLogger = LoggerFactory.getLogger(TurretSpin.class);
     private final Turret mTurret;
+    private TurretState_t mTurretState;
+    private ControlState_t mControlState;
+    private FailingState_t mFailingState;
 
     /******************************************************************************************************************************
      ** COMMAND OVERRIDES
@@ -29,6 +34,7 @@ public class TurretSpin extends CommandBase {
         mIsFinished = false;
         // setInterruptible( false );
         mTurret.mVision.setState( State.kTurn );
+       // mTurretState( Zeroing );
     }
 
     @Override
@@ -52,6 +58,20 @@ public class TurretSpin extends CommandBase {
                 mLogger.warn( "Unknown status: [{}]", mStatus );
             }
         }
+
+        //     if ( mTurretState == Zeroing ) {
+        //      mStatus = mTurret.mVision.getStatus();
+        //     if ( TurretState_t.Zeroing == ZeroingRetries ) {
+        //         TurretState_t.Zeroing = FailingState_t;
+        //     } else if ( TurretState_t.Zeroing == ZeroingTimeout ) {
+        //         mAlternateEncoder.setPosition();
+        //     } else if ( mStatus == Status.kReachedTarget ) {
+        //         mAlternateEncoder.setPosition();
+        //     } else {
+        //         mAlternateEncoder.setPosition();
+        //     }
+        // }
+
     }
 
     @Override

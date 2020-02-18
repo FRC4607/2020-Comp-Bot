@@ -45,6 +45,7 @@ public class Hood extends SubsystemBase {
     private double mP, mI, mD, mF, mMaxVelocity, mMaxAcceleration;
     private double mTargetPosition_Rot;
     private double mCurrentPosition_Rot;
+    private double mSmartCurrentLimit;
     //private double mError_Rot;
 
     // Open-loop control
@@ -341,7 +342,7 @@ public class Hood extends SubsystemBase {
             case Init:
                 // Always move to Zeroing state when we arrive at the Init state, start trying to move the hood slowly
                 mTargetPercentOutput = HOOD.ZEROING_MOTOR_OUTPUT;
-                // TODO: Add current limiting 
+                mSmartCurrentLimit = Constants.LONG_CAN_TIMEOUT_MS;
                 mZeroingTimer_S = Timer.getFPGATimestamp(); 
                 mHoodState = HoodState_t.Zeroing;
                 break;

@@ -47,6 +47,7 @@ public class Turret extends SubsystemBase {
     private double mP, mI, mD, mF, mMaxVelocity, mMaxAcceleration;
     private double mTargetPosition_Rot;
     private double mCurrentPosition_Rot;
+    private double mSmartCurrentLimit;
     // private double mError_Rot;
     // Closed-loop control with vision feedback
     public final Vision mVision;
@@ -150,7 +151,8 @@ public class Turret extends SubsystemBase {
         mD = TURRET.PID_KD;
         mF = TURRET.PID_KF;
         mMaxVelocity = TURRET.MAX_VELOCITY;
-        mMaxAcceleration = TURRET.MAX_ACCELERATION; 
+        mMaxAcceleration = TURRET.MAX_ACCELERATION;
+        // mSmartCurrentLimit =  Constants.LONG_CAN_TIMEOUT_MS;
         SetGains();
     }
 
@@ -326,7 +328,7 @@ public class Turret extends SubsystemBase {
             case Init:
                 // Always move to Zeroing state when we arrive at the Init state, start trying to move the turret slowly
                 mTargetPercentOutput = TURRET.ZEROING_MOTOR_OUTPUT;
-                // TODO: Add current limiting
+                mSmartCurrentLimit = Constants.LONG_CAN_TIMEOUT_MS;
                 mZeroingTimer_S = Timer.getFPGATimestamp();
                 mTurretState = TurretState_t.Zeroing;
                 break;

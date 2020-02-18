@@ -23,6 +23,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Limelight;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.HoodDrive;
@@ -52,6 +53,7 @@ public class RobotContainer {
      private TransferWheel mTransferWheel = TransferWheel.create();
      private Shooter mShooter = Shooter.create();
      private Turret mTurret = Turret.create(); 
+     private Limelight mLimelight = Limelight.create();
 
     // Autonomous chooser
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -100,7 +102,7 @@ public class RobotContainer {
         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
         // transfer wheel operator button b
         new JoystickButton( mOperatorXbox, 2).whenPressed( new InstantCommand( () -> mTransferWheel.Spin() ) ); 
-        new JoystickButton( mOperatorXbox, 2).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) ); 
+        new JoystickButton( mOperatorXbox, 2).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) );
     } 
 
      // Debug logging 
@@ -170,7 +172,7 @@ public class RobotContainer {
         mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
         mFlywheel.setDefaultCommand( new FlywheelSpin( mFlywheel, mOperatorXbox ) );
         mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
-        mTurret.setDefaultCommand( new TurretSpin( mTurret ) );
+        mTurret.setDefaultCommand( new TurretSpin( mTurret, mLimelight ) );
         mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel ) );
         mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
         SmartDashboard.putData( "Auto Chooser", mAutoChooser );

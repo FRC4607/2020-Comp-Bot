@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret.TurretState_t;
 import frc.robot.subsystems.Turret.ControlState_t;
 import frc.robot.subsystems.Turret.FailingState_t;
+import frc.robot.subsystems.Limelight;
 import frc.robot.Constants.TURRET;
 import frc.robot.lib.controllers.Vision.State;
 import frc.robot.lib.controllers.Vision.Status;
-import frc.robot.lib.drivers.Limelight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import frc.robot.subsystems.Turret;
@@ -100,9 +100,11 @@ public class TurretSpin extends CommandBase {
     /******************************************************************************************************************************
      ** CONSTRUCTOR
      ******************************************************************************************************************************/
-    public TurretSpin ( Turret turret ) {
+    public TurretSpin ( Turret turret, Limelight limelight ) {
         mTurret = turret;
+        mLimelight = limelight;
         addRequirements( mTurret );
+        addRequirements( mLimelight );
     }
 
 }

@@ -172,10 +172,28 @@ public final class Constants {
     public static final class LIMELIGHT {
         public static final double SCALE_HORIZONTAL_TO_TARGET = 1.0 / 27.0;                // Limelight has 54deg FOV
         public static final double VISION_THREAD_TIME = 0.01;  
+        public static final double TARGET_X_MAX = 29.8;
+        public static final double TARGET_ACQUIRED = 1.0;
+        public static final double PIPELINE_INDEX_NEAR = 0.0;
+        public static final double PIPELINE_INDEX_FAR = 1.0;
+    /** Height of the target in meters */
+        public static final double TARGET_HEIGHT = Units.inchesToMeters(80.875);
+    /** Height of the limelight on the bot in meters */
+        public static final double HIGH_MOUNT_HEIGHT = Units.inchesToMeters(22.375);
+        public static final double LOW_MOUNT_HEIGHT = Units.inchesToMeters(8.125);
+    /** Distance Limelight is mounted from the front frame of the bot */
+        public static final double HIGH_DISTANCE_FROM_FRONT = Units.inchesToMeters(16.5);
+        public static final double LOW_DISTANCE_FROM_FRONT = Units.inchesToMeters(2.0);
+    /** Distance Limelight is mounted from the centerline of the bot */
+        public static final double HIGH_DISTANCE_FROM_CENTER = Units.inchesToMeters(0);
+        public static final double LOW_DISTANCE_FROM_CENTER = Units.inchesToMeters(7.125);
+    /** Angle of the limelight in degrees */
+        public static final double HIGH_MOUNT_ANGLE = 20.0;
+        public static final double LOW_MOUNT_ANGLE = 25.0;
     }
 
     public static final class CURRENT_LIMIT {
-      public static final int RPM_LIMIT = 50;
+        public static final int RPM_LIMIT = 50;
     }
 }
 

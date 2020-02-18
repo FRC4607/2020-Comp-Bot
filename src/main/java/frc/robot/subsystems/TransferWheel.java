@@ -42,8 +42,8 @@ public class TransferWheel extends SubsystemBase {
 
     public TransferWheel ( CANSparkMax master ) {
         mMaster = master;
-     // Current limiting
-     mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        // Current limiting
+        mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
         // Set the hardware states
         // mIsSpin = false; 
         // Spin( false ); 

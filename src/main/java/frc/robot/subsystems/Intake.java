@@ -53,9 +53,9 @@ public class Intake extends SubsystemBase {
         mMaster = master;
         mShifter = shifter;
     // Current limiting
-        mMaster.configContinuousCurrentLimit( 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
-        mMaster.configPeakCurrentLimit( 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
-        mMaster.configPeakCurrentDuration( 200, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        mMaster.configContinuousCurrentLimit( 6, CURRENT_LIMIT.RPM_LIMIT );
+        mMaster.configPeakCurrentLimit( 6, CURRENT_LIMIT.RPM_LIMIT );
+        mMaster.configPeakCurrentDuration( 200, CURRENT_LIMIT.RPM_LIMIT );
         mMaster.enableCurrentLimit( true );
     }
 

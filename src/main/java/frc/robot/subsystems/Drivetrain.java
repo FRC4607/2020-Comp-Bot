@@ -129,10 +129,10 @@ public class Drivetrain extends SubsystemBase {
         mShifter = shifter;
 
         // Current limiting
-        mLeftMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
-        mLeftFollower.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
-        mRightMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
-        mRightFollower.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        mLeftMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mLeftFollower.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mRightMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mRightFollower.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
 
         // Create differential drive object
         mDifferentialDrive = new DifferentialDrive( leftMaster, rightMaster );

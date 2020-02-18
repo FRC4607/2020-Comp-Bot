@@ -37,7 +37,7 @@ public class Indexer extends SubsystemBase {
     public Indexer ( CANSparkMax master ) {
         mMaster = master;
         // Current limiting
-     mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
     }
 
     public static Indexer create () {

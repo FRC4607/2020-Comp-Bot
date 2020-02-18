@@ -24,6 +24,10 @@ public class TurretSpin extends CommandBase {
     private TurretState_t mTurretState;
     private ControlState_t mControlState;
     private FailingState_t mFailingState;
+    private State mZeroing;
+    private State mHolding;
+    private State mLoading;
+    private State mFail;
 
     /******************************************************************************************************************************
      ** COMMAND OVERRIDES
@@ -34,7 +38,7 @@ public class TurretSpin extends CommandBase {
         mIsFinished = false;
         // setInterruptible( false );
         mTurret.mVision.setState( State.kTurn );
-       // mTurretState( Zeroing );
+       // mTurret.setState( mZeroing );
     }
 
     @Override
@@ -59,16 +63,23 @@ public class TurretSpin extends CommandBase {
             }
         }
 
-        //     if ( mTurretState == Zeroing ) {
-        //      mStatus = mTurret.mVision.getStatus();
-        //     if ( TurretState_t.Zeroing == ZeroingRetries ) {
-        //         TurretState_t.Zeroing = FailingState_t;
-        //     } else if ( TurretState_t.Zeroing == ZeroingTimeout ) {
-        //         mAlternateEncoder.setPosition();
-        //     } else if ( mStatus == Status.kReachedTarget ) {
-        //         mAlternateEncoder.setPosition();
+        // if ( mTurretState.getState() = mZeroing ) {
+        //         mZeroing = mTurretState.getState();
+
+        //     if ( mZeroing == mTurretState.ZeroingRetries ) {
+        //         mZeroing.setState( mFailingState.ZeroingRetries );
+
+        //     } else if ( mZeroing == mTurretState.ZeroingTimeout ) {
+        //         mZeroing.setState( mFailingState.ZeroingTimeout );
+
+        //     } else if ( mZeroing == mHolding ) {
+        //         mZeroing.setState( mHolding );
+
+        //     } else if ( mZeroing == mLoading ) {
+        //         mZeroing.setState.mTurretState.Loading;
+
         //     } else {
-        //         mAlternateEncoder.setPosition();
+        //         mTurret.mAlternateEncoder.setPosition();
         //     }
         // }
 

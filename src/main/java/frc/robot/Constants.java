@@ -175,7 +175,7 @@ public final class Constants {
     }
 
     public static final class CURRENT_LIMIT {
-      public static final int LONG_CAN_TIMEOUT_MS = 50;
+      public static final int RPM_LIMIT = 50;
     }
 }
 

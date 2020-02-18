@@ -1,6 +1,7 @@
 package frc.robot.lib.controllers;
 
-import frc.robot.Constants;
+import frc.robot.Constants.LIMELIGHT;
+import frc.robot.Constants.TURRET;
 import frc.robot.lib.drivers.Limelight;
 import frc.robot.lib.drivers.Limelight.ledMode;
 import edu.wpi.first.wpilibj.Notifier;
@@ -49,10 +50,10 @@ public class Vision {
           mLogger.info( "Target at: [{}]", mLimelight.horizontalToTargetDeg()); 
 
           mTurningErrorDeg = mLimelight.horizontalToTargetDeg();
-          mTurn = mTurningErrorDeg * Constants.SCALE_HORIZONTAL_TO_TARGET * Constants.TURRET.TURNING_GAIN;
+          mTurn = mTurningErrorDeg * LIMELIGHT.SCALE_HORIZONTAL_TO_TARGET * TURRET.TURNING_GAIN;
           if ( !mLimelight.foundTarget() ) {
             mStatus = Status.kLostTarget; 
-          } else if ( Math.abs( mTurningErrorDeg ) < Constants.TURRET.STOP_TURNING_DEG ) {
+          } else if ( Math.abs( mTurningErrorDeg ) < TURRET.STOP_TURNING_DEG ) {
             mStatus = Status.kReachedTarget;
           } else {
             mStatus = Status.kTargeting;

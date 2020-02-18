@@ -342,7 +342,7 @@ public class Hood extends SubsystemBase {
             case Init:
                 // Always move to Zeroing state when we arrive at the Init state, start trying to move the hood slowly
                 mTargetPercentOutput = HOOD.ZEROING_MOTOR_OUTPUT;
-                mSmartCurrentLimit = CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS;
+                mSmartCurrentLimit = CURRENT_LIMIT.RPM_LIMIT;
                 mZeroingTimer_S = Timer.getFPGATimestamp(); 
                 mHoodState = HoodState_t.Zeroing;
                 break;
@@ -435,7 +435,7 @@ public class Hood extends SubsystemBase {
         mMovingAverageFilter = movingAverageFilter;
         Initialize();
         // Current limiting
-     mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
     }
 
     /**

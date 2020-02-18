@@ -134,30 +134,48 @@ public final class Constants {
     * @see {@link frc.robot.subsystems.TransferWheel}
     */        
     public static final class TRANSFER_WHEEL {
-        // supposed to be 11
         public static final int MASTER_ID = 11;
         public static final int PHOTOEYE_DIO_CHANNEL = 1;
         public static final double SPEED = 1.0;
     }   
 
-    // Controllers and Joysticks
-    public static final int DRIVER_XBOX = 0;
-    public static final int OPERATOR_XBOX = 1;
+    public static final class CONTROLLER {
+        public static final int DRIVER_XBOX = 0;
+        public static final int OPERATOR_XBOX = 1;
+    }
+    
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the transfer
+    * wheel subsystem.
+    * @see {@link frc.robot.lib.drivers.PressureSensor}
+    */ 
+    public static final class PRESSURE_SENSOR {
+        public static final int PRESSURE_SENSOR_ANALOG_CHANNEL = 0;
+        public static final double PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE = 1.19;               // Measure by reading analog input voltage @ 0-PSI 
+        public static final double PRESSURE_SENSOR_PRESSURE_PER_VOLT = 115.0 / (3.62 - 1.19);   // Calculate with prior measurement and reading analog input voltage @ max operating PSI 
+    }
+    
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the transfer
+    * wheel subsystem.
+    * @see {@link frc.robot.lib.drivers.Photoeye}
+    */ 
+    public static final class PHOTOEYE {
+        public static final int PHOTOEYE_ANALOG_CHANNEL = 1; 
+    }
 
-    // Pressure sensor
-    public static final int PRESSURE_SENSOR_ANALOG_CHANNEL = 0;
-    public static final double PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE = 1.19;               // Measure by reading analog input voltage @ 0-PSI 
-    public static final double PRESSURE_SENSOR_PRESSURE_PER_VOLT = 115.0 / (3.62 - 1.19);   // Calculate with prior measurement and reading analog input voltage @ max operating PSI 
+    /**
+    * These are the constants which are used to map the hardware and define the working bahavior of the the transfer
+    * wheel subsystem.
+    * @see {@link frc.robot.lib.drivers.Limelight}
+    */ 
+    public static final class LIMELIGHT {
+        public static final double SCALE_HORIZONTAL_TO_TARGET = 1.0 / 27.0;                // Limelight has 54deg FOV
+        public static final double VISION_THREAD_TIME = 0.01;  
+    }
 
-    // Photoeye
-    public static final int PHOTOEYE_ANALOG_CHANNEL = 1; 
-
-    // Limelight
-    public static final double SCALE_HORIZONTAL_TO_TARGET = 1.0 / 27.0;                // Limelight has 54deg FOV
-    public static final double VISION_THREAD_TIME = 0.01;  
-
-    // Current Limiting
+    public static final class CURRENT_LIMIT {
       public static final int LONG_CAN_TIMEOUT_MS = 50;
-
+    }
 }
 

@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.INTAKE;
 import frc.robot.Constants.GLOBAL;
-import frc.robot.Constants;
+import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -53,9 +53,9 @@ public class Intake extends SubsystemBase {
         mMaster = master;
         mShifter = shifter;
     // Current limiting
-        mMaster.configContinuousCurrentLimit( 6, Constants.LONG_CAN_TIMEOUT_MS );
-        mMaster.configPeakCurrentLimit( 6, Constants.LONG_CAN_TIMEOUT_MS );
-        mMaster.configPeakCurrentDuration( 200, Constants.LONG_CAN_TIMEOUT_MS );
+        mMaster.configContinuousCurrentLimit( 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        mMaster.configPeakCurrentLimit( 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
+        mMaster.configPeakCurrentDuration( 200, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
         mMaster.enableCurrentLimit( true );
     }
 

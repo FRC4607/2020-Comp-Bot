@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.TRANSFER_WHEEL;
-import frc.robot.Constants;
+import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.Photoeye;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -43,7 +43,7 @@ public class TransferWheel extends SubsystemBase {
     public TransferWheel ( CANSparkMax master ) {
         mMaster = master;
      // Current limiting
-     mMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
+     mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
         // Set the hardware states
         // mIsSpin = false; 
         // Spin( false ); 

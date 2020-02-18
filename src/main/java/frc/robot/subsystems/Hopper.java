@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.HOPPER;
-import frc.robot.Constants;
+import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -34,7 +34,7 @@ public class Hopper extends SubsystemBase {
     public Hopper ( CANSparkMax master ) {
         mMaster = master;
         // Current limiting
-     mMaster.setSmartCurrentLimit( 6, 6, Constants.LONG_CAN_TIMEOUT_MS );
+     mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.LONG_CAN_TIMEOUT_MS );
     }
 
     public static Hopper create () {

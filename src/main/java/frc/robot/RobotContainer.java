@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.CONTROLLER;
+import frc.robot.Constants.PRESSURE_SENSOR;
 import frc.robot.Constants.GLOBAL;
 import frc.robot.lib.drivers.PressureSensor;
 import frc.robot.lib.drivers.PDP;
@@ -34,10 +36,10 @@ import org.slf4j.Logger;
 public class RobotContainer {
 
     // Hardware
-    private final XboxController mDriverXbox = new XboxController( Constants.DRIVER_XBOX );
-    private final XboxController mOperatorXbox = new XboxController( Constants.OPERATOR_XBOX );
-    private final PressureSensor mPressureSensor = new PressureSensor( Constants.PRESSURE_SENSOR_ANALOG_CHANNEL, Constants.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
-                                                                       Constants.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
+    private final XboxController mDriverXbox = new XboxController( CONTROLLER.DRIVER_XBOX );
+    private final XboxController mOperatorXbox = new XboxController( CONTROLLER.OPERATOR_XBOX );
+    private final PressureSensor mPressureSensor = new PressureSensor( PRESSURE_SENSOR.PRESSURE_SENSOR_ANALOG_CHANNEL, PRESSURE_SENSOR.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
+                                                                       PRESSURE_SENSOR.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( GLOBAL.PDP_ID ), GLOBAL.PDP_ID );
 
      // Subsystems

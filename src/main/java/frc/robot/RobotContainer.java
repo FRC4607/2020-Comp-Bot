@@ -23,7 +23,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Limelight;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.HoodDrive;
@@ -31,6 +30,8 @@ import frc.robot.commands.FlywheelSpin;
 import frc.robot.commands.TurretSpin;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
+
+// import frc.robot.subsystems.Limelight;
 
 import org.slf4j.Logger;
 
@@ -53,7 +54,7 @@ public class RobotContainer {
      private TransferWheel mTransferWheel = TransferWheel.create();
      private Shooter mShooter = Shooter.create();
      private Turret mTurret = Turret.create(); 
-     private Limelight mLimelight = Limelight.create();
+    //  private Limelight mLimelight = Limelight.create();
 
     // Autonomous chooser
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -94,10 +95,9 @@ public class RobotContainer {
         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
-        // run hopper backward on x
+        // run hopper and indexer backward on x
         new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mHopper.SpinBack() ) ); 
         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
-        // run hopper backward on x
         new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mIndexer.SpinBack() ) ); 
         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
         // transfer wheel operator button b

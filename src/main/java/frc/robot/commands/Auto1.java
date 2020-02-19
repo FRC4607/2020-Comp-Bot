@@ -24,32 +24,32 @@ public class Auto1 extends CommandBase {
     @Override
     public void execute() {
       //Start Flywheel
-       mFlywheel.setOpenLoop( -0.6 );
+      //  mFlywheel.setOpenLoop( -0.6 );
 
-       //Dont tell Eric, but wait for 3 seconds
-       long start = System.currentTimeMillis();
+      //  //Dont tell Eric, but wait for 3 seconds
+      //  long start = System.currentTimeMillis();
 
-       while( System.currentTimeMillis() <= start + 3000 ) {}
+      //  while( System.currentTimeMillis() <= start + 3000 ) {}
 
-       //Feed Balls into Shooter
-       mHopper.Spin();
-       mIndexer.Spin();
-       mTransferWheel.Spin();
+      //  //Feed Balls into Shooter
+      //  mHopper.Spin();
+      //  mIndexer.Spin();
+      //  mTransferWheel.Spin();
 
-       //Dont tell Eric again, but wait until balls are shot and stop everything
-       start = System.currentTimeMillis();
+      //  //Dont tell Eric again, but wait until balls are shot and stop everything
+      //  start = System.currentTimeMillis();
 
-       while( System.currentTimeMillis() <= start + 7000 ) {}
+      //  while( System.currentTimeMillis() <= start + 7000 ) {}
 
-       mFlywheel.Stop();
-       mHopper.Stop();
-       mIndexer.Stop();
-       mTransferWheel.Stop();
+      //  mFlywheel.Stop();
+      //  mHopper.Stop();
+      //  mIndexer.Stop();
+      //  mTransferWheel.Stop();
 
-       //Drive off Line
-       mDrivetrain.mDifferentialDrive.arcadeDrive(-.50, -.50);
-       while(System.currentTimeMillis() <= start + 800) {}
-       mDrivetrain.mDifferentialDrive.arcadeDrive(0, 0);
+      //  //Drive off Line
+      //  mDrivetrain.mDifferentialDrive.arcadeDrive(-.50, -.50);
+      //  while(System.currentTimeMillis() <= start + 800) {}
+      //  mDrivetrain.mDifferentialDrive.arcadeDrive(0, 0);
 
        // :D
        mIsFinished = true;

@@ -103,7 +103,7 @@ public final class Constants {
     }
 
     public static final class CLIMBER {
-        public static final int MASTER_ID = 16;
+        public static final int MASTER_ID = 12;
         public static final int FOLLOWER_ID = 1;
         // public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
         public static final int LOW_GEAR_SOLENOID_ID = 3;

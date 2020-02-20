@@ -114,6 +114,22 @@ public class Flywheel extends SubsystemBase {
     }
 
     /**
+     * 
+     * @param desiredState
+     */
+    public void SetFlywheelState( FlywheelState_t desiredState ) {
+        mFlywheelState = desiredState;
+    }
+
+    /**
+     * 
+     * @param desiredState
+     */
+    public void SetControlState( ControlState_t desiredState ) {
+        mControlState = desiredState;
+    }
+
+    /**
     * @param double The target velocity in RPM for closed-loop velocity control.
     */
     public void SetTargetVelocity_RPM ( double targetVelocity_RPM ) {
@@ -305,8 +321,15 @@ public class Flywheel extends SubsystemBase {
     }
 
     // open loop drive
-    public void setOpenLoop (double xFlywheel) {
-        mMaster.set( xFlywheel );
+    public void setOpenLoop ( double xFlywheel ) {
+        mTargetPercentOutput  =  xFlywheel;
+        SetPercentOutput();
+    }
+
+    // close loop drive
+    public void setCloseLoop ( double xRPM ) {
+        mTargetVelocity_Units_Per_100ms  =  xRPM;
+        SetVelocityOutput();
     }
 
     // stop for deadband
@@ -449,12 +472,12 @@ public class Flywheel extends SubsystemBase {
         Initialize();
 
         // Current limiting
-        mMaster.configContinuousCurrentLimit( 6, CURRENT_LIMIT.RPM_LIMIT );
-        mFollower.configContinuousCurrentLimit( 6, CURRENT_LIMIT.RPM_LIMIT );
-        mMaster.configPeakCurrentLimit( 6, CURRENT_LIMIT.RPM_LIMIT );
-        mFollower.configPeakCurrentLimit( 6, CURRENT_LIMIT.RPM_LIMIT );
-        mMaster.configPeakCurrentDuration( 200, CURRENT_LIMIT.RPM_LIMIT );
-        mFollower.configPeakCurrentDuration( 200, CURRENT_LIMIT.RPM_LIMIT );
+        mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );     
+        mFollower.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mFollower.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mFollower.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
         mMaster.enableCurrentLimit( true );
         mFollower.enableCurrentLimit( true );
 

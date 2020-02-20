@@ -22,22 +22,25 @@ public class Indexer extends SubsystemBase {
     // spin indexer sending power cells into transfer
     public void Spin() {
         mMaster.set( INDEXER.SPEED );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
     }
 
     // spin hopper backward away from indexer
     public void SpinBack() {
         mMaster.set( -INDEXER.SPEED );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
     }
 
     // stop spinning
     public void Stop() {
         mMaster.set( 0.0 );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
     }
 
     public Indexer ( CANSparkMax master ) {
         mMaster = master;
         // Current limiting
-        mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
     }
 
     public static Indexer create () {

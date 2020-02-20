@@ -18,8 +18,8 @@ public class IntakeDrive extends CommandBase {
     public void execute() {
 
         // drive off triggers 
-        double xOuttake = ( 0.8 * mDriverXbox.getRawAxis(3));
-        double xIntake = ( -0.8 * mDriverXbox.getRawAxis(2));
+        double xOuttake = ( 1 * mDriverXbox.getRawAxis(3));
+        double xIntake = ( -1 * mDriverXbox.getRawAxis(2));
 
         if ( xIntake < -INTAKE.DEADBAND ) {
             mIntake.setOpenLoop( xIntake );
@@ -44,6 +44,7 @@ public class IntakeDrive extends CommandBase {
         mDriverXbox = driverXbox;
         addRequirements( mIntake );
     }
+      
 
 }
 

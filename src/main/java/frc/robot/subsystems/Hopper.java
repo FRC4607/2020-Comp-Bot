@@ -20,21 +20,24 @@ public class Hopper extends SubsystemBase {
     // spin hopper sending power cells into indexer
     public void Spin() {
         mMaster.set( HOPPER.SPEED );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
     }
 
     // spin hopper backward away from indexer
     public void SpinBack() {
         mMaster.set( -HOPPER.SPEED );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     public void Stop() {
         mMaster.set( 0.0 );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     public Hopper ( CANSparkMax master ) {
         mMaster = master;
         // Current limiting
-        mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     public static Hopper create () {

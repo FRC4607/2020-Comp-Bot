@@ -23,11 +23,12 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Limelight;
+//import frc.robot.subsystems.Limelight;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.HoodDrive;
-import frc.robot.commands.FlywheelSpin;
+// import frc.robot.commands.FlywheelSpin;
+import frc.robot.commands.FlywheelToSetRPM;
 import frc.robot.commands.TurretSpin;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
@@ -53,7 +54,7 @@ public class RobotContainer {
      private TransferWheel mTransferWheel = TransferWheel.create();
      private Shooter mShooter = Shooter.create();
      private Turret mTurret = Turret.create(); 
-     private Limelight mLimelight = Limelight.create();
+    // private Limelight mLimelight = Limelight.create();
 
     // Autonomous chooser
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -170,9 +171,9 @@ public class RobotContainer {
         ConfigureButtonBindings();
         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
         mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
-        mFlywheel.setDefaultCommand( new FlywheelSpin( mFlywheel, mOperatorXbox ) );
+        mFlywheel.setDefaultCommand( new FlywheelToSetRPM( mFlywheel, mOperatorXbox ) );
         mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
-        mTurret.setDefaultCommand( new TurretSpin( mTurret, mLimelight ) );
+        mTurret.setDefaultCommand( new TurretSpin( mTurret ) );
         mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel ) );
         mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
         SmartDashboard.putData( "Auto Chooser", mAutoChooser );

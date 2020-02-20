@@ -46,6 +46,11 @@ public class Drivetrain extends SubsystemBase {
             mLeftFollower.setInverted( wantsReversed );
             mRightMaster.setInverted( wantsReversed) ;
             mRightFollower.setInverted( wantsReversed );
+            // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Reversed drive set to: [{}]", mIsReversed );
         }
     }
@@ -58,10 +63,18 @@ public class Drivetrain extends SubsystemBase {
         if ( wantsHighGear && !mIsHighGear ) {
             mIsHighGear = wantsHighGear;
             mShifter.set( DoubleSolenoid.Value.kForward );
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Gear set to: [High]" );
         } else if ( !wantsHighGear && mIsHighGear ) {
             mIsHighGear = wantsHighGear;
             mShifter.set( DoubleSolenoid.Value.kReverse );
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Gear set to: [Low]" );
         }
     }
@@ -73,6 +86,11 @@ public class Drivetrain extends SubsystemBase {
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
         if (wantsBrakeMode && !mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
+            // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             // mLeftMaster.setNeutralMode( NeutralMode.Brake );
             // mLeftFollower.setNeutralMode( NeutralMode.Brake );
             // mRightMaster.setNeutralMode( NeutralMode.Brake );
@@ -81,6 +99,10 @@ public class Drivetrain extends SubsystemBase {
 
         } else if (!wantsBrakeMode && mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             // mLeftMaster.setNeutralMode( NeutralMode.Coast );
             // mLeftFollower.setNeutralMode( NeutralMode.Coast );
             // mRightMaster.setNeutralMode( NeutralMode.Coast );
@@ -129,10 +151,10 @@ public class Drivetrain extends SubsystemBase {
         mShifter = shifter;
 
         // Current limiting
-        mLeftMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
-        mLeftFollower.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
-        mRightMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
-        mRightFollower.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
 
         // Create differential drive object
         mDifferentialDrive = new DifferentialDrive( leftMaster, rightMaster );

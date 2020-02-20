@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret.TurretState_t;
 import frc.robot.subsystems.Turret.ControlState_t;
 import frc.robot.subsystems.Turret.FailingState_t;
-import frc.robot.subsystems.Limelight;
+//import frc.robot.subsystems.Limelight;
 import frc.robot.Constants.TURRET;
 import frc.robot.lib.controllers.Vision.State;
 import frc.robot.lib.controllers.Vision.Status;
@@ -18,7 +18,7 @@ public class TurretSpin extends CommandBase {
 
     private boolean mIsFinished = true;
     private Status mStatus;
-    private Limelight mLimelight;
+    //private Limelight mLimelight;
     private final Logger mLogger = LoggerFactory.getLogger(TurretSpin.class);
     private final Turret mTurret;
     private TurretState_t mTurretState;
@@ -100,11 +100,11 @@ public class TurretSpin extends CommandBase {
     /******************************************************************************************************************************
      ** CONSTRUCTOR
      ******************************************************************************************************************************/
-    public TurretSpin ( Turret turret, Limelight limelight ) {
+    public TurretSpin ( Turret turret ) {
         mTurret = turret;
-        mLimelight = limelight;
+       // mLimelight = limelight;
         addRequirements( mTurret );
-        addRequirements( mLimelight );
+        //addRequirements( mLimelight );
     }
 
 }

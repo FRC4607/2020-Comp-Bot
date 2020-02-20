@@ -30,7 +30,7 @@ public class Vision {
       synchronized( this ) {
         // Process state changes
         if ( mState != mDesiredState ) {
-          mLogger.info( "Vision processing state change request: [{}]", mDesiredState );
+          // mLogger.info( "Vision processing state change request: [{}]", mDesiredState );
           mState = mDesiredState;
           mStatus = Status.kTargeting;
         }
@@ -40,7 +40,7 @@ public class Vision {
         // mLogger.info("Desired State: {}, Current State: {}", x, y);
 
         if ( mDesiredLimelightState.ordinal() != mLimelight.getLedMode() ) {
-          mLogger.info( "Limelight led mode state change requrest: [{}]", mDesiredLimelightState );
+          // mLogger.info( "Limelight led mode state change requrest: [{}]", mDesiredLimelightState );
           mLimelight.setLedMode( mDesiredLimelightState );
         }
 

@@ -18,13 +18,13 @@ public class IntakeDrive extends CommandBase {
     public void execute() {
 
         // drive off triggers 
-        double xOuttake = ( 1 * mDriverXbox.getRawAxis(3));
-        double xIntake = ( -1 * mDriverXbox.getRawAxis(2));
+        double xOuttake = ( -1 * mDriverXbox.getRawAxis(3));
+        double xIntake = ( 1 * mDriverXbox.getRawAxis(2));
 
-        if ( xIntake < -INTAKE.DEADBAND ) {
-            mIntake.setOpenLoop( xIntake );
-        } else if ( xOuttake > INTAKE.DEADBAND ) {
+        if ( xOuttake < -INTAKE.DEADBAND ) {
             mIntake.setOpenLoop( xOuttake );
+        } else if ( xIntake > INTAKE.DEADBAND ) {
+            mIntake.setOpenLoop( xIntake );
         } else {
             mIntake.Stop();
         }

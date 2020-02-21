@@ -116,6 +116,7 @@ public final class Constants {
         public static final int LOW_GEAR_SOLENOID_ID = 3;
         public static final int HIGH_GEAR_SOLENOID_ID = 6;
         public static final double DEADBAND = 0.1; 
+        public static final double SPEED = 1.0;
     }
 
     /**

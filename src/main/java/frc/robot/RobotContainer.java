@@ -23,7 +23,8 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
-//import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Climber; 
+// import frc.robot.subsystems.Limelight;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.HoodDrive;
@@ -44,19 +45,20 @@ public class RobotContainer {
                                                                        PRESSURE_SENSOR.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( GLOBAL.PDP_ID ), GLOBAL.PDP_ID );
 
-     // Subsystems
-     private Drivetrain mDrivetrain = Drivetrain.create();
-     private Flywheel mFlywheel = Flywheel.create();
-     private Hood mHood = Hood.create();
-     private Hopper mHopper = Hopper.create();
-     private Indexer mIndexer = Indexer.create();
-     private Intake mIntake = Intake.create();
-     private TransferWheel mTransferWheel = TransferWheel.create();
-     private Shooter mShooter = Shooter.create();
-     private Turret mTurret = Turret.create(); 
+    // Subsystems
+    private Drivetrain mDrivetrain = Drivetrain.create();
+    private Flywheel mFlywheel = Flywheel.create();
+    private Hood mHood = Hood.create();
+    private Hopper mHopper = Hopper.create();
+    private Indexer mIndexer = Indexer.create();
+    private Intake mIntake = Intake.create();
+    private TransferWheel mTransferWheel = TransferWheel.create();
+    private Shooter mShooter = Shooter.create();
+    private Turret mTurret = Turret.create(); 
+    private Climber mClimber = Climber.create();
     // private Limelight mLimelight = Limelight.create();
 
-    // Autonomous chooser
+    // Autonomous chooser 
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
  
     // Match states for debug data output
@@ -69,22 +71,23 @@ public class RobotContainer {
         teleopInit { @Override public String toString() { return "Teleop Init"; } },
         teleopPeriodic { @Override public String toString() { return "Teleop Periodic"; } };
     }
-     private MatchState_t mMatchState;
+
+    private MatchState_t mMatchState;
  
-     public MatchState_t GetMatchState () {
-         return mMatchState;
-     }
+    public MatchState_t GetMatchState () {
+        return mMatchState;
+    }
  
-     public void SetMatchState ( MatchState_t matchState ) {
-         mMatchState = matchState;
-     }
- 
-     public Command GetAutonomousCommand () {
+    public void SetMatchState ( MatchState_t matchState ) {
+        mMatchState = matchState;
+    }
+
+    public Command GetAutonomousCommand () {
         return mAutoChooser.getSelected();
     }
 
      // Button mappings
-     private void ConfigureButtonBindings () {
+    private void ConfigureButtonBindings () {
         // drivetrian buttons
         new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
         new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
@@ -95,19 +98,21 @@ public class RobotContainer {
         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
-        // run hopper backward on x
+        // run hopper and indexer backward on x
         new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mHopper.SpinBack() ) ); 
         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
-        // run hopper backward on x
         new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mIndexer.SpinBack() ) ); 
         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
         // transfer wheel operator button b
         new JoystickButton( mOperatorXbox, 2).whenPressed( new InstantCommand( () -> mTransferWheel.Spin() ) ); 
         new JoystickButton( mOperatorXbox, 2).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) );
+        // climber 
+        new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mClimber.OpenLoop() ) ); 
+        new JoystickButton( mOperatorXbox, 4).whenReleased( new InstantCommand( () -> mClimber.Stop() ) ); 
     } 
 
-     // Debug logging 
-     public void LogRobotDataHeader ( Logger fileLogger ) {
+    // Debug logging 
+    public void LogRobotDataHeader ( Logger fileLogger ) {
         fileLogger.debug( "Time,"+
                           "Match State,"+
                           "Flywheel State,"+

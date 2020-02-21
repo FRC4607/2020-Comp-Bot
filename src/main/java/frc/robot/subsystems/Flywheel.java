@@ -234,11 +234,11 @@ public class Flywheel extends SubsystemBase {
     /**
     * This method will set the velocity closed-loop gains of the TalonSRX.
     */
-    private void SetGains () {
-		mMaster.config_kP( FLYWHEEL.PID_IDX, mP, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.config_kI( FLYWHEEL.PID_IDX, mI, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.config_kD( FLYWHEEL.PID_IDX, mD, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.config_kF( FLYWHEEL.PID_IDX, mF, GLOBAL.CAN_TIMEOUT_MS );
+    public void SetGains () {
+		mMaster.config_kP( FLYWHEEL.PID_IDX, 0.006, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.config_kI( FLYWHEEL.PID_IDX, 0, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.config_kD( FLYWHEEL.PID_IDX, 0, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.config_kF( FLYWHEEL.PID_IDX, 0.0198, GLOBAL.CAN_TIMEOUT_MS );
     }
 
     /**

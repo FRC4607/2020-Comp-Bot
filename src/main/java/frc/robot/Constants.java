@@ -116,6 +116,7 @@ public final class Constants {
         public static final int LOW_GEAR_SOLENOID_ID = 3;
         public static final int HIGH_GEAR_SOLENOID_ID = 6;
         public static final double DEADBAND = 0.1; 
+        public static final double SPEED = 1.0;
     }
 
     /**
@@ -216,6 +217,7 @@ public final class Constants {
         public static final double HIGH_MOUNT_ANGLE = 60.0;
     }
 
+    // used for current limiting 
     public static final class CURRENT_LIMIT {
         public static final int TALON_AMPS_LIMIT = 40;              // amperage limit of talon motors
         public static final int SPARK_ZERO_RPM_LIMIT = 5;           // limit when spark is at zero rpms

@@ -11,7 +11,8 @@ public class TeleopDrive extends CommandBase {
     private final XboxController mDriverXbox;
 
     @Override
-    public void initialize () {}
+    public void initialize () {
+    }
 
     @Override
     public void execute() {

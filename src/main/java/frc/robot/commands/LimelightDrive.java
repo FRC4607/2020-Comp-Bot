@@ -1,4 +1,4 @@
-// package frc.robot.commands;
+//  package frc.robot.commands;
 
 // import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.wpilibj.controller.PIDController;
@@ -6,83 +6,89 @@
 // import frc.robot.Constants.DRIVETRAIN;
 // import frc.robot.subsystems.Drivetrain;
 // import frc.robot.subsystems.Limelight;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
+// >>>>>>> 376201e4ce0f75c42b5f01453b759acccca5ebe1
 
-// /**
-//  * Aims at the target and shoots at least a given number of times.
-//  */
-// public class LimelightDrive extends CommandBase {
+// // /**
+// //  * Aims at the target and shoots at least a given number of times.
+// //  */
+// // public class LimelightDrive extends CommandBase {
 
-//   private final Drivetrain shooterSubsystem;
-//   private final Limelight indexerSubsystem;
 
-//   private final PIDController pidController = new PIDController( kP, 0, kD );
-  
-//   private final int ballsToShoot;
-//   private int ballsShot = 0;
-//   private boolean noTarget = false;
-//   private boolean wasFull = false;
-//   private Timer endTimer = new Timer();
+//     private final Drivetrain mDrivetrain;
+//     private final Limelight mLimelight;
 
-//   public LimelightDrive( int ballsToShoot, Drivetrain drivetrain, Limelight limelight ) {
+//     // TODO: figure out PID values
+//     private final PIDController pidController = new PIDController( 0, 0, 0 );
+    
+//     private final int ballsToShoot;
+//     // private int ballsShot = 0;
+//     private boolean noTarget = false;
+//     private boolean wasFull = false;
+//     private Timer endTimer = new Timer();
 
-//     super( 100, limelight );
+//     public LimelightDrive( int ballsToShoot, Drivetrain drivetrain, Limelight limelight ) {
 
-//     this.ballsToShoot = ballsToShoot;
-//     this.drivetrain = drivetrain;
-//     this.limelight = limelight;
+//         // super( 100, limelight );
 
-//     aaddRequirements( drivetrain, limelight );
+//         this.ballsToShoot = ballsToShoot;
+//         this.drivetrain = drivetrain;
+//         this.limelight = limelight;
 
-//     pidController.setTolerance(DRIVETRAIN.AIM_TOLERANCE);
-//   }
+//         addRequirements( drivetrain, limelight );
 
-//   @Override
-//   public void initialize() {
-//     noTarget = false;
-//     // ballsShot = 0;
-//     // wasFull = indexerSubsystem.isFull();
-//     endTimer.reset();
-//     pidController.reset();
-//     limelight.enable();
-//   }
-
-//   @Override
-//   public void execute() {
-//     var limelightWithTarget = getTargetAcquired();
-//     if (limelightWithTarget != null) {
-//       shooterSubsystem.prepareToShoot(Units.metersToInches(limelightWithTarget.getDistanceToTarget()));
-//       aimShooter(limelightWithTarget);
-//       if (shooterSubsystem.isReadyToShoot() && pidController.atSetpoint()) {
-//         indexerSubsystem.shoot();
-//       } else {
-//         indexerSubsystem.prepareToShoot();
-//       }
-//     } else {
-//       noTarget = true;
-//       mDrivetrain.stop();;
+//         pidController.setTolerance(DRIVETRAIN.AIM_TOLERANCE);
 //     }
-//     var isFull = indexerSubsystem.isFull();
-//     if ((wasFull && !isFull) && (++ballsShot >= ballsToShoot)) {
-//       endTimer.start();
+
+//     @Override
+//     public void initialize() {
+//         noTarget = false;
+//         // ballsShot = 0;
+//         // wasFull = indexerSubsystem.isFull();
+//         endTimer.reset();
+//         pidController.reset();
+//         limelight.enable();
 //     }
-//     wasFull = isFull;
-//   }
 
-//   private void aimShooter(ILimelightSubsystem selectedLimelightSubsystem) {
-//     double targetX = selectedLimelightSubsystem.getTargetX(); //getFilteredX()
-//     double rotationSpeed = -pidController.calculate(targetX / 5);
-//     driveTrainSubsystem.arcadeDrive(0.0, rotationSpeed, false);
-//   }
+//     @Override
+//     public void execute() {
+//         var limelightWithTarget = getTargetAcquired();
+//         if (limelightWithTarget != null) {
+//             shooterSubsystem.prepareToShoot(Units.metersToInches(limelightWithTarget.getDistanceToTarget()));
+//             aimShooter(limelightWithTarget);
+//             if (shooterSubsystem.isReadyToShoot() && pidController.atSetpoint()) {
+//                 indexerSubsystem.shoot();
+//             } else {
+//                 indexerSubsystem.prepareToShoot();
+//             }
+//         } else {
+//             noTarget = true;
+//             mDrivetrain.stop();
+//         }
 
-//   @Override
-//   public boolean isFinished() {
-//     return noTarget || (ballsShot >= ballsToShoot && endTimer.hasPeriodPassed(ShooterConstants.SHOOT_TIME));
-//   }
+//         var isFull = indexerSubsystem.isFull();
+//         if ((wasFull && !isFull) && (++ballsShot >= ballsToShoot)) {
+//             endTimer.start();
+//         }
+//         wasFull = isFull;
+//     }
 
-//   @Override
-//   public void end(boolean interrupted) {
-//     shooterSubsystem.stopShooter();
-//     indexerSubsystem.stopIndexer();
-//     driveTrainSubsystem.stop();
-//   }
+//     private void aimShooter(ILimelightSubsystem selectedLimelightSubsystem) {
+//         double targetX = selectedLimelightSubsystem.getTargetX(); //getFilteredX()
+//         double rotationSpeed = -pidController.calculate(targetX / 5);
+//         driveTrainSubsystem.arcadeDrive(0.0, rotationSpeed, false);
+//     }
+
+//     @Override
+//     public boolean isFinished() {
+//         return noTarget; // || (ballsShot >= ballsToShoot && endTimer.hasPeriodPassed(ShooterConstants.SHOOT_TIME));
+//     }
+
+//     @Override
+//     public void end(boolean interrupted) {
+//         shooterSubsystem.stopShooter();
+//         indexerSubsystem.stopIndexer();
+//         driveTrainSubsystem.stop();
+//     }
 // }
+

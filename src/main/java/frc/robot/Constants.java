@@ -103,12 +103,9 @@ public final class Constants {
     }
 
     public static final class CLIMBER {
-        public static final int MASTER_ID = 12;
-        public static final int FOLLOWER_ID = 1;
-        // public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
-        public static final int LOW_GEAR_SOLENOID_ID = 3;
-        public static final int HIGH_GEAR_SOLENOID_ID = 6;
-    }
+        public static final int MASTER_ID = 12; 
+        public static final double SPEED = 1.0;
+    } 
 
     /**
     * These are the constants which are used to map the hardware and define the working bahavior of the the hopper
@@ -196,22 +193,23 @@ public final class Constants {
         public static final double TARGET_ACQUIRED = 1.0;
         public static final double PIPELINE_INDEX_NEAR = 0.0;
         public static final double PIPELINE_INDEX_FAR = 1.0;
-    // /** Height of the target in meters */
-    //     public static final double TARGET_HEIGHT = Units.inchesToMeters(80.875);
-    // /** Height of the limelight on the bot in meters */
-    //     public static final double HIGH_MOUNT_HEIGHT = Units.inchesToMeters(22.375);
-    //     public static final double LOW_MOUNT_HEIGHT = Units.inchesToMeters(8.125);
-    // /** Distance Limelight is mounted from the front frame of the bot */
-    //     public static final double HIGH_DISTANCE_FROM_FRONT = Units.inchesToMeters(16.5);
-    //     public static final double LOW_DISTANCE_FROM_FRONT = Units.inchesToMeters(2.0);
-    // /** Distance Limelight is mounted from the centerline of the bot */
-    //     public static final double HIGH_DISTANCE_FROM_CENTER = Units.inchesToMeters(0);
-    //     public static final double LOW_DISTANCE_FROM_CENTER = Units.inchesToMeters(7.125);
-    /** Angle of the limelight in degrees */
+        // /** Height of the target in meters */
+        //     public static final double TARGET_HEIGHT = Units.inchesToMeters(80.875);
+        // /** Height of the limelight on the bot in meters */
+        //     public static final double HIGH_MOUNT_HEIGHT = Units.inchesToMeters(22.375);
+        //     public static final double LOW_MOUNT_HEIGHT = Units.inchesToMeters(8.125);
+        // /** Distance Limelight is mounted from the front frame of the bot */
+        //     public static final double HIGH_DISTANCE_FROM_FRONT = Units.inchesToMeters(16.5);
+        //     public static final double LOW_DISTANCE_FROM_FRONT = Units.inchesToMeters(2.0);
+        // /** Distance Limelight is mounted from the centerline of the bot */
+        //     public static final double HIGH_DISTANCE_FROM_CENTER = Units.inchesToMeters(0);
+        //     public static final double LOW_DISTANCE_FROM_CENTER = Units.inchesToMeters(7.125);
+        /** Angle of the limelight in degrees */
         public static final double HIGH_MOUNT_ANGLE = 20.0;
         public static final double LOW_MOUNT_ANGLE = 25.0;
     }
 
+    // used for current limiting 
     public static final class CURRENT_LIMIT {
         public static final int TALON_AMPS_LIMIT = 40;              // amperage limit of talon motors
         public static final int SPARK_ZERO_RPM_LIMIT = 5;           // limit when spark is at zero rpms

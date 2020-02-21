@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.DRIVETRAIN;
+import frc.robot.Constants;
 import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -19,6 +20,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends SubsystemBase {
 
+    public static enum ControlState_t {
+        OpenLoop { @Override public String toString() { return "Open-Loop"; } },
+        ClosedLoop { @Override public String toString() { return "Closed-Loop"; } },
+        DriveWithTurningAssist { @Override public String toString() { return "Drive-Assist"; } };
+    }
+
     // Hardware
     private final CANSparkMax mLeftMaster;
     private final CANSparkMax mLeftFollower;
@@ -30,6 +37,8 @@ public class Drivetrain extends SubsystemBase {
     private CANPIDController mRightPIDController;
     private final DoubleSolenoid mShifter;
     public final DifferentialDrive mDifferentialDrive;
+    private ControlState_t mControlState;
+    private double mTargetVelocity_Units_Per_100ms;
 
     // Hardware states
     private boolean mIsReversed;
@@ -55,9 +64,48 @@ public class Drivetrain extends SubsystemBase {
         }
     }
 
+     /**
+    * @return ControlState_t The current control state of the flywheel.
+    */
+    public ControlState_t GetControlState () {
+        return mControlState;
+    }
+
+    /**
+     * 
+     * @param desiredState
+     */
+    public void SetControlState( ControlState_t desiredState ) {
+        mControlState = desiredState;
+    }
+    
+
     public boolean IsReversed () {
         return mIsReversed;
     }
+
+    public void ApplyDriveSignal(double throttle, double turn) {
+        double mThrottle = 0.0;
+        double mTurn = 0.0;
+        
+        // Apply calibrated motor deadband
+        if (turn > 0.0) {
+          mTurn = ( DRIVETRAIN.DEADBAND  * turn );
+        } else if (turn < -0.0) {
+          mTurn = ( ( -1.0 * DRIVETRAIN.DEADBAND ) * turn );
+        }
+        if (throttle > 0.0) {
+          mThrottle = ( DRIVETRAIN.DEADBAND * throttle );
+        } else if (throttle < 0.0) {
+          mThrottle = ( ( -1.0 * DRIVETRAIN.DEADBAND ) * throttle );
+        }
+        }
+    
+      
+
+    // public void LimelightDrive() {
+    //     mControlState = ControlType.kDriveWithTurningAssist;
+    //   }
 
     public void SetHighGear ( boolean wantsHighGear ) {
         if ( wantsHighGear && !mIsHighGear ) {

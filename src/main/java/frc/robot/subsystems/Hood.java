@@ -85,11 +85,19 @@ public class Hood extends SubsystemBase {
     // open loop drive
     public void setOpenLoop (double xHood) {
         mMaster.set( xHood );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
+
+    public void setOpenLoopR (double xHoodR) {
+        mMaster.set( xHoodR );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+    }
+
 
     // stop for deadband
     public void Stop() {
         mMaster.set( 0.0 );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     /**
@@ -435,7 +443,7 @@ public class Hood extends SubsystemBase {
         mMovingAverageFilter = movingAverageFilter;
         Initialize();
         // Current limiting
-        // mMaster.setSmartCurrentLimit( 6, 6, CURRENT_LIMIT.RPM_LIMIT );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     /**

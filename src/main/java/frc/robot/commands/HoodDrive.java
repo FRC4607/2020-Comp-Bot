@@ -18,14 +18,17 @@ public class HoodDrive extends CommandBase {
     public void execute() {
 
         // drive off joystick 
-        double xHood = ( 0.2 * mOperatorXbox.getRawAxis(5));
+        double xHood = ( -0.2 * mOperatorXbox.getRawAxis(5));
+        double xHoodR = ( 0.2 * mOperatorXbox.getRawAxis(5));
 
         if ( xHood < -HOOD.DEADBAND ) {
             mHood.setOpenLoop( xHood );
+        } else if ( xHoodR < HOOD.DEADBAND ) {
+            mHood.setOpenLoopR( xHoodR );
         } else {
             mHood.Stop();
         }
-    
+        
     }
 
     @Override

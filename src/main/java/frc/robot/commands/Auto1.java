@@ -29,17 +29,17 @@ public class Auto1 extends CommandBase {
        //Dont tell Eric, but wait for 3 seconds
        long start = System.currentTimeMillis();
 
-       while( System.currentTimeMillis() <= start + 3000 ) {}
+       while( System.currentTimeMillis() >= start + 3000 ) {}
 
        //Feed Balls into Shooter
        mHopper.Spin();
        mIndexer.Spin();
        mTransferWheel.Spin();
 
-       //Dont tell Eric again, but wait until balls are shot and stop everything
+       //Don't tell Eric again, but wait until balls are shot and stop everything
        start = System.currentTimeMillis();
 
-       while( System.currentTimeMillis() <= start + 7000 ) {}
+       while( System.currentTimeMillis() >= start + 7000 ) {}
 
        mFlywheel.Stop();
        mHopper.Stop();
@@ -48,7 +48,7 @@ public class Auto1 extends CommandBase {
 
        //Drive off Line
        mDrivetrain.mDifferentialDrive.arcadeDrive(-.50, -.50);
-       while(System.currentTimeMillis() <= start + 800) {}
+       while( System.currentTimeMillis() >= start + 800 ) {}
        mDrivetrain.mDifferentialDrive.arcadeDrive(0, 0);
 
        // :D

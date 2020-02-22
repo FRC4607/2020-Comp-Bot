@@ -28,19 +28,9 @@ public class Intake extends SubsystemBase {
         if ( wantsUp && !mIsUp ) {
             mIsUp = wantsUp;
             mShifter.set( DoubleSolenoid.Value.kForward );
-            mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
-            mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
-            mMaster.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
-            mMaster.enableCurrentLimit( true );
-            mLogger.info( "Gear set to: [High]" );
         } else if ( !wantsUp && mIsUp ) {
             mIsUp = wantsUp; 
             mShifter.set( DoubleSolenoid.Value.kReverse );
-            mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
-            mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
-            mMaster.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
-            mMaster.enableCurrentLimit( true );
-            mLogger.info( "Gear set to: [Low]" );
         }
     }
     public boolean IsUp() {

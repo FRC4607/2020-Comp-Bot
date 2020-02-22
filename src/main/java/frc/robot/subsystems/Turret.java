@@ -69,9 +69,17 @@ public class Turret extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
     
-    // open loop drive
-    public void setOpenLoop ( double xTurret ) {
-        mMaster.set( xTurret );
+   // open loop drive
+   public void setOpenLoop ( double xFlywheel ) {
+        mTargetPercentOutput  =  xFlywheel;
+        SetPercentOutput();
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+}
+    
+    // close loop drive
+    public void setCloseLoop ( double xUPMS ) {
+        mTargetPosition_Rot  =  xUPMS;
+        SetSmartMotionOutput();
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
     }
     // stop spinning

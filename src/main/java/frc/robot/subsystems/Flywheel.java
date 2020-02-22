@@ -49,6 +49,7 @@ public class Flywheel extends SubsystemBase {
     private double mTargetVelocity_Units_Per_100ms;
     private double mTargetVelocity_RPM;
     private double mCurrentVelocity_RPM;
+    private double mCurrentVelocity_UPMS;
     private double mError_RPM;
 
     // Open-loop control
@@ -99,6 +100,12 @@ public class Flywheel extends SubsystemBase {
         return mTargetPercentOutput;
     }
 
+    /**
+    * @return double The current current velocity of the flywheel in RPM.
+    */
+    public double GetCurrentVelocity_UPMS () {
+        return mCurrentVelocity_UPMS;
+    }
     /**
     * @return double The current current velocity of the flywheel in RPM.
     */
@@ -511,8 +518,8 @@ public class Flywheel extends SubsystemBase {
     */ 
     @Override
     public void periodic () {
-        mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX ) /
-                                                                  FLYWHEEL.SENSOR_UNITS_PER_ROTATION * 600.0;
+        mCurrentVelocity_UPMS = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX );
+        mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX ) / FLYWHEEL.SENSOR_UNITS_PER_ROTATION * 600.0;
         mError_RPM = GetTargetVelocity_RPM() - mCurrentVelocity_RPM;     
     }
 
@@ -531,6 +538,10 @@ public class Flywheel extends SubsystemBase {
         builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
         builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }
+
+	public double getSetPoint() {
+		return mTargetVelocity_Units_Per_100ms;
+	}
 
 }
 

@@ -7,6 +7,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU_ControlFrame;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -21,6 +24,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.SPI;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -43,12 +47,20 @@ public class Drivetrain extends SubsystemBase {
     private ControlState_t mControlState;
     private double mTargetVelocity_Units_Per_100ms;
     private double mTargetSpeed;
+    private AHRS mNavx_MXP;
+    private PigeonIMU mPidgey;
+    private double [] xyz_dps = new double [3];
+    private double currentAngle = 0;
+    private double currentAngluarRate = xyz_dps[2];
 
     // Hardware states
     private boolean mIsReversed;
     private boolean mIsHighGear;
     private boolean mIsBrakeMode;
     private boolean Turn;
+    private boolean usePigeon = true;
+    private boolean angleIsGood = false;
+
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
@@ -243,13 +255,64 @@ public class Drivetrain extends SubsystemBase {
         CANEncoder rightAlternateEncoder = rightMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController rightPidController = rightMaster.getPIDController();
         DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
+        AHRS mNavx_MXP = new AHRS( SPI.Port.kMXP );
+        PigeonIMU mPidgey = new PigeonIMU( 0 );
+        mPidgey.configFactoryDefault();
         return new Drivetrain( leftMaster, leftFollower, leftAlternateEncoder, leftPidController,
                                rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter ); 
     }
 
     @Override
     public void periodic () {
+        boolean debug = true;
+        if( debug ) {
+            SmartDashboard.putNumber( "Current Gyro", getHeading() );
+            SmartDashboard.putNumber( "Left Encoder", getLeftEncoder() );
+        }
 
+    }
+
+    private void getPidgey() {
+        PigeonIMU.GeneralStatus generalStatus = new PigeonIMU.GeneralStatus();
+        PigeonIMU.FusionStatus fusionStatus = new PigeonIMU.FusionStatus();
+        mPidgey.getGeneralStatus( generalStatus );
+        mPidgey.getRawGyro( xyz_dps );
+        mPidgey.getFusedHeading( fusionStatus );
+        currentAngle = fusionStatus.heading;
+        angleIsGood = ( mPidgey.getState() == PigeonIMU.PigeonState.Ready ) ? true : false;
+        currentAngluarRate = xyz_dps[2];
+    }
+
+    public double getHeading() {
+        double heading;
+        if( !usePigeon ) {
+            if( mNavx_MXP.isConnected() ) {
+                heading = mNavx_MXP.getAngle();
+            } else {
+                heading = 0;
+            }
+        } else {
+           getPidgey();
+           if( angleIsGood ) {
+            heading = currentAngle;
+           } else {
+               heading = 0;
+           }
+
+        }
+
+        return heading;
+    }
+
+
+	public void zeroDistanceTraveled() {
+        mLeftAlternateEncoder.setPosition(0);
+        
+    }
+    
+    public double getLeftEncoder() {
+        return mLeftAlternateEncoder.getPosition();
+     
     }
 
 }

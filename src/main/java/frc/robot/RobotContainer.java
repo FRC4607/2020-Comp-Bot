@@ -22,20 +22,25 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Turret;
+import frc.robot.util.XboxControllerAxisButton;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Climber; 
+import frc.robot.subsystems.Climber;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.LimelightDrive2;
 import frc.robot.commands.HoodDrive;
+import frc.robot.commands.IndexerRun;
 // import frc.robot.commands.LimelightDrive;
 // import frc.robot.commands.FlywheelSpin;
 import frc.robot.commands.FlywheelToSetRPM;
 import frc.robot.commands.TurretSpin;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
+import frc.robot.commands.DriveForDistance;
+import frc.robot.commands.Drive_Turn_To_Setpoint;
+import frc.robot.commands.DrivetrainZeroEncoders;
 import frc.robot.commands.FlywheelSpin;
-import frc.robot.util.*;
+
 
 import org.slf4j.Logger;
 
@@ -47,6 +52,8 @@ public class RobotContainer {
     private final PressureSensor mPressureSensor = new PressureSensor( PRESSURE_SENSOR.PRESSURE_SENSOR_ANALOG_CHANNEL, PRESSURE_SENSOR.PRESSURE_SENSOR_VOLTS_AT_ZERO_PRESSURE, 
                                                                        PRESSURE_SENSOR.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( GLOBAL.PDP_ID ), GLOBAL.PDP_ID );
+    private Limelight mLimelight = new Limelight();
+
 
     // Subsystems
     private Drivetrain mDrivetrain = Drivetrain.create();
@@ -59,7 +66,7 @@ public class RobotContainer {
     private Shooter mShooter = Shooter.create();
     private Turret mTurret = Turret.create(); 
     private Climber mClimber = Climber.create();
-    private Limelight mLimelight = new Limelight();
+  
 
     // Autonomous chooser 
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -97,44 +104,62 @@ public class RobotContainer {
     private void ConfigureButtonBindings () {
         SetUpmDriverXbox();
         SetUpmOperatorXbox();
+        SetUpSmartDashboardButtons();
+        SetUpSubsystemData();
     } 
 
+    private void SetUpSubsystemData() {
+        SmartDashboard.putData( mDrivetrain );
+        SmartDashboard.putData( mFlywheel );
+        SmartDashboard.putData( mHood );
+        SmartDashboard.putData( mIndexer );
+        SmartDashboard.putData( mIntake );
+        SmartDashboard.putData( mTransferWheel );
+        SmartDashboard.putData( mClimber );
+        SmartDashboard.putData( mHopper );
+        SmartDashboard.putData( mTurret );
+
+    }
+
+    private void SetUpSmartDashboardButtons(){
+        SmartDashboard.putData( new Drive_Turn_To_Setpoint( mDrivetrain,mDriverXbox,90.0 ) );
+        SmartDashboard.putData( new DrivetrainZeroEncoders( mDrivetrain ) );
+        SmartDashboard.putData( new DriveForDistance(mDrivetrain, 2048, 0.25, 0.0) );
+    }
 
     private void SetUpmOperatorXbox(){
          // Run hopper and indexer together on button a 
-         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mHopper.Spin() ) ); 
-         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
-         new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
-         new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
+         new JoystickButton( mOperatorXbox, 1 ).whenPressed( new InstantCommand( () -> mHopper.Spin() ) ); 
+         new JoystickButton( mOperatorXbox, 1 ).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
+         new JoystickButton( mOperatorXbox, 1 ).whenHeld( new IndexerRun( mIndexer, mFlywheel, mLimelight ) );
+         //new JoystickButton( mOperatorXbox, 1).whenPressed( new InstantCommand( () -> mIndexer.Spin() ) ); 
+         //new JoystickButton( mOperatorXbox, 1).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
          // run hopper and indexer backward on x
-         new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mHopper.SpinBack() ) ); 
-         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
-         new JoystickButton( mOperatorXbox, 3).whenPressed( new InstantCommand( () -> mIndexer.SpinBack() ) ); 
-         new JoystickButton( mOperatorXbox, 3).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
+         new JoystickButton( mOperatorXbox, 3 ).whenPressed( new InstantCommand( () -> mHopper.SpinBack() ) ); 
+         new JoystickButton( mOperatorXbox, 3 ).whenReleased( new InstantCommand( () -> mHopper.Stop() ) ); 
+         new JoystickButton( mOperatorXbox, 3 ).whenPressed( new InstantCommand( () -> mIndexer.SpinBack() ) ); 
+         new JoystickButton( mOperatorXbox, 3 ).whenReleased( new InstantCommand( () -> mIndexer.Stop() ) ); 
          // transfer wheel operator button b
-         new JoystickButton( mOperatorXbox, 2).whenPressed( new InstantCommand( () -> mTransferWheel.Spin() ) ); 
-         new JoystickButton( mOperatorXbox, 2).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) );
+         new JoystickButton( mOperatorXbox, 2 ).whenPressed( new InstantCommand( () -> mTransferWheel.Spin() ) ); 
+         new JoystickButton( mOperatorXbox, 2 ).whenReleased( new InstantCommand( () -> mTransferWheel.Stop() ) );
          // climber 
-         new JoystickButton( mOperatorXbox, 4).whenPressed( new InstantCommand( () -> mClimber.OpenLoop() ) ); 
-         new JoystickButton( mOperatorXbox, 4).whenReleased( new InstantCommand( () -> mClimber.Stop() ) ); 
-        
- 
+         new JoystickButton( mOperatorXbox, 4 ).whenPressed( new InstantCommand( () -> mClimber.OpenLoop() ) ); 
+         new JoystickButton( mOperatorXbox, 4 ).whenReleased( new InstantCommand( () -> mClimber.Stop() ) ); 
+         // flywheel closed loop
          new XboxControllerAxisButton( mOperatorXbox, 3 ).whileHeld( new FlywheelToSetRPM(mFlywheel, mOperatorXbox ) );
 
     }
 
     private void SetUpmDriverXbox(){
          // drivetrian buttons
-         new JoystickButton( mDriverXbox, 1).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
-         new JoystickButton( mDriverXbox, 4).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
+         new JoystickButton( mDriverXbox, 1 ).whenPressed( new InstantCommand( () -> mDrivetrain.SetHighGear( !mDrivetrain.IsHighGear() ), mDrivetrain ) );
+         new JoystickButton( mDriverXbox, 4 ).whenPressed( new InstantCommand( () -> mDrivetrain.SetReversed( !mDrivetrain.IsReversed() ), mDrivetrain ) );
          // intake shifting
-         new JoystickButton( mDriverXbox, 2).whenPressed( new InstantCommand( () -> mIntake.SetUp( !mIntake.IsUp() ), mDrivetrain ) ); 
-
-        // limelight
-        new JoystickButton( mDriverXbox, 3).whileHeld( new LimelightDrive2( mDrivetrain, mDriverXbox, mLimelight ) ); 
-
+         new JoystickButton( mDriverXbox, 2 ).whenPressed( new InstantCommand( () -> mIntake.SetUp( !mIntake.IsUp() ), mDrivetrain ) ); 
+        // limelight drive
+        new JoystickButton( mDriverXbox, 3 ).whileHeld( new LimelightDrive2( mDrivetrain, mDriverXbox, mLimelight ) ); 
         // turret
-        new JoystickButton( mDriverXbox, 8).whileHeld( new TurretSpin(mTurret)); 
+        new JoystickButton( mDriverXbox, 8 ).whileHeld( new TurretSpin(mTurret)); 
 
     }
     // Debug logging 

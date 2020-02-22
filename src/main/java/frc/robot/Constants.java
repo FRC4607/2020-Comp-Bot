@@ -106,7 +106,14 @@ public final class Constants {
         public static final double DEADBAND = 0.1; 
         public static final double kP = 1.1;
         public static final double kD = 0.3;
+         /** Voltage needed to overcome the motor’s static friction. kS */
+        public static final double kS = 0.747;
+          /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
+        public static final double kV = 2.98;
+          /** Voltage needed to induce a given acceleration in the motor shaft. kA */
+        public static final double kA = 0.474;
         public static final double AIM_TOLERANCE = 0.1;
+        public static final int CLOSED_LOOP_ERROR_RANGE = 15;
     }
 
     public static final class CLIMBER {

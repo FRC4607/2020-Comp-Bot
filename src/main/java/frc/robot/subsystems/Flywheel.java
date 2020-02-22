@@ -156,10 +156,16 @@ public class Flywheel extends SubsystemBase {
     private void Initialize () {
         mMaster.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
                                               FLYWHEEL.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.setSensorPhase( true );
+		mMaster.setSensorPhase( false );
         mMaster.setNeutralMode( NeutralMode.Coast ); 
+        mMaster.setInverted( true );
+        mMaster.configNominalOutputForward(0, GLOBAL.CAN_LONG_TIMEOUT_MS);
+        mMaster.configNominalOutputReverse(0,GLOBAL.CAN_LONG_TIMEOUT_MS);
+        mMaster.configPeakOutputForward(1, GLOBAL.CAN_LONG_TIMEOUT_MS);
+        mMaster.configPeakOutputReverse(0, GLOBAL.CAN_LONG_TIMEOUT_MS);
+        mFollower.setInverted( false );
+        mFollower.follow(mMaster);
         mFollower.setNeutralMode( NeutralMode.Coast );
-        mFollower.setInverted( InvertType.OpposeMaster );
         mFlywheelState = FlywheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
         mFailingState = FailingState_t.Healthy;
@@ -327,8 +333,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     // close loop drive
-    public void setCloseLoop ( double xRPM ) {
-        mTargetVelocity_Units_Per_100ms  =  xRPM;
+    public void setCloseLoop ( double xUPMS ) {
+        mTargetVelocity_Units_Per_100ms  =  xUPMS;
         SetVelocityOutput();
     }
 

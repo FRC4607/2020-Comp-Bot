@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.DRIVETRAIN.CLOSED_LOOP_ERROR_RANGE;
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.DRIVETRAIN;
 import frc.robot.Constants;
@@ -11,6 +12,9 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -23,7 +27,6 @@ public class Drivetrain extends SubsystemBase {
     public static enum ControlState_t {
         OpenLoop { @Override public String toString() { return "Open-Loop"; } },
         ClosedLoop { @Override public String toString() { return "Closed-Loop"; } },
-        DriveWithTurningAssist { @Override public String toString() { return "Drive-Assist"; } };
     }
 
     // Hardware
@@ -39,14 +42,20 @@ public class Drivetrain extends SubsystemBase {
     public final DifferentialDrive mDifferentialDrive;
     private ControlState_t mControlState;
     private double mTargetVelocity_Units_Per_100ms;
+    private double mTargetSpeed;
 
     // Hardware states
     private boolean mIsReversed;
     private boolean mIsHighGear;
     private boolean mIsBrakeMode;
+    private boolean Turn;
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
+
+    private final SimpleMotorFeedforward motorFeedForward = 
+    new SimpleMotorFeedforward(DRIVETRAIN.kS, DRIVETRAIN.kV, DRIVETRAIN.kA);
+
 
     public void SetReversed ( boolean wantsReversed ) {
         if ( wantsReversed != mIsReversed ) {
@@ -62,6 +71,41 @@ public class Drivetrain extends SubsystemBase {
             mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Reversed drive set to: [{}]", mIsReversed );
         }
+    }
+
+
+ /**
+   * Prepare to shoot the given distance in INCHES
+   * @param distanceToTarget distance in INCHES
+   */
+//   public void prepareToTurn( double distanceToTarget ) {
+//     if ( distanceToTarget > 150 ) {
+//         mTargetSpeed = 1.0;
+//     } else if ( distanceToTarget <= 150 ) {
+//         mTargetSpeed = .25;
+//     }
+    // mLeftPIDController.setReference(
+    //     mTargetSpeed,
+    //     ControlType.kVelocity,
+    //     0,
+    //     motorFeedForward.calculate( mTargetSpeed / 60, (mTargetSpeed - mLeftAlternateEncoder.getVelocity()) / 60 ) );
+    // }
+
+    public boolean isReadyToTurn() {
+        return Math.abs( mLeftAlternateEncoder.getVelocity() - mTargetSpeed ) <= CLOSED_LOOP_ERROR_RANGE;
+    }
+
+
+    public void Turn() {
+        mLeftMaster.set(1.0);
+        Turn = true;
+      }
+
+    public void Stop() {
+        mLeftMaster.set(0.0);
+        mRightMaster.set(0.0);
+        mLeftFollower.set(0.0);
+        mRightFollower.set(0.0);
     }
 
      /**
@@ -83,29 +127,6 @@ public class Drivetrain extends SubsystemBase {
     public boolean IsReversed () {
         return mIsReversed;
     }
-
-    public void ApplyDriveSignal(double throttle, double turn) {
-        double mThrottle = 0.0;
-        double mTurn = 0.0;
-        
-        // Apply calibrated motor deadband
-        if (turn > 0.0) {
-          mTurn = ( DRIVETRAIN.DEADBAND  * turn );
-        } else if (turn < -0.0) {
-          mTurn = ( ( -1.0 * DRIVETRAIN.DEADBAND ) * turn );
-        }
-        if (throttle > 0.0) {
-          mThrottle = ( DRIVETRAIN.DEADBAND * throttle );
-        } else if (throttle < 0.0) {
-          mThrottle = ( ( -1.0 * DRIVETRAIN.DEADBAND ) * throttle );
-        }
-        }
-    
-      
-
-    // public void LimelightDrive() {
-    //     mControlState = ControlType.kDriveWithTurningAssist;
-    //   }
 
     public void SetHighGear ( boolean wantsHighGear ) {
         if ( wantsHighGear && !mIsHighGear ) {
@@ -132,29 +153,25 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
+        mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         if (wantsBrakeMode && !mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
             // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
-            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            // mLeftMaster.setNeutralMode( NeutralMode.Brake );
-            // mLeftFollower.setNeutralMode( NeutralMode.Brake );
-            // mRightMaster.setNeutralMode( NeutralMode.Brake );
-            // mRightFollower.setNeutralMode( NeutralMode.Brake );
+            mLeftMaster.setIdleMode( IdleMode.kBrake );
+            mLeftFollower.setIdleMode( IdleMode.kBrake );
+            mRightMaster.setIdleMode( IdleMode.kBrake );
+            mRightFollower.setIdleMode( IdleMode.kBrake );
             mLogger.info( "Neutral mode set to: [Brake]" );
 
         } else if (!wantsBrakeMode && mIsBrakeMode) {
             mIsBrakeMode = wantsBrakeMode;
-            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-            // mLeftMaster.setNeutralMode( NeutralMode.Coast );
-            // mLeftFollower.setNeutralMode( NeutralMode.Coast );
-            // mRightMaster.setNeutralMode( NeutralMode.Coast );
-            // mRightFollower.setNeutralMode( NeutralMode.Coast );
+            mLeftMaster.setIdleMode( IdleMode.kCoast );
+            mLeftFollower.setIdleMode( IdleMode.kCoast );
+            mRightMaster.setIdleMode( IdleMode.kCoast );
+            mRightFollower.setIdleMode( IdleMode.kCoast );
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }

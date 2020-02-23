@@ -16,23 +16,22 @@ public class Climber extends SubsystemBase {
     private final CANSparkMax mFollower;
     private final DoubleSolenoid mShifter;
 
-    private boolean mIsUp;
+    private boolean mIsLocked;
 
-
- // shift intake up and down
- public void SetUp ( boolean wantsUp ) {
-    if ( wantsUp && !mIsUp ) {
-        mIsUp = wantsUp;
-        mShifter.set( DoubleSolenoid.Value.kForward );
-    } else if ( !wantsUp && mIsUp ) {
-        mIsUp = wantsUp; 
-        mShifter.set( DoubleSolenoid.Value.kReverse );
+    // shift climber between locked and unlocked
+    public void SetLocked( boolean wantsLocked ) {
+        if ( wantsLocked && !mIsLocked ) {
+            mIsLocked = wantsLocked;
+            mShifter.set( DoubleSolenoid.Value.kForward );
+        } else if ( !wantsLocked && mIsLocked ) {
+            mIsLocked = wantsLocked; 
+            mShifter.set( DoubleSolenoid.Value.kReverse );
+        }
     }
-}
 
-public boolean IsUp() {
-    return mIsUp;
-}
+    public boolean IsLockedp() {
+        return mIsLocked;
+    }
 
     public void OpenLoop() {
         mMaster.set( CLIMBER.SPEED );
@@ -53,7 +52,6 @@ public boolean IsUp() {
         mFollower = follower;
         mShifter = shifter;
 
-
         mFollower.follow(mMaster);
     
         // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
@@ -64,7 +62,7 @@ public boolean IsUp() {
     public static Climber create () {
         CANSparkMax master =  SparkMax.CreateSparkMax( new CANSparkMax( CLIMBER.MASTER_ID, MotorType.kBrushless ) );
         CANSparkMax follower =  SparkMax.CreateSparkMax( new CANSparkMax( CLIMBER.FOLLOWER_ID, MotorType.kBrushless ) );
-        DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, CLIMBER.UP_SOLENOID_ID, CLIMBER.DOWN_SOLENOID_ID );
+        DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, CLIMBER.LOCKED_SOLENOID_ID, CLIMBER.UNLOCKED_SOLENOID_ID );
         return new Climber( master, follower, shifter /*PidController*/ ); 
     } 
 

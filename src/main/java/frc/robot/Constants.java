@@ -120,12 +120,10 @@ public final class Constants {
         public static final int MASTER_ID = 12;
         public static final int FOLLOWER_ID = 1;
         // public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
-        public static final int LOW_GEAR_SOLENOID_ID = 3;
-        public static final int HIGH_GEAR_SOLENOID_ID = 6;
         public static final double DEADBAND = 0.1; 
         public static final double SPEED = 1.0;
-        public static final int UP_SOLENOID_ID = 2; 
-        public static final int DOWN_SOLENOID_ID = 7; 
+        public static final int LOCKED_SOLENOID_ID = 1; 
+        public static final int UNLOCKED_SOLENOID_ID = 5; 
     }
 
     /**

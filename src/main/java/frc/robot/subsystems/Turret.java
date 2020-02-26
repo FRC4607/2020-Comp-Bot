@@ -70,8 +70,8 @@ public class Turret extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     
    // open loop drive
-   public void setOpenLoop ( double xFlywheel ) {
-        mTargetPercentOutput  =  xFlywheel;
+   public void setOpenLoop ( double xTurret ) {
+        mTargetPercentOutput  =  xTurret;
         SetPercentOutput();
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
 }

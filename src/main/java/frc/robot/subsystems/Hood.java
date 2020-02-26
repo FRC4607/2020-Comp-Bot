@@ -9,6 +9,8 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
@@ -160,6 +162,7 @@ public class Hood extends SubsystemBase {
     private void Initialize () {
         mPIDController.setFeedbackDevice( mAlternateEncoder );
         mAlternateEncoder.setInverted( false );
+        mMaster.setIdleMode( IdleMode.kBrake );
         mTargetPosition_Rot = 0.0;
         mTargetPercentOutput = 0.0;
         mZeroingTimer_S = 0.0;

@@ -58,7 +58,7 @@ public class Drivetrain extends SubsystemBase {
     private boolean mIsHighGear;
     private boolean mIsBrakeMode;
     private boolean Turn;
-    private boolean usePigeon = true;
+    // private boolean usePigeon = true;
     private boolean angleIsGood = false;
 
 
@@ -214,7 +214,7 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain ( CANSparkMax leftMaster, CANSparkMax leftFollower, CANEncoder leftAlternateEncoder, CANPIDController leftPidController,
                         CANSparkMax rightMaster, CANSparkMax rightFollower, CANEncoder rightAlternateEncoder, CANPIDController rightPidController,
-                        DoubleSolenoid shifter ) {
+                        DoubleSolenoid shifter /*, PigeonIMU pidgey*/ ) {
   
         // Set the hardware
         mLeftMaster = leftMaster;
@@ -226,6 +226,8 @@ public class Drivetrain extends SubsystemBase {
         mRightAlternateEncoder = rightAlternateEncoder;
         mRightPIDController = rightPidController;        
         mShifter = shifter;
+        // mPidgey = pidgey;
+        // mNavx_MXP = navx_MXP;
 
         // Current limiting
         mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
@@ -256,63 +258,62 @@ public class Drivetrain extends SubsystemBase {
         CANPIDController rightPidController = rightMaster.getPIDController();
         DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
         AHRS mNavx_MXP = new AHRS( SPI.Port.kMXP );
-        PigeonIMU mPidgey = new PigeonIMU( 0 );
-        mPidgey.configFactoryDefault();
+
+        leftAlternateEncoder.setInverted(true);
+        // PigeonIMU mPidgey = new PigeonIMU( 0 );
+        // mPidgey.configFactoryDefault();
         return new Drivetrain( leftMaster, leftFollower, leftAlternateEncoder, leftPidController,
-                               rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter ); 
+                               rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter /*, pidgey*/ ); 
     }
 
     @Override
     public void periodic () {
         boolean debug = true;
         if( debug ) {
-            SmartDashboard.putNumber( "Current Gyro", getHeading() );
+           // SmartDashboard.putNumber( "Current Gyro", getHeading() );
             SmartDashboard.putNumber( "Left Encoder", getLeftEncoder() );
         }
 
     }
 
-    private void getPidgey() {
-        PigeonIMU.GeneralStatus generalStatus = new PigeonIMU.GeneralStatus();
-        PigeonIMU.FusionStatus fusionStatus = new PigeonIMU.FusionStatus();
-        mPidgey.getGeneralStatus( generalStatus );
-        mPidgey.getRawGyro( xyz_dps );
-        mPidgey.getFusedHeading( fusionStatus );
-        currentAngle = fusionStatus.heading;
-        angleIsGood = ( mPidgey.getState() == PigeonIMU.PigeonState.Ready ) ? true : false;
-        currentAngluarRate = xyz_dps[2];
-    }
+    // private void getPidgey() {
+    //     PigeonIMU.GeneralStatus generalStatus = new PigeonIMU.GeneralStatus();
+    //     PigeonIMU.FusionStatus fusionStatus = new PigeonIMU.FusionStatus();
+    //     mPidgey.getGeneralStatus( generalStatus );
+    //     mPidgey.getRawGyro( xyz_dps );
+    //     mPidgey.getFusedHeading( fusionStatus );
+    //     currentAngle = fusionStatus.heading;
+    //     angleIsGood = ( mPidgey.getState() == PigeonIMU.PigeonState.Ready ) ? true : false;
+    //     currentAngluarRate = xyz_dps[2];
+    // }
 
-    public double getHeading() {
-        double heading;
-        if( !usePigeon ) {
-            if( mNavx_MXP.isConnected() ) {
-                heading = mNavx_MXP.getAngle();
-            } else {
-                heading = 0;
-            }
-        } else {
-           getPidgey();
-           if( angleIsGood ) {
-            heading = currentAngle;
-           } else {
-               heading = 0;
-           }
+    // public double getHeading() {
+    //     double heading;
+    //     if( !usePigeon ) {
+    //         if( mNavx_MXP.isConnected() ) {
+    //             heading = mNavx_MXP.getAngle();
+    //         } else {
+    //             heading = 0;
+    //         }
+    //     } else {
+    //        getPidgey();
+    //        if( angleIsGood ) {
+    //         heading = currentAngle;
+    //        } else {
+    //            heading = 0;
+    //        }
 
-        }
+    //     }
 
-        return heading;
-    }
-
+    //     return heading;
+    // } 
 
 	public void zeroDistanceTraveled() {
-        mLeftAlternateEncoder.setPosition(0);
-        
+        mLeftAlternateEncoder.setPosition( 0 );
     }
     
     public double getLeftEncoder() {
-        return mLeftAlternateEncoder.getPosition();
-     
+        return mLeftAlternateEncoder.getPosition(); 
     }
 
 }

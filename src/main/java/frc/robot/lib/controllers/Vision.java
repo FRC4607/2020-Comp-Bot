@@ -47,7 +47,7 @@ public class Vision {
         // Process the current states
         if ( mState == State.kTurn ) {
           // read out vision target data
-          mLogger.info( "Target at: [{}]", mLimelight.horizontalToTargetDeg()); 
+          // mLogger.info( "Target at: [{}]", mLimelight.horizontalToTargetDeg()); 
 
           mTurningErrorDeg = mLimelight.horizontalToTargetDeg();
           mTurn = mTurningErrorDeg * LIMELIGHT.SCALE_HORIZONTAL_TO_TARGET * TURRET.TURNING_GAIN;

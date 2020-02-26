@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
             mRobotContainer.SetMatchState( MatchState_t.robotPeriodic );
             mRobotContainer.LogRobotDataToRoboRio( mLogger );
             mRobotContainer.UpdateSmartDashboard();
-           // mRobotContainer.StopLimelight();
+            // mRobotContainer.StopLimelight();
         }
     }
 
@@ -57,14 +57,17 @@ public class Robot extends TimedRobot {
     public void autonomousInit () {
         mLogger.info( "<=========== AUTONOMOUS INIT ===========>" );
         mRobotContainer.SetMatchState( MatchState_t.autonomousInit );
+
         mAutonomousCommand = mRobotContainer.GetAutonomousCommand();
+
         if ( mAutonomousCommand != null ) {
             mAutonomousCommand.schedule();
             mLogger.info( "Starting autonomous command {}", mAutonomousCommand.getName() );
         }
+        
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();         
-        //mRobotContainer.StartLimelight();
+        // mRobotContainer.StartLimelight();
     }
 
     @Override
@@ -84,7 +87,7 @@ public class Robot extends TimedRobot {
         }
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard(); 
-       // mRobotContainer.StartLimelight();
+        // mRobotContainer.StartLimelight();
     }
 
     @Override

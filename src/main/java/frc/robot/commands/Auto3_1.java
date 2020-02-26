@@ -7,23 +7,34 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.lib.drivers.Limelight;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.TransferWheel;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class DriveAuto extends SequentialCommandGroup {
+public class Auto3_1 extends SequentialCommandGroup {
   /**
-   * Creates a new DriveAuto.
+   * Creates a new Auto3.
    */
-  public DriveAuto( Drivetrain drivetrain, XboxController driverXbox ) {
+  public Auto3_1( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, TransferWheel transferWheel, Limelight limelight ) {
+
     super();
     addCommands(
-        new DriveForDistance(drivetrain, 2048, .25, 0), 
-        // new Drive_Turn_To_Setpoint(drivetrain, driverXbox, 90),
-        new DriveForDistance(drivetrain, 2048, .25, 0)
-        );
-  }
+     
+        parallel(
+          new FlywheelToSetRPM_Auto(flywheel, 31000),
+          new InstantCommand( () -> hopper.Spin() ),
+          new InstantCommand( () -> indexer.Spin() ),
+          new TransferWheelRun( transferWheel, flywheel, limelight, true )
+        ).withTimeout(7)
+      );
+    }
 }

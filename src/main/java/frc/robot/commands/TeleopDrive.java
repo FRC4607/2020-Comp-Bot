@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DRIVETRAIN;
 import frc.robot.subsystems.Drivetrain;
 
 public class TeleopDrive extends CommandBase {
@@ -16,13 +17,17 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void execute() {
+        double speed = squareInputs( deadband ( mDriverXbox.getY( Hand.kLeft) ) );
+        double turn = squareInputs( deadband ( mDriverXbox.getX( Hand.kLeft ) ) );
         // Arcade drive driven off of the left Xbox joystick only 
         if ( mDrivetrain.IsReversed() ) {
-            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), -mDriverXbox.getX( Hand.kLeft ) );
+            mDrivetrain.mDifferentialDrive.arcadeDrive( speed, -turn );
         } else {
-            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY( Hand.kLeft ), mDriverXbox.getX( Hand.kLeft ) );
+            mDrivetrain.mDifferentialDrive.arcadeDrive( speed , turn );
         }
     }
+
+    
 
     @Override
     public void end ( boolean interrupted ) {
@@ -37,6 +42,18 @@ public class TeleopDrive extends CommandBase {
         mDrivetrain = drivetrain;
         mDriverXbox = driverXbox;
         addRequirements( mDrivetrain );
+    }
+
+    private double deadband ( double value ) {
+        if ( Math.abs(value) > DRIVETRAIN.DEADBAND ) {
+            return value;
+        } else {
+            return 0;
+        }
+    }
+
+    private double squareInputs ( double value ) {
+       return Math.copySign( value * value, value );
     }
 
 }

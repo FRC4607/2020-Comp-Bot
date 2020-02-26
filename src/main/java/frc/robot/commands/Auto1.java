@@ -6,7 +6,7 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.TransferWheel;
-import frc.robot.commands.FlywheelSpin;
+// import frc.robot.commands.FlywheelSpin;
 
 public class Auto1 extends CommandBase {
     @SuppressWarnings( { "PMD.UnusedPrivateField", "PMD.SingularField" } )
@@ -38,7 +38,7 @@ public class Auto1 extends CommandBase {
 
        //Don't tell Eric again, but wait until balls are shot and stop everything
        start = System.currentTimeMillis();
-
+      // Test auto, if nothing happens switch the sign
        while( System.currentTimeMillis() >= start + 7000 ) {}
 
        mFlywheel.Stop();

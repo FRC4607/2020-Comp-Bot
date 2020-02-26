@@ -98,43 +98,45 @@ public final class Constants {
     public static final class DRIVETRAIN {
         public static final int LEFT_MASTER_ID = 16;                       // CAN number is 16 but it is plugged into port 0 on the PDP
         public static final int LEFT_FOLLOWER_ID = 1;                      // 40 amps for all drive motors
-        public static final int RIGHT_MASTER_ID = 2;
-        public static final int RIGHT_FOLLOWER_ID = 3;
+        public static final int RIGHT_MASTER_ID = 2; 
+        public static final int RIGHT_FOLLOWER_ID = 3; 
         public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
         public static final int LOW_GEAR_SOLENOID_ID = 3;
         public static final int HIGH_GEAR_SOLENOID_ID = 6;
         public static final double DEADBAND = 0.1; 
         public static final double kP = 1.1;
         public static final double kD = 0.3;
-         /** Voltage needed to overcome the motor’s static friction. kS */
+        /** Voltage needed to overcome the motor’s static friction. kS */
         public static final double kS = 0.747;
-          /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
+        /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
         public static final double kV = 2.98;
-          /** Voltage needed to induce a given acceleration in the motor shaft. kA */
+        /** Voltage needed to induce a given acceleration in the motor shaft. kA */
         public static final double kA = 0.474;
         public static final double AIM_TOLERANCE = 0.1;
         public static final int CLOSED_LOOP_ERROR_RANGE = 15;
-    }
+        public static final int DRIVETRAIN_PIGEON = 10;
+    } 
 
     public static final class CLIMBER {
-        public static final int MASTER_ID = 12;
-        public static final int FOLLOWER_ID = 1;
+        // 30
+        public static final int MASTER_ID = 30;                             // should be ?? and 12 hard to trace unknown 
+        public static final int FOLLOWER_ID = 12; 
         // public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
         public static final double DEADBAND = 0.1; 
         public static final double SPEED = 1.0;
         public static final int LOCKED_SOLENOID_ID = 1; 
         public static final int UNLOCKED_SOLENOID_ID = 5; 
-    }
+    } 
 
     /**
     * These are the constants which are used to map the hardware and define the working bahavior of the the hopper
     * subsystem.
     * @see {@link frc.robot.subsystems.Hopper}
     */ 
-    public static final class HOPPER {
+    public static final class HOPPER { 
         // is supposed to be 15 
         public static final int MASTER_ID = 15;                           // 40 amp 
-        public static final double SPEED = 0.5;
+        public static final double SPEED = 0.6;
     }    
 
     /**
@@ -231,5 +233,6 @@ public final class Constants {
         public static final int SPARK_FREE_RPM_LIMIT = 40;          // limit when spark is at max rpms
         public static final int SPARK_RPM_LIMIT = 0;                // below rpm goes to zero limit, above scales linerally to free limit
     }
+
 }
 

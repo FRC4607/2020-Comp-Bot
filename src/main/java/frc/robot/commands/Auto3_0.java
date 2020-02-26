@@ -7,23 +7,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.lib.drivers.Limelight;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.TransferWheel;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class DriveAuto extends SequentialCommandGroup {
+public class Auto3_0 extends SequentialCommandGroup {
   /**
-   * Creates a new DriveAuto.
+   * Creates a new Auto3_0.
    */
-  public DriveAuto( Drivetrain drivetrain, XboxController driverXbox ) {
+  public Auto3_0(Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, TransferWheel transferWheel, Limelight limelight ) {
+    // Add your commands in the super() call, e.g.
+    // super(new FooCommand(), new BarCommand());
     super();
     addCommands(
-        new DriveForDistance(drivetrain, 2048, .25, 0), 
-        // new Drive_Turn_To_Setpoint(drivetrain, driverXbox, 90),
-        new DriveForDistance(drivetrain, 2048, .25, 0)
-        );
+      
+      new DriveForDistance(drivetrain, 5, -.5, 0.0)
+    );
   }
 }

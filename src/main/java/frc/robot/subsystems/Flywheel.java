@@ -13,6 +13,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import java.lang.Math;
 
 public class Flywheel extends SubsystemBase {
@@ -166,12 +168,12 @@ public class Flywheel extends SubsystemBase {
 		mMaster.setSensorPhase( false );
         mMaster.setNeutralMode( NeutralMode.Coast ); 
         mMaster.setInverted( true );
-        mMaster.configNominalOutputForward(0, GLOBAL.CAN_LONG_TIMEOUT_MS);
-        mMaster.configNominalOutputReverse(0,GLOBAL.CAN_LONG_TIMEOUT_MS);
-        mMaster.configPeakOutputForward(1, GLOBAL.CAN_LONG_TIMEOUT_MS);
-        mMaster.configPeakOutputReverse(0, GLOBAL.CAN_LONG_TIMEOUT_MS);
-        mFollower.setInverted( false );
-        mFollower.follow(mMaster);
+        mMaster.configNominalOutputForward( 0, GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mMaster.configNominalOutputReverse( 0,GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mMaster.configPeakOutputForward( 1, GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mMaster.configPeakOutputReverse( 0, GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mFollower.setInverted( false ); 
+        mFollower.follow( mMaster );
         mFollower.setNeutralMode( NeutralMode.Coast );
         mFlywheelState = FlywheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
@@ -337,6 +339,14 @@ public class Flywheel extends SubsystemBase {
     public void setOpenLoop ( double xFlywheel ) {
         mTargetPercentOutput  =  xFlywheel;
         SetPercentOutput();
+        mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );     
+        mFollower.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mFollower.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mFollower.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mMaster.enableCurrentLimit( true );
+        mFollower.enableCurrentLimit( true );
     }
 
     // close loop drive
@@ -521,6 +531,7 @@ public class Flywheel extends SubsystemBase {
         mCurrentVelocity_UPMS = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX );
         mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX ) / FLYWHEEL.SENSOR_UNITS_PER_ROTATION * 600.0;
         mError_RPM = GetTargetVelocity_RPM() - mCurrentVelocity_RPM;     
+        SmartDashboard.putNumber("FlyWheel UPMS", mCurrentVelocity_UPMS);
     }
 
     /**

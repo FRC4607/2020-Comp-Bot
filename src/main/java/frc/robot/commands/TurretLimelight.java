@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import frc.robot.subsystems.Turret;
 
 // turn turret based off target command
-public class TurretSpin extends CommandBase {
+public class TurretLimelight extends CommandBase {
 
     private boolean mIsFinished = true;
     private Status mStatus;
    // private Limelight mLimelight;
-    private final Logger mLogger = LoggerFactory.getLogger(TurretSpin.class);
+    private final Logger mLogger = LoggerFactory.getLogger(TurretLimelight.class);
     private final Turret mTurret;
     private TurretState_t mTurretState;
     private ControlState_t mControlState;
@@ -63,6 +63,7 @@ public class TurretSpin extends CommandBase {
             }
         }
 
+    
         // if ( mTurretState.getState() = mZeroing ) {
         //         mZeroing = mTurretState.getState();
 
@@ -100,7 +101,7 @@ public class TurretSpin extends CommandBase {
     /******************************************************************************************************************************
      ** CONSTRUCTOR
      ******************************************************************************************************************************/
-    public TurretSpin ( Turret turret ) {
+    public TurretLimelight ( Turret turret ) {
         mTurret = turret;
        // mLimelight = limelight;
         addRequirements( mTurret );

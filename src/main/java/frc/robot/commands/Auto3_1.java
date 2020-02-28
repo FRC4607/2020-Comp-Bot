@@ -25,28 +25,27 @@ public class Auto3_1 extends SequentialCommandGroup {
   /**
    * Creates a new Auto3.
    */
-  public Auto3_1( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, TransferWheel transferWheel, Intake intake/*, Limelight limelight */) {
+  public Auto3_1( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, 
+                  TransferWheel transferWheel, Intake intake/*, Limelight limelight */) {
 
     super();
     addCommands(
+      new InstantCommand( () -> intake.SetUp( !intake.IsUp() ) ).withTimeout( 3 ),
+      new FlywheelToSetRPM_Auto( flywheel, 31000 ).withTimeout( 3 )
+    ); 
 
-      sequence(
-      new InstantCommand( () -> intake.SetUp( !intake.IsUp() ) ),
-      new FlywheelToSetRPM_Auto(flywheel, 31000)
-       .withTimeout(3),
-
-      parallel(
+    parallel(
         new FlywheelToSetRPM_Auto(flywheel, 31000),
-        new InstantCommand( () -> hopper.Spin() ),
-        new InstantCommand( () -> indexer.Spin() ),
-        new InstantCommand( () -> transferWheel.Spin() )
-      .withTimeout(7)
-      ),
+        new InstantCommand( () -> hopper.Spin() ).withTimeout( 7 ),
+        new InstantCommand( () -> indexer.Spin() ).withTimeout( 7 ),
+        new InstantCommand( () -> transferWheel.Spin()).withTimeout( 7 )
+    );
 
-        new DriveForDistance(drivetrain, 5, -.5, 0.0) 
-        .withTimeout(2)
-      )
+    addCommands(
+    new InstantCommand( () -> hopper.Stop() ),
+    new InstantCommand( () -> indexer.Stop() ),
+    new InstantCommand( () -> transferWheel.Stop() ),
+    new DriveForDistance( drivetrain, 5, -.5, 0.0 ).withTimeout( 2 )
     );
   }
 }
-

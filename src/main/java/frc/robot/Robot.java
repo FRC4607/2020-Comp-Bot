@@ -26,8 +26,8 @@ public class Robot extends TimedRobot {
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();
         PortForwarder.add( 5800, "10.46.7.1", 5800 );
-        PortForwarder.add( 5801, "10.46.7.1", 5801 );
-        CameraServer.getInstance().startAutomaticCapture();
+        PortForwarder.add( 5801, "10.46.7.1", 5801 ); 
+        CameraServer.getInstance().startAutomaticCapture(); 
     }
 
     @Override

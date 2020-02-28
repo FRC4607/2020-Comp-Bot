@@ -19,9 +19,7 @@ public class FlywheelToSetRPM_Auto extends CommandBase {
 
     @Override
     public void initialize () {
-        mFlywheel.SetControlState( ControlState_t.ClosedLoop );
-       
-		
+        mFlywheel.SetControlState( ControlState_t.ClosedLoop ); 
     }
 
     @Override
@@ -48,7 +46,7 @@ public class FlywheelToSetRPM_Auto extends CommandBase {
       return false;
     }
 
-    public FlywheelToSetRPM_Auto ( Flywheel flywheel, double setpoint ) {
+    public  FlywheelToSetRPM_Auto ( Flywheel flywheel, double setpoint ) {
         mFlywheel = flywheel;
         mSetpoint = setpoint;
         addRequirements( mFlywheel );

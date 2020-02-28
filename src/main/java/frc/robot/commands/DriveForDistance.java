@@ -31,7 +31,7 @@ public class DriveForDistance extends CommandBase {
   @Override
   public void initialize() {
     mDrivetrain.zeroDistanceTraveled();
-
+    System.out.println("ini drivefordistance");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,6 +43,7 @@ public class DriveForDistance extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end( boolean interrupted ) {
+    System.out.println("end drivefordistance");
   }
 
   // Returns true when the command should end.

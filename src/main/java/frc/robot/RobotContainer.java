@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.cscore.CameraServerCvJNI;
-import edu.wpi.cscore.CameraServerJNI;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.cscore.CvSink;
+// import edu.wpi.cscore.CameraServerCvJNI;
+// import edu.wpi.cscore.CameraServerJNI;
+// import edu.wpi.cscore.UsbCamera; 
+// import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.cscore.CvSink;
 
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Constants.PRESSURE_SENSOR;
@@ -64,7 +64,7 @@ public class RobotContainer {
                                                                        PRESSURE_SENSOR.PRESSURE_SENSOR_PRESSURE_PER_VOLT );
     private final PowerDistributionPanel mPDP = PDP.createPDP( new PowerDistributionPanel( GLOBAL.PDP_ID ), GLOBAL.PDP_ID );
     private Limelight mLimelight = new Limelight();
-    private UsbCamera mCamera = new UsbCamera( "USB Camera", 1 ); 
+    // private UsbCamera mCamera = new UsbCamera( "USB Camera", 1 ); 
     // private CameraServer mCameraServer = new CameraServer.getInstance().startAutomaticCapture();
 
 

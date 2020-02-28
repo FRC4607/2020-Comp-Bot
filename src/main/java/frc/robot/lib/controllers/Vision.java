@@ -6,7 +6,7 @@ import frc.robot.lib.drivers.Limelight;
 import frc.robot.lib.drivers.Limelight.ledMode;
 import edu.wpi.first.wpilibj.Notifier;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory; 
 
 /******************************************************************************************************************************** 
 ** VISION CONTROLLER CLASS
@@ -25,7 +25,7 @@ public class Vision {
   }
 
   Runnable mVisionProcessor = new Runnable() {
-    @Override
+    @Override 
     public void run() {
       synchronized( this ) {
         // Process state changes
@@ -39,10 +39,10 @@ public class Vision {
         // double y = mLimelight.getLedMode();
         // mLogger.info("Desired State: {}, Current State: {}", x, y);
 
-        if ( mDesiredLimelightState.ordinal() != mLimelight.getLedMode() ) {
-          // mLogger.info( "Limelight led mode state change requrest: [{}]", mDesiredLimelightState );
-          mLimelight.setLedMode( mDesiredLimelightState );
-        }
+        // if ( mDesiredLimelightState.ordinal() != mLimelight.getLedMode() ) { 
+          // mLogger.info( "Limelight led mode state change request: [{}]", mDesiredLimelightState );
+        // mLimelight.setLedMode( mDesiredLimelightState );
+        // } 
 
         // Process the current states
         if ( mState == State.kTurn ) {
@@ -65,8 +65,8 @@ public class Vision {
 
   private double mTurningErrorDeg = 0.0;
   private double mTurn = 0.0;
-  private State mState = State.kTurn;
-  private ledMode mDesiredLimelightState = ledMode.kOn;
+  private State mState = State.kTurn; 
+  private ledMode mDesiredLimelightState = ledMode.kOn; 
   private State mDesiredState = State.kTurn;
   private Status mStatus = Status.kLostTarget;
 
@@ -105,7 +105,20 @@ public class Vision {
 
   public synchronized void setLimelightState ( ledMode desiredLimelightState ) {
     mDesiredLimelightState = desiredLimelightState;
+    mLimelight.setLedMode( mDesiredLimelightState );
+    mLogger.info( "Limelight led mode state change request: [{}]", mDesiredLimelightState );
+  } 
+
+  // methods to call trning limelight leds on and off 
+  public void setLimelightLEDOff() {
+    setLimelightState( ledMode.kOff ) ;
+
   }
+
+  public void setLimelightLEDOn() {
+    setLimelightState( ledMode.kOn ) ;
+  }
+
 
   /****************************************************************************************************************************** 
   ** CONSTRUCTOR

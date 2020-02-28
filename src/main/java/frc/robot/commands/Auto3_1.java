@@ -16,6 +16,7 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.TransferWheel;
+import frc.robot.subsystems.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,17 +25,28 @@ public class Auto3_1 extends SequentialCommandGroup {
   /**
    * Creates a new Auto3.
    */
-  public Auto3_1( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, TransferWheel transferWheel, Limelight limelight ) {
+  public Auto3_1( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, TransferWheel transferWheel, Intake intake/*, Limelight limelight */) {
 
     super();
     addCommands(
-     
-        parallel(
-          new FlywheelToSetRPM_Auto(flywheel, 31000),
-          new InstantCommand( () -> hopper.Spin() ),
-          new InstantCommand( () -> indexer.Spin() ),
-          new TransferWheelRun( transferWheel, flywheel, limelight, true )
-        ).withTimeout(7)
-      );
-    }
+
+      sequence(
+      new InstantCommand( () -> intake.SetUp( !intake.IsUp() ) ),
+      new FlywheelToSetRPM_Auto(flywheel, 31000)
+       .withTimeout(3),
+
+      parallel(
+        new FlywheelToSetRPM_Auto(flywheel, 31000),
+        new InstantCommand( () -> hopper.Spin() ),
+        new InstantCommand( () -> indexer.Spin() ),
+        new InstantCommand( () -> transferWheel.Spin() )
+      .withTimeout(7)
+      ),
+
+        new DriveForDistance(drivetrain, 5, -.5, 0.0) 
+        .withTimeout(2)
+      )
+    );
+  }
 }
+

@@ -16,9 +16,15 @@ public class TeleopDrive extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        double speed = squareInputs( deadband ( mDriverXbox.getY( Hand.kLeft) ) );
-        double turn = squareInputs( deadband ( mDriverXbox.getX( Hand.kLeft ) ) );
+    public void execute() { 
+        // drive with square input
+        // double speed = squareInputs( deadband ( mDriverXbox.getY( Hand.kLeft) ) );
+        // double turn = squareInputs( deadband ( mDriverXbox.getX( Hand.kLeft ) ) );
+
+        // drive without square input
+        double speed = deadband( mDriverXbox.getY( Hand.kLeft) ); 
+        double turn = deadband( mDriverXbox.getX( Hand.kLeft ) ); 
+
         // Arcade drive driven off of the left Xbox joystick only 
         if ( mDrivetrain.IsReversed() ) {
             mDrivetrain.mDifferentialDrive.arcadeDrive( speed, -turn );
@@ -44,17 +50,17 @@ public class TeleopDrive extends CommandBase {
         addRequirements( mDrivetrain );
     }
 
-    private double deadband ( double value ) {
-        if ( Math.abs(value) > DRIVETRAIN.DEADBAND ) {
+    private double deadband ( double value ) { 
+        if ( Math.abs( value ) > DRIVETRAIN.DEADBAND ) {
             return value;
         } else {
             return 0;
         }
     }
 
-    private double squareInputs ( double value ) {
-       return Math.copySign( value * value, value );
-    }
+    // private double squareInputs ( double value ) {
+    //    return Math.copySign( value * value, value );
+    // }
 
 }
 

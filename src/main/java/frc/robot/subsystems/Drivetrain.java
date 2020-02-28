@@ -66,7 +66,7 @@ public class Drivetrain extends SubsystemBase {
     private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
 
     private final SimpleMotorFeedforward motorFeedForward = 
-    new SimpleMotorFeedforward(DRIVETRAIN.kS, DRIVETRAIN.kV, DRIVETRAIN.kA);
+    new SimpleMotorFeedforward( DRIVETRAIN.kS, DRIVETRAIN.kV, DRIVETRAIN.kA );
 
 
     public void SetReversed ( boolean wantsReversed ) {
@@ -109,18 +109,18 @@ public class Drivetrain extends SubsystemBase {
 
 
     public void Turn() {
-        mLeftMaster.set(1.0);
+        mLeftMaster.set( 1.0 );
         Turn = true;
       }
 
     public void Stop() {
-        mLeftMaster.set(0.0);
-        mRightMaster.set(0.0);
-        mLeftFollower.set(0.0);
-        mRightFollower.set(0.0);
+        mLeftMaster.set( 0.0 );
+        mRightMaster.set( 0.0 );
+        mLeftFollower.set( 0.0 );
+        mRightFollower.set( 0.0 );
     }
 
-     /**
+    /**
     * @return ControlState_t The current control state of the flywheel.
     */
     public ControlState_t GetControlState () {
@@ -257,7 +257,7 @@ public class Drivetrain extends SubsystemBase {
         CANEncoder rightAlternateEncoder = rightMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController rightPidController = rightMaster.getPIDController();
         DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
-        AHRS mNavx_MXP = new AHRS( SPI.Port.kMXP );
+        // AHRS mNavx_MXP = new AHRS( SPI.Port.kMXP );
 
         leftAlternateEncoder.setInverted(true);
         // PigeonIMU mPidgey = new PigeonIMU( 0 );

@@ -469,8 +469,8 @@ public class Turret extends SubsystemBase {
         builder.addDoubleProperty( "F", this::GetF, this::SetF);
         builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity);
         builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration);
-        //builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
-        //builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
+        // builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
+        // builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }
 
 }

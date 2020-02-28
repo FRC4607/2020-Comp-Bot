@@ -17,7 +17,7 @@ public class Climber extends SubsystemBase {
     private final DoubleSolenoid mShifter; 
 
     private boolean mIsLocked; 
-    private boolean mIsInverted;
+    // private boolean mIsInverted; 
 
     // shift climber between locked and unlocked 
     // shift pnematics to put the climber up 
@@ -57,14 +57,14 @@ public class Climber extends SubsystemBase {
     // }
 
 
-    // private void Initialize () {
+    private void Initialize () {
         
-    //     // follower is opposite master 
-    //     mMaster.setInverted( false );
-    //     mFollower.setInverted( true ); 
+        // follower is opposite master 
+        mMaster.setInverted( false );
+        // mFollower.setInverted( false ); 
 
-    //     mFollower.follow( mMaster );
-    // }
+        // mFollower.follow( mMaster );
+    }
 
     public Climber( CANSparkMax master, /*CANSparkMax follower,*/ DoubleSolenoid shifter /* CANPIDController PidController*/ ) {
 
@@ -72,7 +72,7 @@ public class Climber extends SubsystemBase {
         // mFollower = follower;
         mShifter = shifter;
 
-        // SetInverted();
+        Initialize();
     
         // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );

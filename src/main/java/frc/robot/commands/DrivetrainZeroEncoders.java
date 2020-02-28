@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class DrivetrainZeroEncoders extends InstantCommand {
 
-  private Drivetrain mDrivetrain;
+  private Drivetrain mDrivetrain; 
 
   public DrivetrainZeroEncoders( Drivetrain drivetrain ) {
     mDrivetrain = drivetrain;

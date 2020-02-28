@@ -7,7 +7,10 @@ import edu.wpi.first.wpiutil.net.PortForwarder;
 import frc.robot.RobotContainer.MatchState_t;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import frc.robot.subsystems.Turret;
+// import frc.robot.subsystems.Turret;
+
+import edu.wpi.first.cameraserver.CameraServer;
+
 
 public class Robot extends TimedRobot {
     private final Logger mLogger = LoggerFactory.getLogger( Robot.class );
@@ -24,6 +27,7 @@ public class Robot extends TimedRobot {
         mRobotContainer.UpdateSmartDashboard();
         PortForwarder.add( 5800, "10.46.7.1", 5800 );
         PortForwarder.add( 5801, "10.46.7.1", 5801 );
+        CameraServer.getInstance().startAutomaticCapture();
     }
 
     @Override

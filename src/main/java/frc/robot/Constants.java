@@ -11,8 +11,8 @@ public final class Constants {
         public static final int TALON_CURRENT_LIMIT_TIMEOUT_MS = 150;    // use for talon current limit timeouts
         public static final int PCM_ID = 0;
         public static final int PDP_ID = 0;
+        public static final int CAMERA_ID = 1;
     }
-
     //-----------------------------------------------------------------------------------------------------------------
     // subsystem classes
     //-----------------------------------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ public final class Constants {
     * running on a 30 amp breaker
     * @see {@link frc.robot.subsystems.Turret}
     */        
-    public static final class TURRET {
+    public static final class TURRET { 
         public static final int MASTER_ID = 4;                             // The device ID of the master *THIS SHOULD MATCH THE PDP SLOT IT IS CONNECTED TO 
         public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
         public static final int PID_IDX = 0;                               // Position closed-loop slot index for gains
@@ -101,7 +101,7 @@ public final class Constants {
         public static final int RIGHT_MASTER_ID = 2; 
         public static final int RIGHT_FOLLOWER_ID = 3; 
         public static final int SENSOR_COUNTS_PER_ROTATION = 8192;         // Using a REV Through Bore Encoder
-        public static final int LOW_GEAR_SOLENOID_ID = 3;
+        public static final int LOW_GEAR_SOLENOID_ID = 3;                  // should be 3 and 6
         public static final int HIGH_GEAR_SOLENOID_ID = 6;
         public static final double DEADBAND = 0.1; 
         public static final double kP = 1.1;
@@ -123,8 +123,8 @@ public final class Constants {
         public static final int FOLLOWER_ID = 12; 
         // public static final int SENSOR_COUNTS_PER_ROTATION = 8192;      // Using a REV Through Bore Encoder
         public static final double DEADBAND = 0.1; 
-        public static final double SPEED = 1.0;
-        public static final int LOCKED_SOLENOID_ID = 1; 
+        public static final double SPEED = 0.8;
+        public static final int LOCKED_SOLENOID_ID = 1;                     // should be 1 and 5
         public static final int UNLOCKED_SOLENOID_ID = 5; 
     } 
 

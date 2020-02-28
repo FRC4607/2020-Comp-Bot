@@ -15,7 +15,7 @@ public class Limelight {
     kOff,             // 1 force off
     kBlink,           // 2 force blink
     kOn               // 3 force on
-  }
+  } 
 
   public enum camMode {
     kVision, // 0 Vision processor
@@ -37,11 +37,11 @@ public class Limelight {
     start // 1	Take two snapshots per second
   }
   private void defaultConfiguration() {    
-    setLedMode(ledMode.kOn);
-    setCamMode(camMode.kDriver);
-    setPipeline(pipeline.k0);
-    setSnapshot(snapshot.stop);
-    setStream(stream.kPipMain);
+    setLedMode( ledMode.kOn );
+    setCamMode( camMode.kDriver );
+    setPipeline( pipeline.k0 );
+    setSnapshot( snapshot.stop );
+    setStream( stream.kPipMain );
   }
 
   /****************************************************************************************************************************** 
@@ -60,20 +60,20 @@ public class Limelight {
   /****************************************************************************************************************************** 
   ** CONFIGURATION SETTERS AND GETTERS
   ******************************************************************************************************************************/
-  public void setLedMode(ledMode value) {
-    mTable.getEntry("ledMode").setValue(value.ordinal());
-  }
+  public void setLedMode( ledMode value ) {
+    mTable.getEntry( "ledMode" ).setValue( value.ordinal() );
+  } 
 
   public double getLedMode() {
-    return mTable.getEntry("ledMode").getDouble(-1.0);
+    return mTable.getEntry( "ledMode" ).getDouble( -1.0 );
   }
 
-  public void setCamMode(camMode value) {
-    mTable.getEntry("camMode").setValue(value.ordinal());
+  public void setCamMode( camMode value ) {
+    mTable.getEntry( "camMode" ).setValue( value.ordinal() );
   }
 
   public double getCamMode() {
-    return mTable.getEntry("camMode").getDouble(-1.0);
+    return mTable.getEntry( "camMode" ).getDouble( -1.0 );
   }
 
   public void setPipeline(pipeline value) {

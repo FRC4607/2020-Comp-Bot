@@ -24,6 +24,7 @@ public class DriveForDistance extends CommandBase {
     mSetpoint = setpoint;
     mTurn = turn;
     mSpeed = -speed;
+    addRequirements(mDrivetrain);
 
   }
 

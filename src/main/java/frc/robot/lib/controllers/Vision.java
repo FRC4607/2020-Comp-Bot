@@ -3,6 +3,7 @@ package frc.robot.lib.controllers;
 import frc.robot.Constants.LIMELIGHT;
 import frc.robot.Constants.TURRET;
 import frc.robot.lib.drivers.Limelight;
+import frc.robot.lib.drivers.Limelight.camMode;
 import frc.robot.lib.drivers.Limelight.ledMode;
 import edu.wpi.first.wpilibj.Notifier;
 import org.slf4j.Logger;
@@ -117,6 +118,10 @@ public class Vision {
 
   public void setLimelightLEDOn() {
     setLimelightState( ledMode.kOn ) ;
+  }
+
+  public void setVisionMode() {
+    mLimelight.setCamMode( camMode.kVision);
   }
 
 

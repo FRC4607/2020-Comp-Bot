@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
         PortForwarder.add( 5800, "10.46.7.1", 5800 );
         PortForwarder.add( 5801, "10.46.7.1", 5801 ); 
         CameraServer.getInstance().startAutomaticCapture(); 
+        // new InstantCommand( () -> climber.mShifter.set( DoubleSolenoid.Value.kReverse );
     }
 
     @Override
@@ -46,7 +47,8 @@ public class Robot extends TimedRobot {
         mLogger.info( "<=========== DISABLED INIT ===========>" );
         mRobotContainer.SetMatchState( MatchState_t.disabledInit );
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
-        mRobotContainer.UpdateSmartDashboard();        
+        mRobotContainer.UpdateSmartDashboard();      
+        mRobotContainer.mVision.setLimelightLEDOff(); 
     }
 
     @Override

@@ -11,7 +11,9 @@ public class ClimberDrive extends CommandBase {
     private final XboxController mOperatorXbox;
 
     @Override
-    public void initialize () {}
+    public void initialize () {
+      
+    }
 
     @Override
     public void execute() { 

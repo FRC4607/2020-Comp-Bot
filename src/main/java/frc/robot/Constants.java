@@ -86,7 +86,7 @@ public final class Constants {
         public static final double MAX_VELOCITY = 1000.0;                  // Smart Motion max velocity
         public static final double MAX_ACCELERATION = 500.0;               // Smart Motion max acceleration
         public static final double DEADBAND = 0.1; 
-        public static final double TURNING_GAIN = 1.0;                     // SPEED OF TURN gain
+        public static final double TURNING_GAIN = 0.75;                     // SPEED OF TURN gain
         public static final double STOP_TURNING_DEG = 1.0; 
     }
 

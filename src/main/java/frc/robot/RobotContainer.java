@@ -28,7 +28,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.LimelightDrive2;
-import frc.robot.commands.HoodDrive;
+// import frc.robot.commands.HoodDrive;
 import frc.robot.commands.TransferWheelRun;
 import frc.robot.commands.FlywheelToSetRPM;
 import frc.robot.commands.TurretLimelight;
@@ -65,8 +65,9 @@ public class RobotContainer {
     // private Shooter mShooter = Shooter.create();
     private Turret mTurret = Turret.create(); 
     private Climber mClimber = Climber.create(); 
-    private Vision mVision = Vision.create();
+    public Vision mVision = Vision.create();
     private DoubleSolenoid mShifter;
+    
   
     // Autonomous chooser 
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -158,12 +159,15 @@ public class RobotContainer {
 
         // turret 
         // turret limelight control on left bumper 
-        new JoystickButton( mOperatorXbox, 5 ).whenPressed( new InstantCommand( () -> mVision.setLimelightLEDOn() ) ); 
+        new JoystickButton( mOperatorXbox, 5 ).whenPressed( new InstantCommand( () -> {
+            mVision.setLimelightLEDOn();
+            mVision.setVisionMode();
+        }) ); 
         new JoystickButton( mOperatorXbox, 5 ).whileHeld( new TurretLimelight( mTurret ) ); 
         new JoystickButton( mOperatorXbox, 5 ).whenReleased( new InstantCommand( () -> mVision.setLimelightLEDOff() ) ); 
         //new XboxControllerAxisButton( mOperatorXbox, 1,1).whileHeld( new TurretManual( mTurret, mOperatorXbox ) );
         // left joystick, press at the same time
-        // new JoystickButton( mOperatorXbox, 9 ).whileHeld( new TurretManual( mTurret, mOperatorXbox ) );
+        new JoystickButton( mOperatorXbox, 9 ).whileHeld( new TurretManual( mTurret, mOperatorXbox ) );
 
     }
 
@@ -261,11 +265,11 @@ public class RobotContainer {
         ConfigureButtonBindings();
         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
         mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
-        mTurret.setDefaultCommand( new TurretManual( mTurret, mOperatorXbox ) );
+        // mTurret.setDefaultCommand( new TurretManual( mTurret, mOperatorXbox ) );
         // mFlywheel.setDefaultCommand( new FlywheelToSetRPM( mFlywheel, mOperatorXbox ) );
-        mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
+        // mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
         // mTurret.setDefaultCommand( new TurretSpin( mTurret ) );
-        mAutoChooser.setDefaultOption( "Auto 3_0", new Auto3_0( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mShifter ) );
+        mAutoChooser.setDefaultOption( "Auto 3_0", new Auto3_0( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mIntake ) );
         // mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel ) );
         mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
         // mAutoChooser.addOption( "Auto 3_0", new Auto3_0( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mLimelight ) );

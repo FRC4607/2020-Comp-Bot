@@ -103,9 +103,9 @@ public class Drivetrain extends SubsystemBase {
     //     motorFeedForward.calculate( mTargetSpeed / 60, (mTargetSpeed - mLeftAlternateEncoder.getVelocity()) / 60 ) );
     // }
 
-    public boolean isReadyToTurn() {
-        return Math.abs( mLeftAlternateEncoder.getVelocity() - mTargetSpeed ) <= CLOSED_LOOP_ERROR_RANGE;
-    }
+    // public boolean isReadyToTurn() {
+    //     return Math.abs( mLeftAlternateEncoder.getVelocity() - mTargetSpeed ) <= CLOSED_LOOP_ERROR_RANGE;
+    // }
 
 
     public void Turn() {
@@ -315,5 +315,7 @@ public class Drivetrain extends SubsystemBase {
     public double getLeftEncoder() {
         return mLeftAlternateEncoder.getPosition(); 
     }
+
+    
 
 }

@@ -4,16 +4,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import edu.wpi.cscore.CameraServerCvJNI;
-// import edu.wpi.cscore.CameraServerJNI;
-// import edu.wpi.cscore.UsbCamera; 
-// import edu.wpi.first.cameraserver.CameraServer;
-// import edu.wpi.cscore.CvSink;
-
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Constants.PRESSURE_SENSOR;
 import frc.robot.Constants.GLOBAL;
@@ -29,30 +24,21 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Turret;
 import frc.robot.util.XboxControllerAxisButton;
-// import sun.security.jca.GetInstance;
-// import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.IntakeDrive;
 import frc.robot.commands.LimelightDrive2;
 import frc.robot.commands.HoodDrive;
 import frc.robot.commands.TransferWheelRun;
-// import frc.robot.commands.LimelightDrive; 
-// import frc.robot.commands.FlywheelSpin;
 import frc.robot.commands.FlywheelToSetRPM;
 import frc.robot.commands.TurretLimelight;
 import frc.robot.commands.TurretManual;
 import frc.robot.commands.Auto1;
 import frc.robot.commands.Auto2;
 import frc.robot.commands.Auto3_0;
-import frc.robot.commands.Auto3_1;
 import frc.robot.commands.DriveForDistance;
-// import frc.robot.commands.Drive_Turn_To_Setpoint;
 import frc.robot.commands.DrivetrainZeroEncoders;
-import frc.robot.commands.TurretManual;
-// import frc.robot.commands.FlywheelSpin; 
 import frc.robot.lib.controllers.Vision;
-import frc.robot.Constants.GLOBAL;
 import org.slf4j.Logger;
 
 public class RobotContainer {
@@ -69,7 +55,7 @@ public class RobotContainer {
 
 
     // Subsystems 
-    private Drivetrain mDrivetrain = Drivetrain.create();
+    public static Drivetrain mDrivetrain = Drivetrain.create();
     private Flywheel mFlywheel = Flywheel.create();
     private Hood mHood = Hood.create();
     private Hopper mHopper = Hopper.create();
@@ -80,6 +66,7 @@ public class RobotContainer {
     private Turret mTurret = Turret.create(); 
     private Climber mClimber = Climber.create(); 
     private Vision mVision = Vision.create();
+    private DoubleSolenoid mShifter;
   
     // Autonomous chooser 
     private final SendableChooser<Command> mAutoChooser = new SendableChooser<>();
@@ -138,8 +125,8 @@ public class RobotContainer {
         // SmartDashboard.putData( new Drive_Turn_To_Setpoint( mDrivetrain,mDriverXbox,90.0 ) );
         SmartDashboard.putData( new DrivetrainZeroEncoders( mDrivetrain ) );
         SmartDashboard.putData( new DriveForDistance(mDrivetrain, 5, -0.75, 0.0) );
-        SmartDashboard.putData( new Auto3_0(mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mLimelight) );
-        SmartDashboard.putData( new Auto3_1(mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mIntake /*, mLimelight*/) );
+        // SmartDashboard.putData( new Auto3_0(mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mLimelight) );
+        // SmartDashboard.putData( new Auto3_1(mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mIntake /*, mLimelight*/) );
 
     }
 
@@ -176,7 +163,7 @@ public class RobotContainer {
         new JoystickButton( mOperatorXbox, 5 ).whenReleased( new InstantCommand( () -> mVision.setLimelightLEDOff() ) ); 
         //new XboxControllerAxisButton( mOperatorXbox, 1,1).whileHeld( new TurretManual( mTurret, mOperatorXbox ) );
         // left joystick, press at the same time
-        new JoystickButton( mOperatorXbox, 9 ).whileHeld( new TurretManual( mTurret, mOperatorXbox ) );
+        // new JoystickButton( mOperatorXbox, 9 ).whileHeld( new TurretManual( mTurret, mOperatorXbox ) );
 
     }
 
@@ -274,13 +261,14 @@ public class RobotContainer {
         ConfigureButtonBindings();
         mDrivetrain.setDefaultCommand( new TeleopDrive( mDrivetrain, mDriverXbox ) );
         mIntake.setDefaultCommand( new IntakeDrive( mIntake, mDriverXbox ) );
+        mTurret.setDefaultCommand( new TurretManual( mTurret, mOperatorXbox ) );
         // mFlywheel.setDefaultCommand( new FlywheelToSetRPM( mFlywheel, mOperatorXbox ) );
         mHood.setDefaultCommand( new HoodDrive( mHood, mOperatorXbox ) );
         // mTurret.setDefaultCommand( new TurretSpin( mTurret ) );
-        mAutoChooser.setDefaultOption( "Auto 3_1", new Auto3_1( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mIntake ) );
+        mAutoChooser.setDefaultOption( "Auto 3_0", new Auto3_0( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mShifter ) );
         // mAutoChooser.setDefaultOption( "Auto 1", new Auto1( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel ) );
         mAutoChooser.addOption( "Auto 2", new Auto2( mDrivetrain ) );
-        mAutoChooser.addOption( "Auto 3_0", new Auto3_0( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mLimelight ) );
+        // mAutoChooser.addOption( "Auto 3_0", new Auto3_0( mDrivetrain, mFlywheel, mHopper, mIndexer, mTransferWheel, mLimelight ) );
         SmartDashboard.putData( "Auto Chooser", mAutoChooser );
         mMatchState = MatchState_t.robotInit;
     }

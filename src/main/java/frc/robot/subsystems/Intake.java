@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     
     // Hardware
     private WPI_TalonSRX mMaster;
-    private final DoubleSolenoid mShifter;
+    public final DoubleSolenoid mShifter;
 
     // Hardware states
     private boolean mIsUp;

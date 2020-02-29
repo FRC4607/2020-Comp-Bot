@@ -5,23 +5,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret.TurretState_t;
 import frc.robot.subsystems.Turret.ControlState_t;
 import frc.robot.subsystems.Turret.FailingState_t;
+// import frc.robot.subsystems.Limelight;
 import frc.robot.Constants.TURRET;
 import frc.robot.lib.controllers.Vision.State;
 import frc.robot.lib.controllers.Vision.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import frc.robot.subsystems.Turret;
-import frc.robot.lib.drivers.Limelight;
-import frc.robot.lib.controllers.Vision;
 
 // turn turret based off target command
 public class TurretLimelight extends CommandBase {
 
     private boolean mIsFinished = true;
     private Status mStatus;
-    private Limelight mLimelight; 
-    private Vision mVision; 
-    private final Logger mLogger = LoggerFactory.getLogger( TurretLimelight.class );
+   // private Limelight mLimelight;
+    private final Logger mLogger = LoggerFactory.getLogger(TurretLimelight.class);
     private final Turret mTurret;
     private TurretState_t mTurretState;
     private ControlState_t mControlState;
@@ -38,16 +36,9 @@ public class TurretLimelight extends CommandBase {
     public void initialize() {
         mLogger.info( "Starting TurretSpin command" );
         mIsFinished = false;
-
         // setInterruptible( false );
-
         mTurret.mVision.setState( State.kTurn );
-
-        // mTurret.setState( mZeroing ); 
-
-        // mVision.setLimelightState( mLimelight.ledMode.kOn ); 
-
-        // mLimelight.setLimelightLEDOn();
+       // mTurret.setState( mZeroing );
     }
 
     @Override
@@ -62,8 +53,7 @@ public class TurretLimelight extends CommandBase {
                 // mLogger.info( "Target at: [{}]", mLimelight.horizontalToTargetDeg()); 
             } else if ( mStatus == Status.kLostTarget ) {
                 // mIsFinished = true;
-                mLogger.info( "Lost target" ); 
-                // mLimelight.setLimelightLEDOff();
+                mLogger.info( "Lost target" );
             } else if ( mStatus == Status.kReachedTarget ) {
                 // mIsFinished = true;
                 mLogger.info( "Reached target" );
@@ -73,7 +63,6 @@ public class TurretLimelight extends CommandBase {
             }
         }
 
-    
         // if ( mTurretState.getState() = mZeroing ) {
         //         mZeroing = mTurretState.getState();
 
@@ -99,27 +88,23 @@ public class TurretLimelight extends CommandBase {
     @Override
     public void end ( boolean interrupted ) {
         mLogger.info( "Finished TurnToTarget command" );
-        mTurret.Stop(); 
-
-        // mLimelight.setLimelightLEDOff(); 
-
+        mTurret.Stop();
     }
 
     @Override
     public boolean isFinished() {
         return false;
-        // return mIsFinished; 
+        // return mIsFinished;
     }
 
     /******************************************************************************************************************************
      ** CONSTRUCTOR
      ******************************************************************************************************************************/
-    public TurretLimelight ( Turret turret /* , Limelight limelight */ ) {
-        mTurret = turret; 
-        // mLimelight = limelight;
-        addRequirements( mTurret ); 
-        // addRequirements( mLimelight ); 
+    public TurretLimelight ( Turret turret ) {
+        mTurret = turret;
+       // mLimelight = limelight;
+        addRequirements( mTurret );
+        //addRequirements( mLimelight );
     }
 
 }
-

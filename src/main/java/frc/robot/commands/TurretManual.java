@@ -10,6 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.lib.controllers.Vision.State;
 import frc.robot.subsystems.Turret;
+
+import java.lang.module.ModuleDescriptor.Requires;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
@@ -21,6 +24,7 @@ public class TurretManual extends CommandBase {
   public TurretManual( Turret turret, XboxController operatXboxController ) {
     mTurret = turret;
     mOperatorXbox = operatXboxController;
+    addRequirements(mTurret);
   }
 
   // Called when the command is initially scheduled.

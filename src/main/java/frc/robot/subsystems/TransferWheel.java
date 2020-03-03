@@ -24,11 +24,11 @@ public class TransferWheel extends SubsystemBase {
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( TransferWheel.class );
 
-    public void Spin() {
+    public void Spin () {
         // if ( wantsSpin != mIsSpin ) {
             // mIsSpin = wantsSpin; 
         mMaster.set( TRANSFER_WHEEL.SPEED );
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         // }
     }
 
@@ -36,16 +36,16 @@ public class TransferWheel extends SubsystemBase {
     //     return mIsSpin;
     // }
 
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
 
     public TransferWheel ( CANSparkMax master ) {
         mMaster = master;
         // Current limiting
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         // Set the hardware states
         // mIsSpin = false; 
         // Spin( false ); 

@@ -21,7 +21,7 @@ public class Climber extends SubsystemBase {
 
     // shift climber between locked and unlocked 
     // shift pnematics to put the climber up 
-    public void SetLocked( boolean wantsLocked ) {
+    public void SetLocked ( boolean wantsLocked ) {
         if ( wantsLocked && !mIsLocked ) {
             mIsLocked = wantsLocked;
             mShifter.set( DoubleSolenoid.Value.kForward );
@@ -31,18 +31,18 @@ public class Climber extends SubsystemBase {
         }
     }
 
-    public boolean IsLocked() { 
+    public boolean IsLocked () { 
         return mIsLocked; 
     } 
 
-    public void OpenLoop() {
+    public void OpenLoop () {
         mMaster.set( CLIMBER.SPEED );
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         // mFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     // stop for deadband
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         // mFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
@@ -66,7 +66,7 @@ public class Climber extends SubsystemBase {
         // mFollower.follow( mMaster );
     }
 
-    public Climber( CANSparkMax master, /*CANSparkMax follower,*/ DoubleSolenoid shifter /* CANPIDController PidController*/ ) {
+    public Climber ( CANSparkMax master, /*CANSparkMax follower,*/ DoubleSolenoid shifter /* CANPIDController PidController*/ ) {
 
         mMaster = master;
         // mFollower = follower;

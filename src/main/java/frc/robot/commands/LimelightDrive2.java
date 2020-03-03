@@ -16,7 +16,7 @@ public class LimelightDrive2 extends CommandBase {
 
     @Override
     public void initialize () {
-        mLimelight.setCamMode(camMode.kVision);
+        mLimelight.setCamMode( camMode.kVision );
     }
 
     @Override
@@ -26,8 +26,8 @@ public class LimelightDrive2 extends CommandBase {
         double kp = .05;
         double tx = mLimelight.horizontalToTargetDeg();
         double xturn = tx*kp;
-        SmartDashboard.putNumber("tx", tx);
-            mDrivetrain.mDifferentialDrive.arcadeDrive(mDriverXbox.getY(Hand.kLeft), -xturn);
+        SmartDashboard.putNumber( "tx", tx );
+            mDrivetrain.mDifferentialDrive.arcadeDrive( mDriverXbox.getY ( Hand.kLeft ), -xturn );
      
     }
 

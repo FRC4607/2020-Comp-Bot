@@ -1,7 +1,6 @@
  package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.Constants.FLYWHEEL;
@@ -18,14 +17,14 @@ public class FlywheelSpin extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void execute () {
 
         // drive off right trigger on operator 
-        final double xSpin = ( -0.6 * mOperatorXbox.getRawAxis( 3 ) );
+        final double xSpin = ( -0.6 * mOperatorXbox.getRawAxis ( 3 ) );
         if ( xSpin < -FLYWHEEL.DEADBAND ) {
             mFlywheel.setOpenLoop( xSpin );
         } else { 
-            mFlywheel.Stop();
+            mFlywheel.Stop ();
         }
     
     }

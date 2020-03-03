@@ -1,12 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turret.TurretState_t;
-import frc.robot.subsystems.Turret.ControlState_t;
-import frc.robot.subsystems.Turret.FailingState_t;
 // import frc.robot.subsystems.Limelight;
-import frc.robot.Constants.TURRET;
 import frc.robot.lib.controllers.Vision.State;
 import frc.robot.lib.controllers.Vision.Status;
 import org.slf4j.Logger;
@@ -19,21 +14,14 @@ public class TurretLimelight extends CommandBase {
     private boolean mIsFinished = true;
     private Status mStatus;
     // private Limelight mLimelight;
-    private final Logger mLogger = LoggerFactory.getLogger(TurretLimelight.class);
+    private final Logger mLogger = LoggerFactory.getLogger( TurretLimelight.class );
     private final Turret mTurret;
-    private TurretState_t mTurretState;
-    private ControlState_t mControlState;
-    private FailingState_t mFailingState;
-    private State mZeroing;
-    private State mHolding;
-    private State mLoading;
-    private State mFail;
 
     /******************************************************************************************************************************
      ** COMMAND OVERRIDES
      ******************************************************************************************************************************/
     @Override
-    public void initialize() {
+    public void initialize () {
         mLogger.info( "Starting TurretSpin command" );
         mIsFinished = false;
         // setInterruptible( false );
@@ -42,7 +30,7 @@ public class TurretLimelight extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void execute () {
 
         // Make sure the vision thread is processing the turning output
         if ( mTurret.mVision.getState() == State.kTurn ) {
@@ -58,30 +46,10 @@ public class TurretLimelight extends CommandBase {
                 // mIsFinished = true;
                 mLogger.info( "Reached target" );
             } else {
-                mTurret.setOpenLoop(0.0);
+                mTurret.setOpenLoop( 0.0 );
                 mLogger.warn( "Unknown status: [{}]", mStatus );
             }
         }
-
-        // if ( mTurretState.getState() = mZeroing ) {
-        //         mZeroing = mTurretState.getState();
-
-        //     if ( mZeroing == mTurretState.ZeroingRetries ) {
-        //         mZeroing.setState( mFailingState.ZeroingRetries );
-
-        //     } else if ( mZeroing == mTurretState.ZeroingTimeout ) {
-        //         mZeroing.setState( mFailingState.ZeroingTimeout );
-
-        //     } else if ( mZeroing == mHolding ) {
-        //         mZeroing.setState( mHolding );
-
-        //     } else if ( mZeroing == mLoading ) {
-        //         mZeroing.setState.mTurretState.Loading;
-
-        //     } else {
-        //         mTurret.mAlternateEncoder.setPosition();
-        //     }
-        // }
 
     }
 

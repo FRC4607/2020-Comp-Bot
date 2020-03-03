@@ -47,9 +47,9 @@ public class Auto1 extends CommandBase {
        mTransferWheel.Stop();
 
        //Drive off Line
-       mDrivetrain.mDifferentialDrive.arcadeDrive(-.50, -.50);
-       while( System.currentTimeMillis() >= start + 800 ) {}
-       mDrivetrain.mDifferentialDrive.arcadeDrive(0, 0);
+       mDrivetrain.mDifferentialDrive.arcadeDrive( -.50, -.50 );
+       while( System.currentTimeMillis () >= start + 800 ) {}
+       mDrivetrain.mDifferentialDrive.arcadeDrive( 0, 0 );
 
        // :D
        mIsFinished = true;

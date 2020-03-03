@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.DriveForDistance;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,11 +20,11 @@ public class DriveAuto extends SequentialCommandGroup {
    * Creates a new DriveAuto.
    */
   public DriveAuto( Drivetrain drivetrain, XboxController driverXbox ) {
-    super();
-    addCommands(
-        new DriveForDistance(drivetrain, 2048, .25, 0), 
+    super ();
+    addCommands (
+        new DriveForDistance( drivetrain, 2048, .25, 0 ), 
         // new Drive_Turn_To_Setpoint(drivetrain, driverXbox, 90),
-        new DriveForDistance(drivetrain, 2048, .25, 0)
+        new DriveForDistance( drivetrain, 2048, .25, 0 )
         );
   }
 }

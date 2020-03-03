@@ -8,7 +8,6 @@ import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-// should be the same as talons control mode
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -73,19 +72,19 @@ public class Turret extends SubsystemBase {
    public void setOpenLoop ( double xTurret ) {
         mTargetPercentOutput  =  xTurret;
         SetPercentOutput();
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
 }
     
     // close loop drive
     public void setCloseLoop ( double xUPMS ) {
         mTargetPosition_Rot  =  xUPMS;
         SetSmartMotionOutput();
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
     // stop spinning
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
     
     /**
@@ -423,7 +422,7 @@ public class Turret extends SubsystemBase {
         mVision = vision;
         Initialize();
         // Current limiting
-        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT);
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     /**
@@ -439,7 +438,7 @@ public class Turret extends SubsystemBase {
         CANPIDController pidController = master.getPIDController();
         LinearFilter movingAverageFilter = LinearFilter.movingAverage( TURRET.MOVING_AVERAGE_FILTER_TAPS );
 
-        Vision vision = Vision.create();
+        Vision vision = Vision.create ();
 
         return new Turret( master, pidController, alternateEncoder, movingAverageFilter, vision );
     }
@@ -463,12 +462,12 @@ public class Turret extends SubsystemBase {
     @Override
     public void initSendable ( SendableBuilder builder ) {
         //builder.setSmartDashboardType( "Turret PID Tuning" );
-        builder.addDoubleProperty( "P", this::GetP, this::SetP);
-        builder.addDoubleProperty( "I", this::GetI, this::SetI);
-        builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
-        builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity);
-        builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration);
+        builder.addDoubleProperty( "P", this::GetP, this::SetP );
+        builder.addDoubleProperty( "I", this::GetI, this::SetI );
+        builder.addDoubleProperty( "D", this::GetD, this::SetD );
+        builder.addDoubleProperty( "F", this::GetF, this::SetF );
+        builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity );
+        builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration );
         // builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
         // builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }

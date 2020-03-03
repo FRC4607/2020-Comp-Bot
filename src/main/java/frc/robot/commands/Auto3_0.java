@@ -9,7 +9,8 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.TransferWheel;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Turret;
+import frc.robot.commands.FlywheelToSetRPM_Auto;
+import frc.robot.commands.DriveForDistance;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,8 +19,8 @@ public class Auto3_0 extends SequentialCommandGroup {
   /**
    * Creates a new Auto3.
    */
-  public Auto3_0( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, 
-                          TransferWheel transferWheel, Intake intake/*, Limelight limelight */) {
+  public Auto3_0 ( Drivetrain drivetrain, Flywheel flywheel, Hopper hopper, Indexer indexer, 
+                          TransferWheel transferWheel, Intake intake/*, Limelight limelight */ ) {
 
     super(
       new InstantCommand( () -> intake.mShifter.set( DoubleSolenoid.Value.kForward ) ),

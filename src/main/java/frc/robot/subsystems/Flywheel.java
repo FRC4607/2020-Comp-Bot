@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
+// import com.ctre.phoenix.motorcontrol.InvertType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -126,7 +126,7 @@ public class Flywheel extends SubsystemBase {
      * 
      * @param desiredState
      */
-    public void SetFlywheelState( FlywheelState_t desiredState ) {
+    public void SetFlywheelState ( FlywheelState_t desiredState ) {
         mFlywheelState = desiredState;
     }
 
@@ -134,7 +134,7 @@ public class Flywheel extends SubsystemBase {
      * 
      * @param desiredState
      */
-    public void SetControlState( ControlState_t desiredState ) {
+    public void SetControlState ( ControlState_t desiredState ) {
         mControlState = desiredState;
     }
 
@@ -356,7 +356,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     // stop for deadband
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
     }
     
@@ -531,7 +531,7 @@ public class Flywheel extends SubsystemBase {
         mCurrentVelocity_UPMS = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX );
         mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX ) / FLYWHEEL.SENSOR_UNITS_PER_ROTATION * 600.0;
         mError_RPM = GetTargetVelocity_RPM() - mCurrentVelocity_RPM;     
-        SmartDashboard.putNumber("FlyWheel UPMS", mCurrentVelocity_UPMS);
+        SmartDashboard.putNumber( "FlyWheel UPMS", mCurrentVelocity_UPMS );
     }
 
     /**
@@ -542,15 +542,15 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void initSendable ( SendableBuilder builder ) {
         //builder.setSmartDashboardType( "Flywheel PID Tuning" );
-        builder.addDoubleProperty( "P", this::GetP, this::SetP);
-        builder.addDoubleProperty( "I", this::GetI, this::SetI);
-        builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
-        builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
+        builder.addDoubleProperty( "P", this::GetP, this::SetP );
+        builder.addDoubleProperty( "I", this::GetI, this::SetI );
+        builder.addDoubleProperty( "D", this::GetD, this::SetD );
+        builder.addDoubleProperty( "F", this::GetF, this::SetF );
+        builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM );
         builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }
 
-	public double getSetPoint() {
+	public double getSetPoint () {
 		return mTargetVelocity_Units_Per_100ms;
 	}
 

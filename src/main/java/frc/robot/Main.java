@@ -10,13 +10,13 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
 public final class Main {
-    private Main() {
+    private Main () {
     }
 
-    public static void main (String... args) {
+    public static void main ( String... args ) {
 
         final File mLogBackFile = new File( Filesystem.getDeployDirectory(), "logback.xml" );
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        LoggerContext context = ( LoggerContext ) LoggerFactory.getILoggerFactory();
         try {
           JoranConfigurator configurator = new JoranConfigurator();
           configurator.setContext( context );

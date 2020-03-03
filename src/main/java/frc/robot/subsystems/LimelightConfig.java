@@ -15,43 +15,43 @@ public class LimelightConfig {
 
   private double mountDistanceFromCenter;
 
-  public String getNetworkTableName() {
+  public String getNetworkTableName () {
     return networkTableName;
   }
 
-  public double getMountHeight() {
+  public double getMountHeight () {
     return mountHeight;
   }
 
-  public double getMountDepth() {
+  public double getMountDepth () {
     return mountDepth;
   }
 
-  public double getMountAngle() {
+  public double getMountAngle () {
     return mountAngle;
   }
 
-  public double getMountDistanceFromCenter() {
+  public double getMountDistanceFromCenter () {
     return mountDistanceFromCenter;
   }
 
-  private void setNetworkTableName(String networkTableName) {
+  private void setNetworkTableName ( String networkTableName ) {
     this.networkTableName = networkTableName;
   }
 
-  private void setMountHeight(double mountHeight) {
+  private void setMountHeight ( double mountHeight ) {
     this.mountHeight = mountHeight;
   }
 
-  private void setMountDepth(double mountDepth) {
+  private void setMountDepth ( double mountDepth ) {
     this.mountDepth = mountDepth;
   }
 
-  private void setMountAngle(double mountAngle) {
+  private void setMountAngle ( double mountAngle ) {
     this.mountAngle = mountAngle;
   }
 
-  private void setMountDistanceFromCenter(double mountDistanceFromCenter) {
+  private void setMountDistanceFromCenter ( double mountDistanceFromCenter ) {
     this.mountDistanceFromCenter = mountDistanceFromCenter;
   }
 
@@ -59,36 +59,36 @@ public class LimelightConfig {
     
     private LimelightConfig limelightConfig = new LimelightConfig();
 
-    public static Builder create() {
+    public static Builder create () {
       return new Builder();
     }
 
-    public Builder withNetworkTableName(String networkTableName) {
-      limelightConfig.setNetworkTableName(networkTableName);
+    public Builder withNetworkTableName ( String networkTableName ) {
+      limelightConfig.setNetworkTableName( networkTableName );
       return this;
     }
 
-    public Builder withMountingHeight(double mountingHeight) {
-      limelightConfig.setMountHeight(mountingHeight);
+    public Builder withMountingHeight ( double mountingHeight ) {
+      limelightConfig.setMountHeight( mountingHeight );
       return this;
     }
 
-    public Builder withMountDepth(double mountDepth) {
-      limelightConfig.setMountDepth(mountDepth);
+    public Builder withMountDepth ( double mountDepth ) {
+      limelightConfig.setMountDepth( mountDepth );
       return this;
     }
 
-    public Builder withMountingAngle(double mountingAngle) {
-      limelightConfig.setMountAngle(mountingAngle);
+    public Builder withMountingAngle ( double mountingAngle ) {
+      limelightConfig.setMountAngle( mountingAngle );
       return this;
     }
 
-    public Builder withMountDistanceFromCenter(double mountDistanceFromCenter) {
-      limelightConfig.setMountDistanceFromCenter(mountDistanceFromCenter);
+    public Builder withMountDistanceFromCenter ( double mountDistanceFromCenter ) {
+      limelightConfig.setMountDistanceFromCenter( mountDistanceFromCenter );
       return this;
     }
 
-    public LimelightConfig build() {
+    public LimelightConfig build () {
       return limelightConfig;
     }
 

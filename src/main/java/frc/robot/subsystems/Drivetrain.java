@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.DRIVETRAIN.CLOSED_LOOP_ERROR_RANGE;
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.DRIVETRAIN;
-import frc.robot.Constants;
 import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -49,9 +47,9 @@ public class Drivetrain extends SubsystemBase {
     private double mTargetSpeed;
     private AHRS mNavx_MXP;
     private PigeonIMU mPidgey;
-    private double [] xyz_dps = new double [3];
+    private double [] xyz_dps = new double [ 3 ];
     private double currentAngle = 0;
-    private double currentAngluarRate = xyz_dps[2];
+    private double currentAngluarRate = xyz_dps[ 2 ];
 
     // Hardware states
     private boolean mIsReversed;
@@ -108,12 +106,12 @@ public class Drivetrain extends SubsystemBase {
     // }
 
 
-    public void Turn() {
+    public void Turn () {
         mLeftMaster.set( 1.0 );
         Turn = true;
       }
 
-    public void Stop() {
+    public void Stop () {
         mLeftMaster.set( 0.0 );
         mRightMaster.set( 0.0 );
         mLeftFollower.set( 0.0 );
@@ -131,7 +129,7 @@ public class Drivetrain extends SubsystemBase {
      * 
      * @param desiredState
      */
-    public void SetControlState( ControlState_t desiredState ) {
+    public void SetControlState ( ControlState_t desiredState ) {
         mControlState = desiredState;
     }
     
@@ -169,7 +167,7 @@ public class Drivetrain extends SubsystemBase {
         mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
         mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
-        if (wantsBrakeMode && !mIsBrakeMode) {
+        if ( wantsBrakeMode && !mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
             // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
             mLeftMaster.setIdleMode( IdleMode.kBrake );
@@ -178,7 +176,7 @@ public class Drivetrain extends SubsystemBase {
             mRightFollower.setIdleMode( IdleMode.kBrake );
             mLogger.info( "Neutral mode set to: [Brake]" );
 
-        } else if (!wantsBrakeMode && mIsBrakeMode) {
+        } else if ( !wantsBrakeMode && mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
             mLeftMaster.setIdleMode( IdleMode.kCoast );
             mLeftFollower.setIdleMode( IdleMode.kCoast );
@@ -259,7 +257,7 @@ public class Drivetrain extends SubsystemBase {
         DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
         // AHRS mNavx_MXP = new AHRS( SPI.Port.kMXP );
 
-        leftAlternateEncoder.setInverted(true);
+        leftAlternateEncoder.setInverted ( true );
         // PigeonIMU mPidgey = new PigeonIMU( 0 );
         // mPidgey.configFactoryDefault();
         return new Drivetrain( leftMaster, leftFollower, leftAlternateEncoder, leftPidController,
@@ -308,11 +306,11 @@ public class Drivetrain extends SubsystemBase {
     //     return heading;
     // } 
 
-	public void zeroDistanceTraveled() {
+	public void zeroDistanceTraveled () {
         mLeftAlternateEncoder.setPosition( 0 );
     }
     
-    public double getLeftEncoder() {
+    public double getLeftEncoder () {
         return mLeftAlternateEncoder.getPosition(); 
     }
 

@@ -85,19 +85,19 @@ public class Hood extends SubsystemBase {
 
 
     // open loop drive
-    public void setOpenLoop (double xHood) {
+    public void setOpenLoop ( double xHood ) {
         mMaster.set( xHood );
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
-    public void setOpenLoopR (double xHoodR) {
+    public void setOpenLoopR ( double xHoodR ) {
         mMaster.set( xHoodR );
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
 
     // stop for deadband
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
         mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
@@ -483,12 +483,12 @@ public class Hood extends SubsystemBase {
     @Override
     public void initSendable ( SendableBuilder builder ) {
         //builder.setSmartDashboardType( "Flywheel PID Tuning" );
-        builder.addDoubleProperty( "P", this::GetP, this::SetP);
-        builder.addDoubleProperty( "I", this::GetI, this::SetI);
-        builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
-        builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity);
-        builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration);
+        builder.addDoubleProperty( "P", this::GetP, this::SetP );
+        builder.addDoubleProperty( "I", this::GetI, this::SetI );
+        builder.addDoubleProperty( "D", this::GetD, this::SetD );
+        builder.addDoubleProperty( "F", this::GetF, this::SetF );
+        builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity );
+        builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration );
         //builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
         //builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }

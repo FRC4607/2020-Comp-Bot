@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
     }
 
     // open loop drive
-    public void setOpenLoop (double xIntake) {
+    public void setOpenLoop ( double xIntake ) {
         mMaster.set( xIntake );
         mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
         mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
@@ -46,7 +46,7 @@ public class Intake extends SubsystemBase {
         mMaster.enableCurrentLimit( true );
     }
     // stop for deadband
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
         mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
         mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase {
     }
 
     public static Intake create () {
-        WPI_TalonSRX master = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( INTAKE.MASTER_ID) );
+        WPI_TalonSRX master = TalonSRX.createTalonSRXWithEncoder( new WPI_TalonSRX( INTAKE.MASTER_ID ) );
         DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, INTAKE.UP_SOLENOID_ID, INTAKE.DOWN_SOLENOID_ID );
         return new Intake( master, shifter );
     }

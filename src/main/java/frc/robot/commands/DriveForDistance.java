@@ -30,14 +30,14 @@ public class DriveForDistance extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
+  public void initialize () {
     mDrivetrain.zeroDistanceTraveled();
     // System.out.println("ini drivefordistance");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute () {
     mDrivetrain.mDifferentialDrive.arcadeDrive( mSpeed, mTurn );
   }
 
@@ -49,10 +49,10 @@ public class DriveForDistance extends CommandBase {
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+  public boolean isFinished () {
     // System.out.println("getLeftEoncdoer: " + mDrivetrain.getLeftEncoder());
     // System.out.println("mSetPoint: " + mSetpoint);
-    return Math.abs( mDrivetrain.getLeftEncoder() ) > Math.abs( mSetpoint );
+    return Math.abs( mDrivetrain.getLeftEncoder () ) > Math.abs( mSetpoint );
   }
 }
 

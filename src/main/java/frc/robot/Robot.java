@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpiutil.net.PortForwarder;
 import frc.robot.RobotContainer.MatchState_t;
-import frc.robot.commands.DriveForDistance;
-import frc.robot.subsystems.Drivetrain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 // import frc.robot.subsystems.Turret;
@@ -67,7 +65,6 @@ public class Robot extends TimedRobot {
         mRobotContainer.SetMatchState( MatchState_t.autonomousInit );
 
         mAutonomousCommand = mRobotContainer.GetAutonomousCommand();
-        // mAutonomousCommand = new DriveForDistance(RobotContainer.mDrivetrain, 5, -.5, 0);
 
         if ( mAutonomousCommand != null ) {
             mAutonomousCommand.schedule();

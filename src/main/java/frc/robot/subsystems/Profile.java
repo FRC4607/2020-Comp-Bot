@@ -10,7 +10,7 @@ public enum Profile {
 
   public final double pipelineId;
 
-  private Profile(double pipelineId) {
+  private Profile( double pipelineId ) {
     this.pipelineId = pipelineId;
   }
 

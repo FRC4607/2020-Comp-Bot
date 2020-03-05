@@ -16,8 +16,9 @@ public class HoodDrive extends CommandBase {
     @Override
     public void execute() {
 
-        // drive off joystick 
+        // drive off joystick foward 
         double xHood = ( -0.2 * mOperatorXbox.getRawAxis( 5 ) );
+        // drive off joystick backward
         double xHoodR = ( 0.2 * mOperatorXbox.getRawAxis( 5 ) );
 
         if ( xHood < -HOOD.DEADBAND ) {

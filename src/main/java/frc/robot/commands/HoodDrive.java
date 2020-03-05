@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 import frc.robot.Constants.HOOD;
@@ -17,15 +16,19 @@ public class HoodDrive extends CommandBase {
     @Override
     public void execute() {
 
-        // drive off joystick 
-        double xHood = ( 0.2 * mOperatorXbox.getRawAxis(5));
+        // drive off joystick foward 
+        double xHood = ( -0.2 * mOperatorXbox.getRawAxis( 5 ) );
+        // drive off joystick backward
+        double xHoodR = ( 0.2 * mOperatorXbox.getRawAxis( 5 ) );
 
         if ( xHood < -HOOD.DEADBAND ) {
             mHood.setOpenLoop( xHood );
+        } else if ( xHoodR < HOOD.DEADBAND ) {
+            mHood.setOpenLoopR( xHoodR );
         } else {
             mHood.Stop();
         }
-    
+        
     }
 
     @Override

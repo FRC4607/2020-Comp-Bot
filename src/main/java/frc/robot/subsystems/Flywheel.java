@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.FLYWHEEL;
+import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.TalonSRX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,8 +11,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
+// import com.ctre.phoenix.motorcontrol.InvertType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import java.lang.Math;
 
 public class Flywheel extends SubsystemBase {
@@ -48,6 +51,7 @@ public class Flywheel extends SubsystemBase {
     private double mTargetVelocity_Units_Per_100ms;
     private double mTargetVelocity_RPM;
     private double mCurrentVelocity_RPM;
+    private double mCurrentVelocity_UPMS;
     private double mError_RPM;
 
     // Open-loop control
@@ -101,6 +105,12 @@ public class Flywheel extends SubsystemBase {
     /**
     * @return double The current current velocity of the flywheel in RPM.
     */
+    public double GetCurrentVelocity_UPMS () {
+        return mCurrentVelocity_UPMS;
+    }
+    /**
+    * @return double The current current velocity of the flywheel in RPM.
+    */
     public double GetCurrentVelocity_RPM () {
         return mCurrentVelocity_RPM;
     }
@@ -110,6 +120,22 @@ public class Flywheel extends SubsystemBase {
     */
     public double GetError_RPM () {
         return mError_RPM;
+    }
+
+    /**
+     * 
+     * @param desiredState
+     */
+    public void SetFlywheelState ( FlywheelState_t desiredState ) {
+        mFlywheelState = desiredState;
+    }
+
+    /**
+     * 
+     * @param desiredState
+     */
+    public void SetControlState ( ControlState_t desiredState ) {
+        mControlState = desiredState;
     }
 
     /**
@@ -139,10 +165,16 @@ public class Flywheel extends SubsystemBase {
     private void Initialize () {
         mMaster.configSelectedFeedbackSensor( FeedbackDevice.CTRE_MagEncoder_Relative,
                                               FLYWHEEL.PID_IDX, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.setSensorPhase( true );
-        mMaster.setNeutralMode( NeutralMode.Brake );
-        mFollower.setNeutralMode( NeutralMode.Brake );
-        mFollower.setInverted( InvertType.OpposeMaster );
+		mMaster.setSensorPhase( false );
+        mMaster.setNeutralMode( NeutralMode.Coast ); 
+        mMaster.setInverted( true );
+        mMaster.configNominalOutputForward( 0, GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mMaster.configNominalOutputReverse( 0,GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mMaster.configPeakOutputForward( 1, GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mMaster.configPeakOutputReverse( 0, GLOBAL.CAN_LONG_TIMEOUT_MS );
+        mFollower.setInverted( false ); 
+        mFollower.follow( mMaster );
+        mFollower.setNeutralMode( NeutralMode.Coast );
         mFlywheelState = FlywheelState_t.Init;
         mControlState = ControlState_t.ClosedLoop;
         mFailingState = FailingState_t.Healthy;
@@ -217,11 +249,11 @@ public class Flywheel extends SubsystemBase {
     /**
     * This method will set the velocity closed-loop gains of the TalonSRX.
     */
-    private void SetGains () {
-		mMaster.config_kP( FLYWHEEL.PID_IDX, mP, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.config_kI( FLYWHEEL.PID_IDX, mI, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.config_kD( FLYWHEEL.PID_IDX, mD, GLOBAL.CAN_TIMEOUT_MS );
-		mMaster.config_kF( FLYWHEEL.PID_IDX, mF, GLOBAL.CAN_TIMEOUT_MS );
+    public void SetGains () {
+		mMaster.config_kP( FLYWHEEL.PID_IDX, 0.006, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.config_kI( FLYWHEEL.PID_IDX, 0, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.config_kD( FLYWHEEL.PID_IDX, 0, GLOBAL.CAN_TIMEOUT_MS );
+		mMaster.config_kF( FLYWHEEL.PID_IDX, 0.0198, GLOBAL.CAN_TIMEOUT_MS );
     }
 
     /**
@@ -304,12 +336,27 @@ public class Flywheel extends SubsystemBase {
     }
 
     // open loop drive
-    public void setOpenLoop (double xFlywheel) {
-        mMaster.set( xFlywheel );
+    public void setOpenLoop ( double xFlywheel ) {
+        mTargetPercentOutput  =  xFlywheel;
+        SetPercentOutput();
+        mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );     
+        mFollower.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mFollower.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mFollower.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mMaster.enableCurrentLimit( true );
+        mFollower.enableCurrentLimit( true );
+    }
+
+    // close loop drive
+    public void setCloseLoop ( double xUPMS ) {
+        mTargetVelocity_Units_Per_100ms  =  xUPMS;
+        SetVelocityOutput();
     }
 
     // stop for deadband
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
     }
     
@@ -446,6 +493,18 @@ public class Flywheel extends SubsystemBase {
         mMasterFaults = masterFaults;
         mFollowerFaults = followerFaults;
         Initialize();
+
+        // Current limiting
+        mMaster.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );     
+        mFollower.configContinuousCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mFollower.configPeakCurrentLimit( CURRENT_LIMIT.TALON_AMPS_LIMIT );
+        mMaster.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mFollower.configPeakCurrentDuration( GLOBAL.TALON_CURRENT_LIMIT_TIMEOUT_MS );
+        mMaster.enableCurrentLimit( true );
+        mFollower.enableCurrentLimit( true );
+
+
     }
 
     /**
@@ -469,9 +528,10 @@ public class Flywheel extends SubsystemBase {
     */ 
     @Override
     public void periodic () {
-        mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX ) /
-                                                                  FLYWHEEL.SENSOR_UNITS_PER_ROTATION * 600.0;
+        mCurrentVelocity_UPMS = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX );
+        mCurrentVelocity_RPM = mMaster.getSelectedSensorVelocity( FLYWHEEL.PID_IDX ) / FLYWHEEL.SENSOR_UNITS_PER_ROTATION * 600.0;
         mError_RPM = GetTargetVelocity_RPM() - mCurrentVelocity_RPM;     
+        SmartDashboard.putNumber( "FlyWheel UPMS", mCurrentVelocity_UPMS );
     }
 
     /**
@@ -482,12 +542,17 @@ public class Flywheel extends SubsystemBase {
     @Override
     public void initSendable ( SendableBuilder builder ) {
         //builder.setSmartDashboardType( "Flywheel PID Tuning" );
-        builder.addDoubleProperty( "P", this::GetP, this::SetP);
-        builder.addDoubleProperty( "I", this::GetI, this::SetI);
-        builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
-        builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
+        builder.addDoubleProperty( "P", this::GetP, this::SetP );
+        builder.addDoubleProperty( "I", this::GetI, this::SetI );
+        builder.addDoubleProperty( "D", this::GetD, this::SetD );
+        builder.addDoubleProperty( "F", this::GetF, this::SetF );
+        builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM );
         builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }
 
+	public double getSetPoint () {
+		return mTargetVelocity_Units_Per_100ms;
+	}
+
 }
+

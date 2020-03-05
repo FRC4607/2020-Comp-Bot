@@ -2,21 +2,34 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.GLOBAL;
 import frc.robot.Constants.DRIVETRAIN;
+import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU_ControlFrame;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.SPI;
 
 public class Drivetrain extends SubsystemBase {
+
+    public static enum ControlState_t {
+        OpenLoop { @Override public String toString() { return "Open-Loop"; } },
+        ClosedLoop { @Override public String toString() { return "Closed-Loop"; } },
+    }
 
     // Hardware
     private final CANSparkMax mLeftMaster;
@@ -29,14 +42,30 @@ public class Drivetrain extends SubsystemBase {
     private CANPIDController mRightPIDController;
     private final DoubleSolenoid mShifter;
     public final DifferentialDrive mDifferentialDrive;
+    private ControlState_t mControlState;
+    private double mTargetVelocity_Units_Per_100ms;
+    private double mTargetSpeed;
+    private AHRS mNavx_MXP;
+    private PigeonIMU mPidgey;
+    private double [] xyz_dps = new double [ 3 ];
+    private double currentAngle = 0;
+    private double currentAngluarRate = xyz_dps[ 2 ];
 
     // Hardware states
     private boolean mIsReversed;
     private boolean mIsHighGear;
     private boolean mIsBrakeMode;
+    private boolean Turn;
+    // private boolean usePigeon = true;
+    private boolean angleIsGood = false;
+
 
     // Logging
     private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
+
+    private final SimpleMotorFeedforward motorFeedForward = 
+    new SimpleMotorFeedforward( DRIVETRAIN.kS, DRIVETRAIN.kV, DRIVETRAIN.kA );
+
 
     public void SetReversed ( boolean wantsReversed ) {
         if ( wantsReversed != mIsReversed ) {
@@ -45,9 +74,65 @@ public class Drivetrain extends SubsystemBase {
             mLeftFollower.setInverted( wantsReversed );
             mRightMaster.setInverted( wantsReversed) ;
             mRightFollower.setInverted( wantsReversed );
+            // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Reversed drive set to: [{}]", mIsReversed );
         }
     }
+
+
+ /**
+   * Prepare to shoot the given distance in INCHES
+   * @param distanceToTarget distance in INCHES
+   */
+//   public void prepareToTurn( double distanceToTarget ) {
+//     if ( distanceToTarget > 150 ) {
+//         mTargetSpeed = 1.0;
+//     } else if ( distanceToTarget <= 150 ) {
+//         mTargetSpeed = .25;
+//     }
+    // mLeftPIDController.setReference(
+    //     mTargetSpeed,
+    //     ControlType.kVelocity,
+    //     0,
+    //     motorFeedForward.calculate( mTargetSpeed / 60, (mTargetSpeed - mLeftAlternateEncoder.getVelocity()) / 60 ) );
+    // }
+
+    // public boolean isReadyToTurn() {
+    //     return Math.abs( mLeftAlternateEncoder.getVelocity() - mTargetSpeed ) <= CLOSED_LOOP_ERROR_RANGE;
+    // }
+
+
+    public void Turn () {
+        mLeftMaster.set( 1.0 );
+        Turn = true;
+      }
+
+    public void Stop () {
+        mLeftMaster.set( 0.0 );
+        mRightMaster.set( 0.0 );
+        mLeftFollower.set( 0.0 );
+        mRightFollower.set( 0.0 );
+    }
+
+    /**
+    * @return ControlState_t The current control state of the flywheel.
+    */
+    public ControlState_t GetControlState () {
+        return mControlState;
+    }
+
+    /**
+     * 
+     * @param desiredState
+     */
+    public void SetControlState ( ControlState_t desiredState ) {
+        mControlState = desiredState;
+    }
+    
 
     public boolean IsReversed () {
         return mIsReversed;
@@ -57,10 +142,18 @@ public class Drivetrain extends SubsystemBase {
         if ( wantsHighGear && !mIsHighGear ) {
             mIsHighGear = wantsHighGear;
             mShifter.set( DoubleSolenoid.Value.kForward );
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Gear set to: [High]" );
         } else if ( !wantsHighGear && mIsHighGear ) {
             mIsHighGear = wantsHighGear;
             mShifter.set( DoubleSolenoid.Value.kReverse );
+            mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+            mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
             mLogger.info( "Gear set to: [Low]" );
         }
     }
@@ -70,20 +163,25 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void SetBrakeMode ( boolean wantsBrakeMode ) {
-        if (wantsBrakeMode && !mIsBrakeMode) {
+        mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        if ( wantsBrakeMode && !mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
-            // mLeftMaster.setNeutralMode( NeutralMode.Brake );
-            // mLeftFollower.setNeutralMode( NeutralMode.Brake );
-            // mRightMaster.setNeutralMode( NeutralMode.Brake );
-            // mRightFollower.setNeutralMode( NeutralMode.Brake );
+            // current limiting for sparks by zero rpm, max rpm, and inbetween rpm current limits
+            mLeftMaster.setIdleMode( IdleMode.kBrake );
+            mLeftFollower.setIdleMode( IdleMode.kBrake );
+            mRightMaster.setIdleMode( IdleMode.kBrake );
+            mRightFollower.setIdleMode( IdleMode.kBrake );
             mLogger.info( "Neutral mode set to: [Brake]" );
 
-        } else if (!wantsBrakeMode && mIsBrakeMode) {
+        } else if ( !wantsBrakeMode && mIsBrakeMode ) {
             mIsBrakeMode = wantsBrakeMode;
-            // mLeftMaster.setNeutralMode( NeutralMode.Coast );
-            // mLeftFollower.setNeutralMode( NeutralMode.Coast );
-            // mRightMaster.setNeutralMode( NeutralMode.Coast );
-            // mRightFollower.setNeutralMode( NeutralMode.Coast );
+            mLeftMaster.setIdleMode( IdleMode.kCoast );
+            mLeftFollower.setIdleMode( IdleMode.kCoast );
+            mRightMaster.setIdleMode( IdleMode.kCoast );
+            mRightFollower.setIdleMode( IdleMode.kCoast );
             mLogger.info( "Neutral mode set to: [Coast]" );
         }
     }
@@ -114,7 +212,7 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain ( CANSparkMax leftMaster, CANSparkMax leftFollower, CANEncoder leftAlternateEncoder, CANPIDController leftPidController,
                         CANSparkMax rightMaster, CANSparkMax rightFollower, CANEncoder rightAlternateEncoder, CANPIDController rightPidController,
-                        DoubleSolenoid shifter ) {
+                        DoubleSolenoid shifter /*, PigeonIMU pidgey*/ ) {
   
         // Set the hardware
         mLeftMaster = leftMaster;
@@ -126,6 +224,14 @@ public class Drivetrain extends SubsystemBase {
         mRightAlternateEncoder = rightAlternateEncoder;
         mRightPIDController = rightPidController;        
         mShifter = shifter;
+        // mPidgey = pidgey;
+        // mNavx_MXP = navx_MXP;
+
+        // Current limiting
+        mLeftMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mLeftFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+        mRightFollower.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
 
         // Create differential drive object
         mDifferentialDrive = new DifferentialDrive( leftMaster, rightMaster );
@@ -149,13 +255,65 @@ public class Drivetrain extends SubsystemBase {
         CANEncoder rightAlternateEncoder = rightMaster.getAlternateEncoder( AlternateEncoderType.kQuadrature, DRIVETRAIN.SENSOR_COUNTS_PER_ROTATION );
         CANPIDController rightPidController = rightMaster.getPIDController();
         DoubleSolenoid shifter = new DoubleSolenoid( GLOBAL.PCM_ID, DRIVETRAIN.HIGH_GEAR_SOLENOID_ID, DRIVETRAIN.LOW_GEAR_SOLENOID_ID );
+        // AHRS mNavx_MXP = new AHRS( SPI.Port.kMXP );
+
+        leftAlternateEncoder.setInverted ( true );
+        // PigeonIMU mPidgey = new PigeonIMU( 0 );
+        // mPidgey.configFactoryDefault();
         return new Drivetrain( leftMaster, leftFollower, leftAlternateEncoder, leftPidController,
-                               rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter ); 
+                               rightMaster, rightFollower, rightAlternateEncoder, rightPidController, shifter /*, pidgey*/ ); 
     }
 
     @Override
     public void periodic () {
+        boolean debug = true;
+        if( debug ) {
+           // SmartDashboard.putNumber( "Current Gyro", getHeading() );
+            SmartDashboard.putNumber( "Left Encoder", getLeftEncoder() );
+        }
 
     }
+
+    // private void getPidgey() {
+    //     PigeonIMU.GeneralStatus generalStatus = new PigeonIMU.GeneralStatus();
+    //     PigeonIMU.FusionStatus fusionStatus = new PigeonIMU.FusionStatus();
+    //     mPidgey.getGeneralStatus( generalStatus );
+    //     mPidgey.getRawGyro( xyz_dps );
+    //     mPidgey.getFusedHeading( fusionStatus );
+    //     currentAngle = fusionStatus.heading;
+    //     angleIsGood = ( mPidgey.getState() == PigeonIMU.PigeonState.Ready ) ? true : false;
+    //     currentAngluarRate = xyz_dps[2];
+    // }
+
+    // public double getHeading() {
+    //     double heading;
+    //     if( !usePigeon ) {
+    //         if( mNavx_MXP.isConnected() ) {
+    //             heading = mNavx_MXP.getAngle();
+    //         } else {
+    //             heading = 0;
+    //         }
+    //     } else {
+    //        getPidgey();
+    //        if( angleIsGood ) {
+    //         heading = currentAngle;
+    //        } else {
+    //            heading = 0;
+    //        }
+
+    //     }
+
+    //     return heading;
+    // } 
+
+	public void zeroDistanceTraveled () {
+        mLeftAlternateEncoder.setPosition( 0 );
+    }
+    
+    public double getLeftEncoder () {
+        return mLeftAlternateEncoder.getPosition(); 
+    }
+
+    
 
 }

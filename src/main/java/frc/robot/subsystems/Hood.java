@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.HOOD;
+import frc.robot.Constants.CURRENT_LIMIT;
 import frc.robot.lib.drivers.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.AlternateEncoderType;
@@ -8,6 +9,8 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
@@ -44,6 +47,7 @@ public class Hood extends SubsystemBase {
     private double mP, mI, mD, mF, mMaxVelocity, mMaxAcceleration;
     private double mTargetPosition_Rot;
     private double mCurrentPosition_Rot;
+    private double mSmartCurrentLimit;
     //private double mError_Rot;
 
     // Open-loop control
@@ -63,15 +67,39 @@ public class Hood extends SubsystemBase {
     //-----------------------------------------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------------------
     
+    // // Logging
+    // private final Logger mLogger = LoggerFactory.getLogger( Drivetrain.class );
+
+    // public void SetBrakeMode ( boolean wantsBrakeMode ) {
+    //     if (wantsBrakeMode && !mIsBrakeMode) {
+    //         mIsBrakeMode = wantsBrakeMode;
+    //         mMaster.setIdleMode( IdleMode.Brake );
+    //         mLogger.info( "Neutral mode set to: [Brake]" );
+
+    //     } else if (!wantsBrakeMode && mIsBrakeMode) {
+    //         mIsBrakeMode = wantsBrakeMode;
+    //         // mMaster.setIdleMode( IdleMode.Coast );
+    //         mLogger.info( "Neutral mode set to: [Coast]" );
+    //     }
+    // }
+
 
     // open loop drive
-    public void setOpenLoop (double xHood) {
+    public void setOpenLoop ( double xHood ) {
         mMaster.set( xHood );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
+    public void setOpenLoopR ( double xHoodR ) {
+        mMaster.set( xHoodR );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
+    }
+
+
     // stop for deadband
-    public void Stop() {
+    public void Stop () {
         mMaster.set( 0.0 );
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     /**
@@ -134,6 +162,7 @@ public class Hood extends SubsystemBase {
     private void Initialize () {
         mPIDController.setFeedbackDevice( mAlternateEncoder );
         mAlternateEncoder.setInverted( false );
+        mMaster.setIdleMode( IdleMode.kBrake );
         mTargetPosition_Rot = 0.0;
         mTargetPercentOutput = 0.0;
         mZeroingTimer_S = 0.0;
@@ -324,7 +353,7 @@ public class Hood extends SubsystemBase {
             case Init:
                 // Always move to Zeroing state when we arrive at the Init state, start trying to move the hood slowly
                 mTargetPercentOutput = HOOD.ZEROING_MOTOR_OUTPUT;
-                // TODO: Add current limiting 
+                // mSmartCurrentLimit = CURRENT_LIMIT.RPM_LIMIT;
                 mZeroingTimer_S = Timer.getFPGATimestamp(); 
                 mHoodState = HoodState_t.Zeroing;
                 break;
@@ -416,6 +445,8 @@ public class Hood extends SubsystemBase {
         mPIDController = pidController;
         mMovingAverageFilter = movingAverageFilter;
         Initialize();
+        // Current limiting
+        mMaster.setSmartCurrentLimit( CURRENT_LIMIT.SPARK_ZERO_RPM_LIMIT, CURRENT_LIMIT.SPARK_FREE_RPM_LIMIT, CURRENT_LIMIT.SPARK_RPM_LIMIT );
     }
 
     /**
@@ -452,12 +483,12 @@ public class Hood extends SubsystemBase {
     @Override
     public void initSendable ( SendableBuilder builder ) {
         //builder.setSmartDashboardType( "Flywheel PID Tuning" );
-        builder.addDoubleProperty( "P", this::GetP, this::SetP);
-        builder.addDoubleProperty( "I", this::GetI, this::SetI);
-        builder.addDoubleProperty( "D", this::GetD, this::SetD);
-        builder.addDoubleProperty( "F", this::GetF, this::SetF);
-        builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity);
-        builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration);
+        builder.addDoubleProperty( "P", this::GetP, this::SetP );
+        builder.addDoubleProperty( "I", this::GetI, this::SetI );
+        builder.addDoubleProperty( "D", this::GetD, this::SetD );
+        builder.addDoubleProperty( "F", this::GetF, this::SetF );
+        builder.addDoubleProperty( "MaxVel", this::GetMaxVelocity, this::SetMaxVelocity );
+        builder.addDoubleProperty( "MaxAcc", this::GetMaxAcceleration, this::SetMaxAcceleration );
         //builder.addDoubleProperty( "Target (RPM)", this::GetTargetVelocity_RPM, this::SetTargetVelocity_RPM);
         //builder.addBooleanProperty( "Closed-Loop On", this::IsClosedLoop, this::EnableClosedLoop );
     }

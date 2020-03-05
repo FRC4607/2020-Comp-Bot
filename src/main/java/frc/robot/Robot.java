@@ -3,9 +3,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpiutil.net.PortForwarder;
 import frc.robot.RobotContainer.MatchState_t;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+// import frc.robot.subsystems.Turret;
+
+import edu.wpi.first.cameraserver.CameraServer;
+
 
 public class Robot extends TimedRobot {
     private final Logger mLogger = LoggerFactory.getLogger( Robot.class );
@@ -20,6 +25,10 @@ public class Robot extends TimedRobot {
         mRobotContainer.LogRobotDataHeader( mLogger );
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();
+        PortForwarder.add( 5800, "10.46.7.1", 5800 );
+        PortForwarder.add( 5801, "10.46.7.1", 5801 ); 
+        CameraServer.getInstance().startAutomaticCapture(); 
+        // new InstantCommand( () -> climber.mShifter.set( DoubleSolenoid.Value.kReverse );
     }
 
     @Override
@@ -36,7 +45,8 @@ public class Robot extends TimedRobot {
         mLogger.info( "<=========== DISABLED INIT ===========>" );
         mRobotContainer.SetMatchState( MatchState_t.disabledInit );
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
-        mRobotContainer.UpdateSmartDashboard();        
+        mRobotContainer.UpdateSmartDashboard();      
+        mRobotContainer.mVision.setLimelightLEDOff(); 
     }
 
     @Override
@@ -45,6 +55,7 @@ public class Robot extends TimedRobot {
             mRobotContainer.SetMatchState( MatchState_t.robotPeriodic );
             mRobotContainer.LogRobotDataToRoboRio( mLogger );
             mRobotContainer.UpdateSmartDashboard();
+            // mRobotContainer.StopLimelight();
         }
     }
 
@@ -52,13 +63,17 @@ public class Robot extends TimedRobot {
     public void autonomousInit () {
         mLogger.info( "<=========== AUTONOMOUS INIT ===========>" );
         mRobotContainer.SetMatchState( MatchState_t.autonomousInit );
+
         mAutonomousCommand = mRobotContainer.GetAutonomousCommand();
+
         if ( mAutonomousCommand != null ) {
             mAutonomousCommand.schedule();
             mLogger.info( "Starting autonomous command {}", mAutonomousCommand.getName() );
         }
+        
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
         mRobotContainer.UpdateSmartDashboard();         
+        // mRobotContainer.StartLimelight();
     }
 
     @Override
@@ -77,7 +92,8 @@ public class Robot extends TimedRobot {
             mAutonomousCommand.cancel();
         }
         mRobotContainer.LogRobotDataToRoboRio( mLogger );
-        mRobotContainer.UpdateSmartDashboard();          
+        mRobotContainer.UpdateSmartDashboard(); 
+        // mRobotContainer.StartLimelight();
     }
 
     @Override

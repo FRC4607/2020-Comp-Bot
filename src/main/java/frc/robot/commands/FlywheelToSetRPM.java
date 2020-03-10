@@ -29,7 +29,7 @@ public class FlywheelToSetRPM extends CommandBase {
         // Max RPM is 18730 
         // REV through born encoder quadature resolution is 2048 cycles per revolution (8192 counts per revolution)
         // 0 to 60 of trigger * max RPM * units per rev * units per 100 ms 
-        double targetVelocity_UnitsPer100ms  =  15000 + ( mOperatorXbox.getRawAxis ( 3 ) * 15000 ); 
+        double targetVelocity_UnitsPer100ms  =  22000 + ( mOperatorXbox.getRawAxis ( 3 ) * 15000 ); 
         mFlywheel.setCloseLoop( targetVelocity_UnitsPer100ms );
     
     }
